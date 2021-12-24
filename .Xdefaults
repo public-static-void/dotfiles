@@ -1,0 +1,125 @@
+!------------!
+! .Xdefaults !
+!------------!
+
+!----------------!
+! URxvt SETTINGS !
+!----------------!
+
+!------------------!
+! GENERAL SETTINGS !
+!------------------!
+
+! Specifies the name of the terminal type to be set in the TERM environment variable.
+URxvt*termName: rxvt-unicode-256color
+
+! Start as a login shell by prepending a '-' to argv[0] of the shell.
+URxvt.loginShell: true
+
+! Save specified number of lines in the scrollback buffer [default 64]. This resource is limited on most machines to 65535.
+URxvt.saveLines: 10000
+
+! Create the window with the specified X window geometry [default 80x24].
+URxvt.geometry: 90x30
+
+! Attempt to find a visual with the given bit depth.
+URxvt.depth: 32
+
+! Turn off pseudo-transparency which would be using the root pixmap as background.
+URxvt.transparent: false
+
+! Fade the text by the given percentage when focus is lost.
+URxvt.fading: 15
+
+! Set scrollbar style to rxvt, plain, next or xterm.
+URxvt.scrollStyle: rxvt
+
+! Disable the scrollbar (enabled by default).
+URxvt.scrollBar: false
+
+! Make cursor blink (off by default).
+URxvt.cursorBlink: true
+! Set cursor color.
+URxvt.cursorColor: #00A8A8
+! True: Make the cursor underlined. False: Make the cursor a box [default].
+URxvt.cursorUnderline: false
+
+! True: blank the mouse pointer when a key is pressed or after a set number of seconds of inactivity. False: the pointer is always visible [default].
+URxvt.pointerBlank: true
+
+!---------------!
+! FONT SETTINGS !
+!---------------!
+
+! Select the fonts to be used.
+! This is a comma separated list of font names that are checked in order when trying to find glyphs for characters.
+! The first font defines the cell size for characters; other fonts might be smaller, but not (in general) larger
+URxvt*font:     xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
+                xft:SourceCodePro:               pixelsize=18,\
+                xft:SourceCodePro for Powerline: pixelsize=18
+URxvt*boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
+                xft:SourceCodePro:               pixelsize=18,\
+                xft:SourceCodePro for Powerline: pixelsize=18
+!URxvt*font:     xft:SauceCodePro Nerd Font Mono: pixelsize=18
+!URxvt*boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18
+
+
+!----------------!
+! COLOR SETTINGS !
+!----------------!
+
+! Use the specified colour as the window's background colour [default White].
+! Make background black and transparent (amount specified by the number in the brackets).
+URxvt.background: [75]#000000
+! Use the specified colour as the window's foreground colour [default Black].
+URxvt.foreground: #FFFFFF
+
+! Specify terminal colorscheme.
+! black.
+Rxvt*color0:  #000000
+Rxvt*color8:  #020202
+! red.
+Rxvt*color1:  #E00707
+Rxvt*color9:  #FF5050
+! green.
+Rxvt*color2:  #00A800
+Rxvt*color10: #80FF80
+! yellow.
+Rxvt*color3:  #FEDC00
+Rxvt*color11: #FFFF80
+! blue.
+Rxvt*color4:  #005EFF
+Rxvt*color12: #4D80FF
+! magenta.
+Rxvt*color5:  #A800A8
+Rxvt*color13: #FF80FF
+! cyan.
+Rxvt*color6:  #00A8A8
+Rxvt*color14: #22D8D8
+! white.
+Rxvt*color7:  #FFFFFF
+Rxvt*color15: #B6B6B6
+
+!---------!
+! KEYMAPS !
+!---------!
+
+! Change escape sequences send by urxvt by pressing Ctrl+Arrowkeys to those xterm would send.
+URxvt.keysym.Control-Up:    \033[1;5A
+URxvt.keysym.Control-Down:  \033[1;5B
+URxvt.keysym.Control-Right: \033[1;5C
+URxvt.keysym.Control-Left:  \033[1;5D
+
+! Change escape sequences send by urxvt by pressing Alt+Arrowkeys to those xterm would send.
+URxvt.keysym.M-Up:          \033[1;3A
+URxvt.keysym.M-Down:        \033[1;3B
+URxvt.keysym.M-Right:       \033[1;3C
+URxvt.keysym.M-Left:        \033[1;3D
+
+! Disable default bindings for Control-Shift.
+URxvt.iso14755:    false
+URxvt.iso14755_52: false
+
+! Allow to copy/paste with Ctrl+Shift+c/Ctrl+Shift+v from/to terminal.
+URxvt.keysym.Shift-Control-V: eval:paste_clipboard
+URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard

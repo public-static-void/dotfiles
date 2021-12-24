@@ -1,0 +1,28 @@
+Backup:
+
+backup command: 
+
+sudo rsync -aAXv --delete --exclude=/dev/* --exclude=/proc/* --exclude=/sys/* --exclude=/tmp/* --exclude=/run/* --exclude=/mnt/* --exclude=/media/* --exclude="swapfile" --exclude="lost+found" --exclude=".cache" --exclude="Downloads" --exclude=".VirtualBoxVMs" --exclude=".ecryptfs" /source /destination 
+
+You can also add the option --dry-run to simulate the backup process. 
+
+
+
+Restore: 
+
+boot in arch iso
+
+mkdir /mnt/system /mnt/backup
+
+mount /dev/sdc4 /mnt/system
+mount /dev/sdc7 /mnt/backup
+
+cd /mnt/system
+
+
+restore command: 
+
+
+sudo rsync -aAXv --delete --exclude="lost+found" /backup /system
+
+($backup: /mnt/backup/ $system: /mnt/system)

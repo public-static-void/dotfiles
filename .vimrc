@@ -1,0 +1,372 @@
+""""""""""""
+" ~/.vimrc "
+""""""""""""
+
+""""""""""""""""""""
+" GENERAL SETTINGS "
+""""""""""""""""""""
+
+" Disable compatibility with vi which can cause unexpected issues.
+" Must be first line.
+set nocompatible
+
+" Set encoding to UTF-8.
+scriptencoding utf-8
+set encoding=utf-8
+set fenc=utf-8
+
+" Disable sound.
+set belloff=all
+
+" Set terminal. Fixes some key press bugs.
+set term=rxvt-unicode-256color
+
+" Enable pathogen plugin manager.
+execute pathogen#infect()
+
+" Use vim8+'s native package manager to load plugins as well.
+packloadall
+
+" Allow plugins to determine indentation.
+filetype plugin indent on
+
+" Change vim's updatetime option; the default value is 4000, i.e. 4 seconds.
+set updatetime=100
+
+" Automatically set current directory to file's location.
+set autochdir
+
+" Watch for file changes.
+set autoread
+
+" Enable system clipboard for copy/paste from/to outside vim.
+set clipboard=unnamedplus,autoselect
+
+" Remove buffer when close a tab.
+set nohidden
+
+" Enable syntax highlighting.
+syntax on
+
+" Show the file name in the terminal title bar.
+set title
+
+" Enable line numbers.
+set number
+set relativenumber
+
+" Show row and column information.
+set ruler
+
+" Always show tabs-bar.
+set showtabline=2
+
+" Enable powerline.
+let $PYTHONPATH='/usr/lib/python3.10/site-packages'
+set rtp+=/usr/lib/python3.10/site-packages/powerline/bindings/vim/
+set laststatus=2
+
+" Colors.
+colorscheme angr            " top
+"colorscheme codedark       " top
+"colorscheme apprentice     " top
+"colorscheme lucid          " top
+"colorscheme lucius         " top
+"colorscheme camarada       " gut
+"colorscheme happyhacking   " gut
+"colorscheme kolor          " gut
+"colorscheme night-owl      " gut
+"colorscheme abstract       " ok
+"colorscheme adventurous    " ok
+"colorscheme base           " ok
+"colorscheme brogrammer     " ok
+"colorscheme buddy          " ok
+"colorscheme cobalt         " ok
+"colorscheme deus           " ok
+"colorscheme flatlandia     " ok
+"colorscheme jellybeans     " ok
+"colorscheme lanox          " ok
+"colorscheme maui           " ok
+"colorscheme oceanic        " ok
+"colorscheme oceanic-next   " ok
+"colorscheme palenight      " ok
+"colorscheme tomorrownight  " ok
+
+" Makes every background transparent.
+highlight NonText     term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+highlight Normal      term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+highlight LineNr      term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+highlight signcolumn  term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+highlight ErrorMsg    term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+highlight EndOFBuffer term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+
+" Highlight cursor line.
+set cursorline
+
+" Keep one line below cursor when scrolling.
+set scrolloff=1
+
+" Allow for cursor beyond last character.
+set virtualedit=onemore
+
+" Enable linebreak.
+set linebreak
+" Show '+++' at beginning of broken line.
+set showbreak=+++
+
+" Enable autoindent.
+set autoindent
+" Enable C-indent.
+set smartindent
+" Amount of spaces for autoindent.
+set shiftwidth=4
+" Set smartindent.
+set smarttab
+" Convert tab to spaces.
+set expandtab
+" Amount of spaces for tab.
+set softtabstop=4
+
+" Show hidden characters.
+set list
+" But only tabs and trailing whitespace.
+set listchars=tab:>·,trail:·
+
+" Enable incremental search.
+set incsearch
+" Highlight the found search terms.
+set hlsearch
+
+" Show matching brackets.
+set showmatch
+
+" Enable omni completion.
+set omnifunc=syntaxcomplete#Complete
+
+" Add spellcheck and keywords to autocompletion.
+set complete+=spell,keyword
+" Let popup menu insert the longest common text of all matches instead of selecting the first completion item, and make the menu come up even if there's only one match.
+set completeopt+=longest,menuone
+
+" Enable Tab completion for the command line.
+set wildmenu
+set wildmode=list:longest,full
+" Ignore certain files.
+set wildignore+=*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
+
+" Splits behaviour:
+" Splits open at the bottom and right.
+set splitbelow
+set splitright
+
+" Set up backups.
+set backup                      " Backups are nice ...
+    if has('persistent_undo')
+        set undofile            " So is persistent undo ...
+        set undolevels=1000     " Maximum number of changes that can be undone
+        set undoreload=10000    " Maximum number lines to save for undo on a buffer reload
+    endif
+
+" Open file at last saved position.
+"if has("autocmd")
+"  augroup resCur
+"    autocmd!
+"    autocmd BufReadPost * call setpos(".", getpos("'\""))
+"  augroup END
+"endif
+
+
+
+" Define a function to remove trailing whitespace.
+fun! TrimTrailingWhitespace()
+    if !&binary && &filetype != 'diff'
+        let l:save = winsaveview()
+        keeppatterns %s/\s\+$//e
+        call winrestview(l:save)
+    endif
+endfun
+
+augroup vimrc
+    " Remove all autocommands for the current group.
+    au!
+    " Jump to the last known cursor position.
+    " Don't when the position is invalid, when inside an event handler and for a commit message.
+    autocmd BufReadPost *
+    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    \ |   exe "normal! g`\""
+    \ | endif
+    " Call the function ito remove trailing whitespace defined above on save.
+    autocmd BufWritePre * :call TrimTrailingWhitespace()
+augroup END
+
+" Set up skeletons.
+augroup skeletons
+  au!
+  autocmd BufNewFile *.* silent! execute '0r ~/.vim/templates/skeleton.'.expand("<afile>:e")
+augroup END
+
+""""""""""""""""""""""""""""
+" PLUGIN SPECIFIC SETTINGS "
+""""""""""""""""""""""""""""
+
+" NERDTree settings:
+" Set size.
+let g:NERDTreeWinSize=30
+" Show hidden files by default.
+let NERDTreeShowHidden=1
+" Autostart NERDTree with vim.
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Always show gitgutter.
+set signcolumn=yes
+
+" Prettier plugin configurations:
+" Enable auto formatting of files that have "@format" or "@prettier" tag.
+let g:prettier#autoformat = 1
+
+"Allow auto formatting also for files without "@format" or "@prettier" tag.
+" The previous line is still required for this one to work.
+let g:prettier#autoformat_require_pragma = 0
+
+" Make prettier async.
+let g:prettier#exec_cmd_async = 1
+
+" By default parsing errors will open the quickfix but can also be disabled.
+let g:prettier#quickfix_enabled = 0
+
+" Syntastic settings.
+"set statusline+=%#warningmsg#
+"set statusline+=%{SyntasticStatuslineFlag()}
+"set statusline+=%*
+
+"let g:syntastic_always_populate_loc_list = 1
+"let g:syntastic_auto_loc_list = 0
+"let g:syntastic_check_on_open = 1
+"let g:syntastic_check_on_wq = 1
+"let g:syntastic_enable_signs=1
+
+" Define some language specific linters.
+" Python.
+"let g:syntastic_python_checkers = ['python']
+" Haskell.
+"let g:syntastic_haskell_checkers = ['hlint']
+" Java.
+"let g:syntastic_java_checkers = ['javac']
+" PHP.
+"let g:syntastic_php_checkers = ['php']
+" HTML.
+"let g:syntastic_html_checkers = ['validator']
+" CSS.
+"let g:syntastic_css_checkers = ['csslint']
+" JS.
+"let g:syntastic_javascript_checkers = ['jslint']
+
+"""""""""""""""""""""""""""
+" LANGUAGE SPECIFIC STUFF "
+"""""""""""""""""""""""""""
+
+" Python:
+" Max textwidth until line break (python standard = 79).
+" Also show hint for max line width.
+autocmd FileType python setlocal textwidth=79 formatoptions+=t colorcolumn=80
+
+"""""""""""""""
+" KEYBINDINGS "
+"""""""""""""""
+
+" Disable arrow keys for all modes and also in combination with Ctrl, Alt and Shift.
+"for mode in ['n', 'v', 'i', 'c']
+"  for key1 in ['<', '<C-', '<S-', '<A-']
+"    for key2 in ['up>', 'down>', 'left>', 'right>']
+"      exec mode.'noremap' key1.key2 '<nop>'
+"    endfor
+"  endfor
+"endfor
+
+" Leader key variable.
+let mapleader = ","
+
+" Remap start/end of line/document to H,L,J,K.
+map H 0
+map L $
+map J G
+map K gg
+
+" Don't skip line wraps while moving over them.
+nnoremap j gj
+nnoremap k gk
+
+" Remap some command typos.
+:command W w
+:command Q q
+:command WQ wq
+:command Wq wq
+:command QA qa
+:command Qa qa
+
+" Remap split navigation to Ctrl+h,j,k,l.
+map <C-h> <C-w>h
+map <C-j> <C-w>j
+map <C-k> <C-w>k
+map <C-l> <C-w>l
+" Do the same for the arrowkeys.
+map <C-left>  <C-w>h
+map <C-down>  <C-w>j
+map <C-up>    <C-w>k
+map <C-right> <C-w>l
+" And also for for the built-in terminal.
+tmap <C-h> <C-w>h
+tmap <C-j> <C-w>j
+tmap <C-k> <C-w>k
+tmap <C-l> <C-w>l
+" Again the same for the arrowkeys in the terminal.
+tmap <C-left>  <C-w>h
+tmap <C-down>  <C-w>j
+tmap <C-up>    <C-w>k
+tmap <C-right> <C-w>l
+
+" Remap split resize keys to Alt+arrowkeys.
+map <M-up>    :resize -1<CR>
+map <M-down>  :resize +1<CR>
+map <M-left>  :vertical resize -1<CR>
+map <M-right> :vertical resize +1<CR>
+" Also for hjkl. <Esc> corresponds to the escape sequence generated by pressing Alt in combination with hjkl in the terminal.
+map <Esc>k :resize -1<CR>
+map <Esc>j :resize +1<CR>
+map <Esc>h :vertical resize -1<CR>
+map <Esc>l :vertical resize +1<CR>
+
+" Open a new tab with Ctrl-A.
+map <C-A> :tabnew<CR>
+
+" Ctrl-S to select next tab.
+nmap <C-s> gT
+
+" Ctrl-D to select previous tab
+nmap <C-d> gt
+
+" Start built-in terminal with Ctrl+T.
+map <C-T> :terminal<CR>
+
+" Exit built-in terminal with Esc.
+tmap <Esc> <C-w>:q!<CR>
+" Or with Ctrl-T again.
+tmap <C-T> <C-w>:q!<CR>
+
+" Set Ctrl+n to open NERDTree plugin.
+map <C-n> :NERDTreeToggle<CR>
+
+" Make <Enter> key select the highlighted menu item when the popup menu is visible.
+"inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+
+" Makes <C-N> work the way it normally does; however, when the menu appears, the <Down> key will be simulated. What this accomplishes is it keeps a menu item always highlighted. This way you can keep typing characters to narrow the matches, and the nearest match will be selected so that you can hit Enter at any time to insert it.
+"inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
+"  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+
+" Simulates <C-X><C-O> to bring up the omni completion menu, then it simulates <C-N><C-P> to remove the longest common text, and finally it simulates <Down> again to keep a match highlighted.
+"inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
+"  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
+
+" Use Tab for autocompletion in insert mode.
+"inoremap <Tab> <C-p>

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+[ $(echo -e "Nein\nJa" | dmenu -i -p "$1") \
+== "Ja" ] && $2

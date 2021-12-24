@@ -1,0 +1,13 @@
+{
+    "firefox": "firefox",
+    "x-terminal-emulator": "terminal",
+    "URxvt": "terminal",
+    "code-oss": "edit",
+    "gedit": "edit",
+    "vim": "edit",
+    "Spacefm": "folder-open",
+    "vlc": "play",
+    "qpdfview": "file-pdf",
+    "_no_match": "question"
+}
+
