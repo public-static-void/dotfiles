@@ -167,16 +167,6 @@ set backup                      " Backups are nice ...
         set undoreload=10000    " Maximum number lines to save for undo on a buffer reload
     endif
 
-" Open file at last saved position.
-"if has("autocmd")
-"  augroup resCur
-"    autocmd!
-"    autocmd BufReadPost * call setpos(".", getpos("'\""))
-"  augroup END
-"endif
-
-
-
 " Define a function to remove trailing whitespace.
 fun! TrimTrailingWhitespace()
     if !&binary && &filetype != 'diff'
@@ -195,7 +185,7 @@ augroup vimrc
     \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
     \ |   exe "normal! g`\""
     \ | endif
-    " Call the function ito remove trailing whitespace defined above on save.
+    " Call the function defined above to remove trailing whitespace on save.
     autocmd BufWritePre * :call TrimTrailingWhitespace()
 augroup END
 
@@ -217,6 +207,34 @@ let NERDTreeShowHidden=1
 " Autostart NERDTree with vim.
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Variables to change custom git status symbols.
+let g:NERDTreeGitStatusIndicatorMapCustom = {
+                \ 'Modified'  :'',
+                \ 'Staged'    :'',
+                \ 'Untracked' :'',
+                \ 'Renamed'   :'',
+                \ 'Unmerged'  :'',
+                \ 'Deleted'   :'',
+                \ 'Dirty'     :'',
+                \ 'Ignored'   :'',
+                \ 'Clean'     :'',
+                \ 'Unknown'   :'?',
+                \ }
+" Predefined map used nerdfonts.
+let g:NERDTreeGitStatusUseNerdFonts = 1 " you should install nerdfonts by yourself. default: 0
+
+" Show ignored status.
+"let g:NERDTreeGitStatusShowIgnored = 1 " a heavy feature may cost much more time. default: 0
+
+" Indicate every single untracked file under an untracked dir.
+"let g:NERDTreeGitStatusUntrackedFilesMode = 'all' " a heavy feature too. default: normal
+
+" Show Clean indicator.
+"let g:NERDTreeGitStatusShowClean = 1 " default: 0
+
+" Hide the boring brackets([ ]).
+let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
 
 " Always show gitgutter.
 set signcolumn=yes
@@ -305,7 +323,7 @@ nnoremap k gk
 :command QA qa
 :command Qa qa
 
-" Remap split navigation to Ctrl+h,j,k,l.
+" Remap split navigation to Ctrl+H,J,K,L.
 map <C-h> <C-w>h
 map <C-j> <C-w>j
 map <C-k> <C-w>k
@@ -346,16 +364,26 @@ nmap <C-s> gT
 " Ctrl-D to select previous tab
 nmap <C-d> gt
 
+" Ctrl-F to close tab.
+nmap <C-f> :tabclose<CR>
+
 " Start built-in terminal with Ctrl+T.
 map <C-T> :terminal<CR>
 
-" Exit built-in terminal with Esc.
-tmap <Esc> <C-w>:q!<CR>
-" Or with Ctrl-T again.
+" Exit built-in terminal with Ctrl-T as well.
 tmap <C-T> <C-w>:q!<CR>
 
-" Set Ctrl+n to open NERDTree plugin.
-map <C-n> :NERDTreeToggle<CR>
+" Set Ctrl+N to open NERDTree plugin.
+" Open NERDTree in the directory of the current file (or /home if no file is open)
+nmap <silent> <C-n> :call NERDTreeToggleInCurDir()<cr>
+function! NERDTreeToggleInCurDir()
+  " If NERDTree is open in the current buffer
+  if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+    exe ":NERDTreeClose"
+  else
+    exe ":NERDTreeFind"
+  endif
+endfunction
 
 " Make <Enter> key select the highlighted menu item when the popup menu is visible.
 "inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"

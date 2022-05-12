@@ -52,10 +52,16 @@ fi
 PATH="$HOME/scripts:$PATH"
 
 # Add i3ass to PATH-variable.
-PATH="$HOME/scripts/i3ass/src:$PATH"
+#PATH="$HOME/scripts/i3ass/src:$PATH"
 
 # Add Haskell Stack to PATH-variable.
-PATH="$HOME/.local/bin${PATH:+:${PATH}}"; export PATH;
+#PATH="$HOME/.local/bin${PATH:+:${PATH}}"; export PATH;
+
+#JAVA_HOME="/usr/lib/jvm/java-16-adoptopenjdk"
+#PATH="$JAVA_HOME/bin:$PATH"
+
+#ANT_HOME="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/libs/ant"
+#PATH="$ANT_HOME/bin:$PATH"
 
 # Export the PATH-variable.
 export PATH
@@ -101,19 +107,40 @@ alias xr800x600='xrandr --output HDMI-0 --mode 800x600'
 alias xr640x480='xrandr --output HDMI-0 --mode 640x480'
 
 # Webcam software 1.
-alias webcam1="qv4l2"
+alias webcam1='qv4l2'
 
 # Webcam software 2.
-alias webcam2="guvcview"
+alias webcam2='guvcview'
 
 # Uni vpn tunnel.
-alias univpn="univpn.sh"
+alias univpn='univpn.sh'
+
+# Renew.
+alias renew='cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/; java -p dist:dist/libs -m de.renew.loader gui'
+
+alias makestub='$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/Core/bin/unix/makestub'
+
+alias compilestub='$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/Core/bin/unix/compilestub'
+
+alias jcompile='$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/Core/bin/unix/jcompile'
 
 # Main wine prefix.
-alias wine-64="WINEPREFIX=$HOME/.wine64"
+alias wine-64='WINEPREFIX=$HOME/.wine64'
 
 # Path to wine games dir.
-alias winegames="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)"
+alias winegames='cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)'
+
+# Reason 4.
+alias reason4='sudo mount $HOME/ISOS/Propellerheads.Reason.v4.0.HYBRID.DVDR-AiRISO/Reason4ISO/Reason\ 4.iso /mnt/disk -o loop; cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Propellerhead/Reason/; wine-64 WINEDEBUG=-all wine Reason.exe'
+
+# Baldurs Gate 2.
+alias baldur2='cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Baldur\ s\ Gate\ II\ Enhanced\ Edition\ v2\ 5; wine-64 WINEDEBUG=-all wine Baldur.exe'
+
+# Fallout 2.
+alias fallout2='cd $HOME/.wine64/drive_c/GOG\ Games/Fallout\ 2/; wine-64 WINEDEBUG=-all WINEDLLOVERRIDES="ddraw.dll=n,b ddraw.ini=n,b" wine fallout2.exe'
+
+# Close Combat 3.
+alias cc3='cd $HOME/.wine64/drive_c/GOG\ Games/Close\ Combat\ 3; wine-64 WINEDEBUG=-all wine CC3.exe'
 
 # Warthunder.
 alias warthunder='$HOME/Games/war-thunder/aces'
@@ -127,11 +154,8 @@ alias poke2='WINEPREFIX=$HOME/.wine2 $HOME/.wine/drive_c/Program\ Files\ \(x86\)
 # Openxcom.
 alias xcom='openxcom -data $HOME/.wine/drive_c/GOG\ Games/X-COM\ UFO\ Defense'
 
-# Dwarf fortress old release.
-alias dwarfold='$HOME/Downloads/LinuxLNP-0.47.04-r1/startlnp'
-
-# Dwarf fortress new release.
-alias dwarfnew='$HOME/Downloads/LinuxDwarfPack-0.47.04-r4/startlnp.sh'
+# Dwarf fortress.
+alias dwarfnew='$HOME/Games/LinuxDwarfPack-0.47.05-r3/startlnp.sh'
 
 # Sims2.
 alias sims2='cd $HOME/wine-3.19/a; env WINEPREFIX=~/wine-3.19/a/ ./wine $HOME/wine-3.19/a/drive_c/Program\ Files/EA\ GAMES/Die\ Sims\ 2\ Villen-\ und\ Garten-Accessoires/TSBin/Sims2EP9.exe'
@@ -170,5 +194,8 @@ alias diablo2='cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Diablo\ II/Mod\ Pl
 alias ksp='cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Kerbal\ Space\ Program\ Breaking\ Ground; wine-64 WINEDEBUG=-all wine Launcher.exe'
 
 # Subsistence.
-alias subsis='$HOME/.wine/drive_c/Program\ Files\ \(x86\)/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Binaries/Win64; wine-64 WINEDEBUG=-all wine UDK.exe'
+alias subsis='cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Binaries/Win64; wine-64 WINEDEBUG=-all wine UDK.exe'
+
+# Revolution under Siege.
+alias revo='cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Revolution\ Under\ Siege\ Gold\ Edition; wine-64 WINEDEBUG=-all wine RUS.exe'
 
