@@ -11,8 +11,6 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-#font pango:saucecodepro 12
-#font pango:monospace 12
 font pango:sourcecodepro 13
 
 #############
@@ -22,8 +20,13 @@ font pango:sourcecodepro 13
 # Start compositor.
 exec_always picom -f
 
-# Open wallpaper.
+# Use nitrogen to set wallpaper.
 exec_always --no-startup-id nitrogen --restore &
+
+# Use wal to set wallpaper and extract colors from it.
+# exec_always --no-startup-id wal -i "$HOME/Bilder/walls/aesthetic2.jpg" -a 75 --backend haishoku
+# Use wal just to load last color scheme.
+exec_always --no-startup-id wal -Rq
 
 # Start dunst notification tool.
 exec --no-startup-id dunst
@@ -59,20 +62,34 @@ floating_modifier $mod
 # Don't change window focus by mouse hovering.
 focus_follows_mouse no
 
-# Set some colors.
-set $bg-color            #505050
-set $inactive-bg-color   #2f343f
-set $text-color          #f3f4f5
-set $inactive-text-color #676E7D
-set $urgent-bg-color     #E53935
-set $blue-grey-color     #68aaaa
+# Set colors from Xresources.
+# At the end of each line fallback colors are specified in case it fails.
 
-# Apply colors.
-#                       border              background         text                 i$
-client.focused          $bg-color           $bg-color          $text-color          #$
-client.unfocused        $inactive-bg-color $inactive-bg-color $inactive-text-color  #0$
-client.focused_inactive $inactive-bg-color $inactive-bg-color $inactive-text-color  #0$
-client.urgent           $urgent-bg-color   $urgent-bg-color   $text-color           #00ff00
+# Focused.
+set_from_resource $bdf  i3wm.color1 #9FE8C2
+set_from_resource $bgf  i3wm.color3 #4CB88F
+set_from_resource $fgf  i3wm.color7 #E7E4D8
+# Unfocused.
+set_from_resource $bdu  i3wm.color5 #308695
+set_from_resource $bgu  i3wm.color2 #455054
+set_from_resource $fgu  i3wm.color6 #D4CFC9
+# Inactive.
+set_from_resource $bdi  i3wm.color3 #308695
+set_from_resource $bgi  i3wm.color1 #656262
+set_from_resource $fgi  i3wm.color5 #4CB88F
+# Urgent.
+set_from_resource $bdx  i3wm.color1 #D45769
+set_from_resource $bgx  i3wm.color7 #FB2E01
+set_from_resource $fgx  i3wm.color4 #FFFEB3
+
+client.background       $bgu
+
+# class                 border  backgr. text  indicator child_border
+client.focused          $bdf    $bgf    $fgf  $bgf      $bgf
+client.unfocused        $bdu    $bgu    $fgu  $bgu      $bgu
+client.focused_inactive $bdi    $bgi    $fgi  $bgi      $bgi
+client.urgent           $bdx    $bgx    $fgx  $bgx      $bgx
+client.placeholder      $bdf    $bgf    $fgf  $bgf      $bgf
 
 ###############
 # BAR / PANEL #
@@ -85,12 +102,12 @@ bar {
         tray_output primary
 
         colors {
-                background $bg-color
-                separator #757575
-                #                  border             background         text
-                focused_workspace  $bg-color          $blue-grey-color   $text-color
-                inactive_workspace $inactive-bg-color $inactive-bg-color $inactive-te$
-                urgent_workspace   $urgent-bg-color   $urgent-bg-color   $text-color
+                background          $bgu
+                separator           $fgu
+                # class             border  backgr. text
+                focused_workspace   $bdf    $bgf    $fgf
+                inactive_workspace  $bdi    $bgi    $fgi
+                urgent_workspace    $bdx    $bgx    $fgx
         }
 }
 
@@ -193,10 +210,9 @@ bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
 
 # Start dmenu.
-bindsym $mod+d exec dmenu_run -fn "SourceCodePro-12"
-
+bindsym $mod+d exec dmenu_run -nb "$bgf" -nf "$fgf" -sb "$bgx" -sf "$fgx" -fn "SourceCodePro-13"
 # Shutdown computer with prompt script.
-bindsym $mod+Shift+Escape exec ~/scripts/prompt "Rechner runterfahren?" "sudo -A shutdown -h now"
+bindsym $mod+Shift+Escape exec ~/scripts/prompt "Rechner runterfahren?" "sudo -A shutdown -h now" "$bgf" "$fgf" "$bgx" "$fgx" "SourceCodePro-13"
 
 # Change focus with vim keys.
 bindsym $mod+h focus left

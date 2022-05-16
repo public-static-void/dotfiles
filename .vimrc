@@ -67,30 +67,12 @@ set rtp+=/usr/lib/python3.10/site-packages/powerline/bindings/vim/
 set laststatus=2
 
 " Colors.
+"colorscheme wal
 colorscheme angr            " top
 "colorscheme codedark       " top
 "colorscheme apprentice     " top
 "colorscheme lucid          " top
 "colorscheme lucius         " top
-"colorscheme camarada       " gut
-"colorscheme happyhacking   " gut
-"colorscheme kolor          " gut
-"colorscheme night-owl      " gut
-"colorscheme abstract       " ok
-"colorscheme adventurous    " ok
-"colorscheme base           " ok
-"colorscheme brogrammer     " ok
-"colorscheme buddy          " ok
-"colorscheme cobalt         " ok
-"colorscheme deus           " ok
-"colorscheme flatlandia     " ok
-"colorscheme jellybeans     " ok
-"colorscheme lanox          " ok
-"colorscheme maui           " ok
-"colorscheme oceanic        " ok
-"colorscheme oceanic-next   " ok
-"colorscheme palenight      " ok
-"colorscheme tomorrownight  " ok
 
 " Makes every background transparent.
 highlight NonText     term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
