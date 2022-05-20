@@ -55,9 +55,6 @@ fi
 # Add custom scripts folder to PATH-variable.
 PATH="$HOME/scripts:$PATH"
 
-# Add i3ass to PATH-variable.
-#PATH="$HOME/scripts/i3ass/src:$PATH"
-
 # Add Haskell Stack to PATH-variable.
 #PATH="$HOME/.local/bin${PATH:+:${PATH}}"; export PATH;
 

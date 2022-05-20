@@ -20,6 +20,7 @@ set belloff=all
 
 " Set terminal. Fixes some key press bugs.
 set term=rxvt-unicode-256color
+set t_Co=256
 
 " Enable pathogen plugin manager.
 execute pathogen#infect()
@@ -41,6 +42,8 @@ set autoread
 
 " Enable system clipboard for copy/paste from/to outside vim.
 set clipboard=unnamedplus,autoselect
+"set clipboard=unnamed
+"set clipboard=unnamedplus
 
 " Remove buffer when close a tab.
 set nohidden
@@ -54,12 +57,20 @@ set title
 " Enable line numbers.
 set number
 set relativenumber
+set numberwidth=5
 
 " Show row and column information.
 set ruler
 
 " Always show tabs-bar.
 set showtabline=2
+
+" Disable modelines as a security precaution
+set modelines=0
+set nomodeline
+
+" Uncomment to prevent non-normal modes showing in powerline and below powerline.
+set noshowmode
 
 " Enable powerline.
 let $PYTHONPATH='/usr/lib/python3.10/site-packages'
@@ -87,6 +98,9 @@ set cursorline
 
 " Keep one line below cursor when scrolling.
 set scrolloff=1
+
+" Allow mouse scrolling in normal, insert and command modes and text selection in visual mode only.
+set mouse=nic
 
 " Allow for cursor beyond last character.
 set virtualedit=onemore
@@ -121,6 +135,9 @@ set hlsearch
 
 " Show matching brackets.
 set showmatch
+
+" Show incomplete commands.
+set showcmd
 
 " Enable omni completion.
 set omnifunc=syntaxcomplete#Complete
@@ -186,6 +203,14 @@ augroup END
 let g:NERDTreeWinSize=30
 " Show hidden files by default.
 let NERDTreeShowHidden=1
+
+let g:NERDTreeDirArrowExpandable = '►'
+let g:NERDTreeDirArrowCollapsible = '▼'
+let NERDTreeShowLineNumbers=1
+let NERDTreeShowHidden=1
+let NERDTreeMinimalUI = 1
+let g:NERDTreeWinSize=38
+
 " Autostart NERDTree with vim.
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
@@ -235,54 +260,22 @@ let g:prettier#exec_cmd_async = 1
 " By default parsing errors will open the quickfix but can also be disabled.
 let g:prettier#quickfix_enabled = 0
 
-" Syntastic settings.
-"set statusline+=%#warningmsg#
-"set statusline+=%{SyntasticStatuslineFlag()}
-"set statusline+=%*
-
-"let g:syntastic_always_populate_loc_list = 1
-"let g:syntastic_auto_loc_list = 0
-"let g:syntastic_check_on_open = 1
-"let g:syntastic_check_on_wq = 1
-"let g:syntastic_enable_signs=1
-
-" Define some language specific linters.
-" Python.
-"let g:syntastic_python_checkers = ['python']
-" Haskell.
-"let g:syntastic_haskell_checkers = ['hlint']
-" Java.
-"let g:syntastic_java_checkers = ['javac']
-" PHP.
-"let g:syntastic_php_checkers = ['php']
-" HTML.
-"let g:syntastic_html_checkers = ['validator']
-" CSS.
-"let g:syntastic_css_checkers = ['csslint']
-" JS.
-"let g:syntastic_javascript_checkers = ['jslint']
-
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
 """""""""""""""""""""""""""
 
-" Python:
+" #Python.
 " Max textwidth until line break (python standard = 79).
-" Also show hint for max line width.
-autocmd FileType python setlocal textwidth=79 formatoptions+=t colorcolumn=80
+" Also show hint for max line width. And comply to PEP8.
+autocmd FileType python setlocal softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79 formatoptions+=t colorcolumn=80
+
+" HTML.
+" Treat <li> and <p> tags like the block tags they are.
+let g:html_indent_tags = 'li\|p'
 
 """""""""""""""
 " KEYBINDINGS "
 """""""""""""""
-
-" Disable arrow keys for all modes and also in combination with Ctrl, Alt and Shift.
-"for mode in ['n', 'v', 'i', 'c']
-"  for key1 in ['<', '<C-', '<S-', '<A-']
-"    for key2 in ['up>', 'down>', 'left>', 'right>']
-"      exec mode.'noremap' key1.key2 '<nop>'
-"    endfor
-"  endfor
-"endfor
 
 " Leader key variable.
 let mapleader = ","
@@ -368,15 +361,5 @@ function! NERDTreeToggleInCurDir()
 endfunction
 
 " Make <Enter> key select the highlighted menu item when the popup menu is visible.
-"inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
-" Makes <C-N> work the way it normally does; however, when the menu appears, the <Down> key will be simulated. What this accomplishes is it keeps a menu item always highlighted. This way you can keep typing characters to narrow the matches, and the nearest match will be selected so that you can hit Enter at any time to insert it.
-"inoremap <expr> <C-n> pumvisible() ? '<C-n>' :
-"  \ '<C-n><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-
-" Simulates <C-X><C-O> to bring up the omni completion menu, then it simulates <C-N><C-P> to remove the longest common text, and finally it simulates <Down> again to keep a match highlighted.
-"inoremap <expr> <M-,> pumvisible() ? '<C-n>' :
-"  \ '<C-x><C-o><C-n><C-p><C-r>=pumvisible() ? "\<lt>Down>" : ""<CR>'
-
-" Use Tab for autocompletion in insert mode.
-"inoremap <Tab> <C-p>
