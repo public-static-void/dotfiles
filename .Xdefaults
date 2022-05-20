@@ -70,35 +70,37 @@ URxvt*boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
 
 ! Use the specified colour as the window's background colour [default White].
 ! Make background black and transparent (amount specified by the number in the brackets).
-URxvt.background: [75]#000000
+*.background:   [75]#262626
 ! Use the specified colour as the window's foreground colour [default Black].
-URxvt.foreground: #FFFFFF
-
+*.foreground:       #E5E5E5
+! Specify cursor color.
+URxvt.cursorColor:  #EEEEEE
 ! Specify terminal colorscheme.
 ! black.
-Rxvt*color0:  #000000
-Rxvt*color8:  #020202
-! red.
-Rxvt*color1:  #E00707
-Rxvt*color9:  #FF5050
-! green.
-Rxvt*color2:  #00A800
-Rxvt*color10: #80FF80
-! yellow.
-Rxvt*color3:  #FEDC00
-Rxvt*color11: #FFFF80
-! blue.
-Rxvt*color4:  #005EFF
-Rxvt*color12: #4D80FF
-! magenta.
-Rxvt*color5:  #A800A8
-Rxvt*color13: #FF80FF
-! cyan.
-Rxvt*color6:  #00A8A8
-Rxvt*color14: #22D8D8
-! white.
-Rxvt*color7:  #FFFFFF
-Rxvt*color15: #B6B6B6
+*.color0:           #101010
+*.color8:           #444444
+! red
+*.color1:           #c5332e
+*.color9:           #ff5f5f
+! green
+*.color2:           #00875f
+*.color10:          #afff87
+! yellow
+*.color3:           #c67c48
+*.color11:          #ffff5f
+! blue
+*.color4:           #005f87
+*.color12:          #87afdf
+! magenta
+*.color5:           #8700af
+*.color13:          #c98de6
+! cyan
+*.color6:           #5e8d87
+*.color14:          #87dfdf
+! white
+*.color7:           #c0c0c0
+*.color15:          #e4e4e4
+
 
 !---------!
 ! KEYMAPS !

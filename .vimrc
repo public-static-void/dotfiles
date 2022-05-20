@@ -13,6 +13,8 @@ set nocompatible
 " Set encoding to UTF-8.
 scriptencoding utf-8
 set encoding=utf-8
+set fileencoding=utf-8
+set fileencodings=utf-8
 set fenc=utf-8
 
 " Disable sound.
@@ -82,8 +84,6 @@ set laststatus=2
 colorscheme angr            " top
 "colorscheme codedark       " top
 "colorscheme apprentice     " top
-"colorscheme lucid          " top
-"colorscheme lucius         " top
 
 " Makes every background transparent.
 highlight NonText     term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
