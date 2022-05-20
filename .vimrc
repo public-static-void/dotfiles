@@ -363,3 +363,5 @@ endfunction
 " Make <Enter> key select the highlighted menu item when the popup menu is visible.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
+nnoremap <silent><esc> :noh<return><esc>
+
