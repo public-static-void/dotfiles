@@ -1,0 +1,27 @@
+{
+    "wallpaper": "/home/ruthless/Bilder/walls/aesthetic2.jpg",
+    "alpha": "75",
+    "special": {
+        "background": "#1e1e1e",
+        "foreground": "#d4d4d4",
+        "cursor": "#eeeeee"
+    },
+    "colors": {
+        "color0": "#000000",
+        "color1": "#cd3131",
+        "color2": "#6a9955",
+        "color3": "#ce9178",
+        "color4": "#2472c8",
+        "color5": "#c586c0",
+        "color6": "#11a8cd",
+        "color7": "#c0c0c0",
+        "color8": "#666666",
+        "color9": "#f14c4c",
+        "color10": "#b5cea8",
+        "color11": "#dcdcaa",
+        "color12": "#569cd6",
+        "color13": "#daadd6",
+        "color14": "#9cdcfe",
+        "color15": "#e5e5e5"
+    }
+}
