@@ -68,39 +68,75 @@ URxvt*boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
 ! COLOR SETTINGS !
 !----------------!
 
+! angr color theme.
+
 ! Use the specified colour as the window's background colour [default White].
 ! Make background black and transparent (amount specified by the number in the brackets).
-*.background:   [75]#262626
+!*.background:   [75]#262626
 ! Use the specified colour as the window's foreground colour [default Black].
-*.foreground:       #E5E5E5
+!*.foreground:       #E5E5E5
+! Specify cursor color.
+!URxvt.cursorColor:  #EEEEEE
+! Specify terminal colorscheme.
+! black.
+!*.color0:           #101010
+!*.color8:           #444444
+! red
+!*.color1:           #c5332e
+!*.color9:           #ff5f5f
+! green
+!*.color2:           #00875f
+!*.color10:          #afff87
+! yellow
+!*.color3:           #c67c48
+!*.color11:          #ffff5f
+! blue
+!*.color4:           #005f87
+!*.color12:          #87afdf
+! magenta
+!*.color5:           #8700af
+!*.color13:          #c98de6
+! cyan
+!*.color6:           #5e8d87
+!*.color14:          #87dfdf
+! white
+!*.color7:           #c0c0c0
+!*.color15:          #e4e4e4
+
+! codedark color theme.
+
+! Use the specified colour as the window's background colour [default White].
+! Make background black and transparent (amount specified by the number in the brackets).
+*.background:   [75]#1e1e1e
+! Use the specified colour as the window's foreground colour [default Black].
+*.foreground:       #d4d4d4
 ! Specify cursor color.
 URxvt.cursorColor:  #EEEEEE
 ! Specify terminal colorscheme.
 ! black.
-*.color0:           #101010
-*.color8:           #444444
+*.color0:           #000000
+*.color8:           #666666
 ! red
-*.color1:           #c5332e
-*.color9:           #ff5f5f
+*.color1:           #cd3131
+*.color9:           #f14c4c
 ! green
-*.color2:           #00875f
-*.color10:          #afff87
+*.color2:           #6a9955
+*.color10:          #b5cea8
 ! yellow
-*.color3:           #c67c48
-*.color11:          #ffff5f
+*.color3:           #ce9178
+*.color11:          #dcdcaa
 ! blue
-*.color4:           #005f87
-*.color12:          #87afdf
+*.color4:           #2472c8
+*.color12:          #569cd6
 ! magenta
-*.color5:           #8700af
-*.color13:          #c98de6
+*.color5:           #c586c0
+*.color13:          #daadd6
 ! cyan
-*.color6:           #5e8d87
-*.color14:          #87dfdf
+*.color6:           #11a8cd
+*.color14:          #9cdcfe
 ! white
 *.color7:           #c0c0c0
-*.color15:          #e4e4e4
-
+*.color15:          #e5e5e5
 
 !---------!
 ! KEYMAPS !
