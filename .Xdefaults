@@ -11,13 +11,13 @@
 !------------------!
 
 ! Specifies the name of the terminal type to be set in the TERM environment variable.
-URxvt*termName: rxvt-unicode-256color
+URxvt.termName: rxvt-unicode-256color
 
 ! Start as a login shell by prepending a '-' to argv[0] of the shell.
 URxvt.loginShell: true
 
 ! Save specified number of lines in the scrollback buffer [default 64]. This resource is limited on most machines to 65535.
-URxvt.saveLines: 10000
+URxvt.saveLines: 25000
 
 ! Create the window with the specified X window geometry [default 80x24].
 URxvt.geometry: 90x30
@@ -39,8 +39,6 @@ URxvt.scrollBar: false
 
 ! Make cursor blink (off by default).
 URxvt.cursorBlink: true
-! Set cursor color.
-URxvt.cursorColor: #00A8A8
 ! True: Make the cursor underlined. False: Make the cursor a box [default].
 URxvt.cursorUnderline: false
 
@@ -54,14 +52,14 @@ URxvt.pointerBlank: true
 ! Select the fonts to be used.
 ! This is a comma separated list of font names that are checked in order when trying to find glyphs for characters.
 ! The first font defines the cell size for characters; other fonts might be smaller, but not (in general) larger
-URxvt*font:     xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
+URxvt.font:     xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
                 xft:SourceCodePro:               pixelsize=18,\
                 xft:SourceCodePro for Powerline: pixelsize=18
-URxvt*boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
+URxvt.boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
                 xft:SourceCodePro:               pixelsize=18,\
                 xft:SourceCodePro for Powerline: pixelsize=18
-!URxvt*font:     xft:SauceCodePro Nerd Font Mono: pixelsize=18
-!URxvt*boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18
+!URxvt.font:     xft:SauceCodePro Nerd Font Mono: pixelsize=18
+!URxvt.boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18
 
 
 !----------------!
@@ -70,10 +68,10 @@ URxvt*boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
 
 ! angr color theme.
 
-! Use the specified colour as the window's background colour [default White].
+! Use the specified colour as the windows background colour [default White].
 ! Make background black and transparent (amount specified by the number in the brackets).
 !*.background:   [75]#262626
-! Use the specified colour as the window's foreground colour [default Black].
+! Use the specified colour as the windows foreground colour [default Black].
 !*.foreground:       #E5E5E5
 ! Specify cursor color.
 !URxvt.cursorColor:  #EEEEEE
@@ -105,10 +103,10 @@ URxvt*boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
 
 ! codedark color theme.
 
-! Use the specified colour as the window's background colour [default White].
+! Use the specified colour as the windows background colour [default White].
 ! Make background black and transparent (amount specified by the number in the brackets).
 *.background:   [75]#1e1e1e
-! Use the specified colour as the window's foreground colour [default Black].
+! Use the specified colour as the windows foreground colour [default Black].
 *.foreground:       #d4d4d4
 ! Specify cursor color.
 URxvt.cursorColor:  #EEEEEE
@@ -139,6 +137,13 @@ URxvt.cursorColor:  #EEEEEE
 *.color15:          #e5e5e5
 
 !---------!
+! PLUGINS !
+!---------!
+
+! Perl Extentions.
+URxvt.perl-ext-common:  resize-font
+
+!---------!
 ! KEYMAPS !
 !---------!
 
@@ -161,3 +166,12 @@ URxvt.iso14755_52: false
 ! Allow to copy/paste with Ctrl+Shift+c/Ctrl+Shift+v from/to terminal.
 URxvt.keysym.Shift-Control-V: eval:paste_clipboard
 URxvt.keysym.Shift-Control-C: eval:selection_to_clipboard
+
+! Changing font size on the fly.
+URxvt.keysym.C-KP_Subtract: resize-font:smaller
+URxvt.keysym.C-KP_Add:      resize-font:bigger
+URxvt.keysym.C-KP_Multiply: resize-font:reset
+URxvt.keysym.C-KP_Divide:   resize-font:show
+
+
+

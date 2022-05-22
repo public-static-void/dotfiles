@@ -71,16 +71,16 @@ set_from_resource $bgf  i3wm.color7 #4CB88F
 set_from_resource $fgf  i3wm.color8 #E7E4D8
 # Unfocused.
 set_from_resource $bdu  i3wm.color8 #308695
-set_from_resource $bgu  i3wm.color8 #455054 #
+set_from_resource $bgu  i3wm.color8 #455054
 set_from_resource $fgu  i3wm.color15 #D4CFC9
 # Inactive.
 set_from_resource $bdi  i3wm.color8 #308695
 set_from_resource $bgi  i3wm.color8 #656262
 set_from_resource $fgi  i3wm.color7 #4CB88F
 # Urgent.
-set_from_resource $bdx  i3wm.color1 #D45769
+set_from_resource $bdx  i3wm.color9 #D45769
 set_from_resource $bgx  i3wm.color9 #FB2E01
-set_from_resource $fgx  i3wm.color11 #FFFEB3
+set_from_resource $fgx  i3wm.color15 #FFFEB3
 
 #set_from_resource $term_background background
 #set_from_resource $term_foreground foreground

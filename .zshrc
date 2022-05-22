@@ -16,6 +16,9 @@
 # Allow to change directory without typing "cd".
 setopt autocd
 
+# Disable bell.
+setopt nobeep
+
 # History settings.
 HISTFILE=~/.histfile
 HISTSIZE=10000
@@ -40,7 +43,7 @@ if [[ -d $HOME/.local/bin && -z $(echo $PATH | grep -o $HOME/.local/bin) ]]; the
 fi
 
 # Set JAVA_HOME and add java 16 to PATH (for renew).
-JAVA_HOME="/usr/lib/jvm/java-16-adoptopenjdk"
+JAVA_HOME="/usr/lib/jvm/java-15-adoptopenjdk"
 if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
     PATH="${PATH}:$JAVA_HOME/bin"
 fi
@@ -90,18 +93,26 @@ _comp_options+=(globdots)
 
 # Automatically highlight first element of completion menu.
 setopt MENU_COMPLETE
-# Automatically list choices on ambiguous completion.
-setopt AUTO_LIST
 # Complete from both ends of a word.
 setopt COMPLETE_IN_WORD
 # Prevents aliases from being internally substituted before completion.
 #setopt COMPLETE_ALIASES
+
+# _complete    -> completing
+# _expand      -> expand variables
+# _prefix      -> ignore everything behind cursor
+# _approximate -> fuzzy completion
+# _ignore      -> ignore some matches (i.e. directories when doing cd)
 
 # Define completers.
 zstyle ':completion:*' completer _extensions _complete _approximate
 
 # Allow to select in a menu.
 zstyle ':completion:*' menu select
+
+# one wrong character every X characters is corrected.
+# X = 5 is a reasonable default.
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX + $#SUFFIX) / 5 )) )'
 
 # Autocomplete options for cd instead of directory stack.
 zstyle ':completion:*' complete-options true
