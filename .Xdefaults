@@ -141,7 +141,7 @@ URxvt.cursorColor:  #EEEEEE
 !---------!
 
 ! Perl Extentions.
-URxvt.perl-ext-common:  resize-font
+URxvt.perl-ext-common: default, resize-font
 
 !---------!
 ! KEYMAPS !
