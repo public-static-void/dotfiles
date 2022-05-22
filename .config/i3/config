@@ -18,7 +18,7 @@ font pango:sourcecodepro 13
 #############
 
 # Start compositor.
-exec_always picom -f
+exec_always picom -b -f
 
 # Use nitrogen to set wallpaper.
 exec_always --no-startup-id nitrogen --restore &

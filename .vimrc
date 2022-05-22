@@ -149,7 +149,8 @@ set completeopt+=longest,menuone
 
 " Enable Tab completion for the command line.
 set wildmenu
-set wildmode=list:longest,full
+"set wildmode=list:longest,full
+set wildmode=longest,list,full
 " Ignore certain files.
 set wildignore+=*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
 
