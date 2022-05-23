@@ -261,6 +261,20 @@ let g:prettier#exec_cmd_async = 1
 " By default parsing errors will open the quickfix but can also be disabled.
 let g:prettier#quickfix_enabled = 0
 
+" IndentLine settings.
+" Exclude filetypes from showing indentation.
+let g:indentLine_fileTypeExclude = ["vimwiki", "help", "diff", "nerdtree"]
+" Exclude buffertypes from showing indentation.
+let g:indentLine_bufTypeExclude = ["help", "terminal", "nofile"]
+
+" Let plugin override cursor concealing settings except in vidual mode.
+let g:indentLine_setConceal = 1
+let g:indentLine_concealcursor = "inc"
+
+" Show dot character to indicate spaces.
+let g:indentLine_leadingSpaceEnabled = 1
+let g:indentLine_leadingSpaceChar = "·"
+
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
 """""""""""""""""""""""""""
