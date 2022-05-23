@@ -43,9 +43,7 @@ set autochdir
 set autoread
 
 " Enable system clipboard for copy/paste from/to outside vim.
-set clipboard=unnamedplus,autoselect
-"set clipboard=unnamed
-"set clipboard=unnamedplus
+"set clipboard=unnamedplus,autoselect
 
 " Remove buffer when close a tab.
 set nohidden
@@ -263,7 +261,7 @@ let g:prettier#quickfix_enabled = 0
 
 " IndentLine settings.
 " Exclude filetypes from showing indentation.
-let g:indentLine_fileTypeExclude = ["vimwiki", "help", "diff", "nerdtree"]
+let g:indentLine_fileTypeExclude = ["help", "diff", "nerdtree"]
 " Exclude buffertypes from showing indentation.
 let g:indentLine_bufTypeExclude = ["help", "terminal", "nofile"]
 
