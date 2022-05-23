@@ -381,3 +381,20 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " Remove last search highlighting with Escape.
 nnoremap <silent><esc> :noh<return><esc>
 
+" Autocomplete parenthesis, brackets and braces (visual and insert mode).
+inoremap ( ()<Left>
+inoremap [ []<Left>
+inoremap { {}<Left>
+
+vnoremap ( s()<Esc>P<Right>%
+vnoremap [ s[]<Esc>P<Right>%
+vnoremap { s{}<Esc>P<Right>%
+
+" Autocomplete quotes (visual and insert mode).
+inoremap ` ``<Left>
+inoremap " ""<Left>
+inoremap ' ''<Left>
+
+vnoremap ` s``<Esc>P<Right>%
+vnoremap " s""<Esc>P<Right>%
+vnoremap ' s''<Esc>P<Right>%
