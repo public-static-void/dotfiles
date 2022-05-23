@@ -23,7 +23,7 @@ URxvt.saveLines: 25000
 URxvt.geometry: 90x30
 
 ! Attempt to find a visual with the given bit depth.
-URxvt.depth: 32
+URxvt*depth: 32
 
 ! Turn off pseudo-transparency which would be using the root pixmap as background.
 URxvt.transparent: false
@@ -33,6 +33,11 @@ URxvt.fading: 15
 
 ! Set scrollbar style to rxvt, plain, next or xterm.
 URxvt.scrollStyle: rxvt
+
+! Show scrolling text output while focusing last line only.
+URxvt.scrollTtyOutput:      false
+URxvt.scrollWithBuffer:     true
+URxvt.scrollTtyKeypress:    true
 
 ! Disable the scrollbar (enabled by default).
 URxvt.scrollBar: false
