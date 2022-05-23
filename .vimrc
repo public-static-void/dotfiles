@@ -378,5 +378,6 @@ endfunction
 " Make <Enter> key select the highlighted menu item when the popup menu is visible.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
+" Remove last search highlighting with Escape.
 nnoremap <silent><esc> :noh<return><esc>
 
