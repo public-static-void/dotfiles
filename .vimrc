@@ -145,6 +145,9 @@ set complete+=spell,keyword
 " Let popup menu insert the longest common text of all matches instead of selecting the first completion item, and make the menu come up even if there's only one match.
 set completeopt+=longest,menuone
 
+" Disables automatic commenting on newline.
+autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+
 " Enable Tab completion for the command line.
 set wildmenu
 "set wildmode=list:longest,full
