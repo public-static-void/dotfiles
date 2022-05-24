@@ -387,15 +387,15 @@ inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
 
-vnoremap ( s()<Esc>P<Right>%
-vnoremap [ s[]<Esc>P<Right>%
-vnoremap { s{}<Esc>P<Right>%
+"vnoremap ( s()<Esc>P<Right>%
+"vnoremap [ s[]<Esc>P<Right>%
+"vnoremap { s{}<Esc>P<Right>%
 
 " Autocomplete quotes (visual and insert mode).
 inoremap ` ``<Left>
 inoremap " ""<Left>
 inoremap ' ''<Left>
 
-vnoremap ` s``<Esc>P<Right>%
-vnoremap " s""<Esc>P<Right>%
-vnoremap ' s''<Esc>P<Right>%
+"vnoremap ` s``<Esc>P<Right>%
+"vnoremap " s""<Esc>P<Right>%
+"vnoremap ' s''<Esc>P<Right>%
