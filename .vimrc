@@ -11,11 +11,10 @@
 set nocompatible
 
 " Set encoding to UTF-8.
-scriptencoding utf-8
 set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
-set fenc=utf-8
+scriptencoding utf-8
 
 " Disable sound.
 set belloff=all
@@ -28,7 +27,7 @@ set t_Co=256
 execute pathogen#infect()
 
 " Use vim8+'s native package manager to load plugins as well.
-packloadall
+"packloadall
 
 " Allow plugins to determine indentation.
 filetype plugin indent on
@@ -382,20 +381,16 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 " Remove last search highlighting with Escape.
 nnoremap <silent><esc> :noh<return><esc>
 
-" Autocomplete parenthesis, brackets and braces (visual and insert mode).
+" Autocomplete parenthesis, brackets and braces.
 inoremap ( ()<Left>
 inoremap [ []<Left>
 inoremap { {}<Left>
 
-"vnoremap ( s()<Esc>P<Right>%
-"vnoremap [ s[]<Esc>P<Right>%
-"vnoremap { s{}<Esc>P<Right>%
-
-" Autocomplete quotes (visual and insert mode).
+" Autocomplete quotes.
 inoremap ` ``<Left>
 inoremap " ""<Left>
 inoremap ' ''<Left>
 
-"vnoremap ` s``<Esc>P<Right>%
-"vnoremap " s""<Esc>P<Right>%
-"vnoremap ' s''<Esc>P<Right>%
+" Keep selection after indenting in visual mode.
+vmap < <gv
+vmap > >gv

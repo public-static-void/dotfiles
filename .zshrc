@@ -62,9 +62,9 @@ LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS
 
 # Preferred editor for local and remote sessions.
 if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR="vim"
+    export EDITOR="nvim"
 else
-    export EDITOR="vim"
+    export EDITOR="nvim"
 fi
 
 # Export the PATH-variable.
@@ -229,7 +229,10 @@ bindkey -a "^[[8~" end-of-line
 # ALIASES #
 ###########
 
-# confirm before overwriting something
+# Neovim is the new vim.
+alias vim="nvim"
+
+# Confirm before overwriting something
 alias cp="cp -i"
 alias mv="mv -i"
 alias rm="rm -i"

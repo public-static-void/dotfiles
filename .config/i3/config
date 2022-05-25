@@ -191,25 +191,27 @@ bindsym $mod+r mode "resize"
 bindsym $mod+Shift+f exec --no-startup-id firefox
 
 # Open i3 config.
-bindsym $mod+Shift+a exec --no-startup-id urxvt -e vim ~/.config/i3/config
+bindsym $mod+Shift+a exec --no-startup-id urxvt -e nvim ~/.config/i3/config
 
 # Open i3blocks config.
-bindsym $mod+Shift+y exec --no-startup-id urxvt -e vim ~/.i3blocks.conf
+bindsym $mod+Shift+y exec --no-startup-id urxvt -e nvim ~/.i3blocks.conf
 
 # Open Xdefaults.
-bindsym $mod+Shift+x exec --no-startup-id urxvt -e vim ~/.Xdefaults
+bindsym $mod+Shift+x exec --no-startup-id urxvt -e nvim ~/.Xdefaults
 
 # Open bashrc.
-#bindsym $mod+Shift+s exec --no-startup-id urxvt -e vim ~/.bashrc
+#bindsym $mod+Shift+s exec --no-startup-id urxvt -e nvim ~/.bashrc
 
 # Open zshrc.
-bindsym $mod+Shift+s exec --no-startup-id urxvt -e vim ~/.zshrc
+bindsym $mod+Shift+s exec --no-startup-id urxvt -e nvim ~/.zshrc
 
 # Open vimrc.
-bindsym $mod+Shift+d exec --no-startup-id urxvt -e vim ~/.vimrc
+#bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.vimrc
+# Open neovim config.
+bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.config/nvim/init.vim
 
 # Open picom config.
-bindsym $mod+Shift+less exec --no-startup-id urxvt -e vim ~/.config/picom/picom.conf
+bindsym $mod+Shift+less exec --no-startup-id urxvt -e nvim ~/.config/picom/picom.conf
 
 # Start Spacefm.
 bindsym $mod+Shift+w exec --no-startup-id spacefm
