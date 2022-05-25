@@ -32,27 +32,32 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 
 " Install plugins:
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'ervandew/supertab'
+
+Plug 'preservim/nerdtree'
+Plug 'Xuyuanp/nerdtree-git-plugin'
+Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
+Plug 'ryanoasis/vim-devicons'
+
+Plug 'kassio/neoterm'
+
+Plug 'airblade/vim-gitgutter'
+Plug 'tpope/vim-fugitive'
+
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
-Plug 'preservim/nerdtree'
+
 Plug 'dense-analysis/ale'
-Plug 'othree/html5.vim'
-Plug 'Yggdroot/indentLine'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'ervandew/supertab'
-Plug 'tranvansang/vim-close-pair'
-Plug 'alvan/vim-closetag'
-Plug 'ryanoasis/vim-devicons'
-Plug 'tpope/vim-fugitive'
-Plug 'airblade/vim-gitgutter'
-Plug 'pangloss/vim-javascript'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'sheerun/vim-polyglot'
-Plug 'tpope/vim-surround'
-Plug 'frazrepo/vim-rainbow'
-Plug 'Shougo/vimproc.vim'
 Plug 'prettier/vim-prettier'
-Plug 'tpope/vim-unimpaired'
+Plug 'Yggdroot/indentLine'
+Plug 'sheerun/vim-polyglot'
+
+Plug 'othree/html5.vim'
+Plug 'alvan/vim-closetag'
+
+Plug 'pangloss/vim-javascript'
+Plug 'frazrepo/vim-rainbow'
+
 
 " Initialize plugin system
 call plug#end()
@@ -255,7 +260,7 @@ augroup END
 let g:airline_theme = 'powerlineish'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
-"let g:airline#extensions#ale#enabled = 1
+let g:airline#extensions#ale#enabled = 1
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
@@ -315,15 +320,6 @@ let g:NERDTreeGitStatusIndicatorMapCustom = {
                 \ }
 " Predefined map used nerdfonts.
 let g:NERDTreeGitStatusUseNerdFonts = 1 " you should install nerdfonts by yourself. default: 0
-
-" Show ignored status.
-"let g:NERDTreeGitStatusShowIgnored = 1 " a heavy feature may cost much more time. default: 0
-
-" Indicate every single untracked file under an untracked dir.
-"let g:NERDTreeGitStatusUntrackedFilesMode = 'all' " a heavy feature too. default: normal
-
-" Show Clean indicator.
-"let g:NERDTreeGitStatusShowClean = 1 " default: 0
 
 " Hide the boring brackets([ ]).
 let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
@@ -441,11 +437,12 @@ nmap <C-d> gt
 " Ctrl-F to close tab.
 nmap <C-f> :tabclose<CR>
 
-" Start built-in terminal with Ctrl+T.
-map <C-T> :terminal<CR>
+" Toggle neoterm terminal with Ctrl+T.
+map <C-T> :Ttoggle <CR>
+tmap <C-T> exit <CR>
 
-" Exit built-in terminal with Ctrl-T as well.
-tmap <C-T> <C-w>:q!<CR>
+" Make sure neoterm starts in horizontal split.
+let g:neoterm_default_mod='belowright'
 
 " Set Ctrl+N to open NERDTree plugin.
 " Open NERDTree in the directory of the current file (or /home if no file is open)

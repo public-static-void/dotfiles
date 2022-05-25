@@ -57,14 +57,15 @@ URxvt.pointerBlank: true
 ! Select the fonts to be used.
 ! This is a comma separated list of font names that are checked in order when trying to find glyphs for characters.
 ! The first font defines the cell size for characters; other fonts might be smaller, but not (in general) larger
-URxvt.font:     xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
-                xft:SourceCodePro:               pixelsize=18,\
-                xft:SourceCodePro for Powerline: pixelsize=18
-URxvt.boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18,\
-                xft:SourceCodePro:               pixelsize=18,\
-                xft:SourceCodePro for Powerline: pixelsize=18
-!URxvt.font:     xft:SauceCodePro Nerd Font Mono: pixelsize=18
-!URxvt.boldFont: xft:SauceCodePro Nerd Font Mono: pixelsize=18
+!URxvt.font:           xft:SauceCodePro Nerd Font Mono:style=Regular:pixelsize=18
+!URxvt.boldFont:       xft:SauceCodePro Nerd Font Mono:style=Bold:pixelsize=18
+!URxvt.italicFont:     xft:SauceCodePro Nerd Font Mono:stlye=Italic:pixelsize=18
+!URxvt.boldItalicFont: xft:SauceCodePro Nerd Font Mono:style=Bold Italic:pixelsize=18
+
+URxvt.font:           xft:MesloLGSDZ Nerd Font Mono:style=Regular:pixelsize=18
+URxvt.boldFont:       xft:MesloLGSDZ Nerd Font Mono:style=Bold:pixelsize=18
+URxvt.italicFont:     xft:MesloLGSDZ Nerd Font Mono:style=Italic:pixelsize=18
+URxvt.boldItalicFont: xft:MesloLGSDZ Nerd Font Mono:style=Bold Italic:pixelsize=18
 
 
 !----------------!
