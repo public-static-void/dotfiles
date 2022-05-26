@@ -65,6 +65,7 @@ call plug#end()
 " Install Coc extentions.
 let g:coc_global_extensions = [
     \'coc-json',
+    \'coc-pairs',
     \'coc-tsserver',
     \'coc-eslint',
     \'coc-html',
@@ -554,22 +555,22 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 nnoremap <silent><esc> :noh<return><esc>
 
 " Autocomplete parenthesis, brackets and braces.
-inoremap ( ()<Left>
-inoremap [ []<Left>
-inoremap { {}<Left>
+""inoremap ( ()<Left>
+""inoremap [ []<Left>
+""inoremap { {}<Left>
 
 " Autocomplete quotes.
-inoremap ` ``<Left>
-inoremap " ""<Left>
-inoremap ' ''<Left>
+""inoremap ` ``<Left>
+""inoremap " ""<Left>
+""inoremap ' ''<Left>
 
 " If you close a bracket that is already closed, it overwrites.
-inoremap <expr> ) strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")"
-inoremap <expr> } strpart(getline('.'), col('.')-1, 1) == "}" ? "\<Right>" : "}"
-inoremap <expr> ] strpart(getline('.'), col('.')-1, 1) == "]" ? "\<Right>" : "]"
-inoremap <expr> ` strpart(getline('.'), col('.')-1, 1) == "`" ? "\<Right>" : "``<left>"
-inoremap <expr> ' strpart(getline('.'), col('.')-1, 1) == "'" ? "\<Right>" : "''<left>"
-inoremap <expr> " strpart(getline('.'), col('.')-1, 1) == "\"" ? "\<Right>" : "\"\"<left>"
+""inoremap <expr> ) strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")"
+""inoremap <expr> } strpart(getline('.'), col('.')-1, 1) == "}" ? "\<Right>" : "}"
+""inoremap <expr> ] strpart(getline('.'), col('.')-1, 1) == "]" ? "\<Right>" : "]"
+""inoremap <expr> ` strpart(getline('.'), col('.')-1, 1) == "`" ? "\<Right>" : "``<left>"
+""inoremap <expr> ' strpart(getline('.'), col('.')-1, 1) == "'" ? "\<Right>" : "''<left>"
+""inoremap <expr> " strpart(getline('.'), col('.')-1, 1) == "\"" ? "\<Right>" : "\"\"<left>"
 
 " Keep selection after indenting in visual mode.
 vmap < <gv
