@@ -165,6 +165,12 @@ URxvt.keysym.M-Down:        \033[1;3B
 URxvt.keysym.M-Right:       \033[1;3C
 URxvt.keysym.M-Left:        \033[1;3D
 
+! Change escape sequences send by urxvt by pressing Shift+Arrowkeys to those xterm would send.
+URxvt.keysym.S-Up:          \033[1;2A
+URxvt.keysym.S-Down:        \033[1;2B
+URxvt.keysym.S-Right:       \033[1;2C
+URxvt.keysym.S-Left:        \033[1;2D
+
 ! Disable default bindings for Control-Shift.
 URxvt.iso14755:    false
 URxvt.iso14755_52: false

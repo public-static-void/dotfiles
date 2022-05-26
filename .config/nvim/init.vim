@@ -32,7 +32,6 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 
 " Install plugins:
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-"Plug 'ervandew/supertab'
 
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -338,6 +337,21 @@ let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
 " Always show gitgutter.
 set signcolumn=yes
 
+" ALE Config.
+" Dont use ALE for code completion.
+let g:ale_completion_enabled = 0
+
+let g:ale_linters = {'python': 'all'}
+let g:ale_fixers = {'python': ['isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']}
+let g:ale_lsp_suggestions = 1
+let g:ale_fix_on_save = 1
+let g:ale_go_gofmt_options = '-s'
+let g:ale_go_gometalinter_options = '— enable=gosimple — enable=staticcheck'
+let g:ale_completion_enabled = 1
+let g:ale_echo_msg_error_str = 'E'
+let g:ale_echo_msg_warning_str = 'W'
+let g:ale_echo_msg_format = '[%linter%] [%severity%] %code: %%s'
+
 " CoC config.
 " Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
@@ -358,11 +372,21 @@ else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
-
 " Make <CR> auto-select the first completion item and notify coc.nvim to
 " format on enter, <cr> could be remapped by other vim plugin
 inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Use y to show documentation in preview window.
+nnoremap <silent> <TAB> :call ShowDocumentation()<CR>
+
+function! ShowDocumentation()
+  if CocAction('hasProvider', 'hover')
+    call CocActionAsync('doHover')
+  else
+    call feedkeys('TAB', 'in')
+  endif
+endfunction
 
 " Apply AutoFix to problem on the current line.
 nmap f <Plug>(coc-fix-current)
@@ -417,17 +441,25 @@ let g:html_indent_tags = 'li\|p'
 
 " Remap start/end of line/document to H,L,J,K.
 map H 0
-map L $
 map J G
 map K gg
+map L $
+" Same for arrow keys.
+map <S-left>  0
+map <S-down>  G
+map <S-up>    gg
+map <S-right> $
 
 " Don't skip line wraps while moving over them.
 nnoremap j gj
 nnoremap k gk
+" Same for arrow keys.
+nnoremap <down> gj
+nnoremap <up>   gk
 
 " Remap some command typos.
-:command W w
-:command Q q
+:command W  w
+:command Q  q
 :command WQ wq
 :command Wq wq
 :command QA qa
@@ -466,7 +498,7 @@ map <Esc>h :vertical resize -1<CR>
 map <Esc>l :vertical resize +1<CR>
 
 " Open a new tab with Ctrl-A.
-map <C-A> :tabnew<CR>
+map  <C-A> :tabnew<CR>
 
 " Ctrl-S to select next tab.
 nmap <C-s> gT
@@ -478,7 +510,7 @@ nmap <C-d> gt
 nmap <C-f> :tabclose<CR>
 
 " Toggle neoterm terminal with Ctrl+T.
-map <C-T> :Ttoggle <CR>
+map  <C-T> :Ttoggle <CR>
 tmap <C-T> exit <CR>
 
 " Make sure neoterm starts in horizontal split.
