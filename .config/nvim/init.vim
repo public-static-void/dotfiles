@@ -46,19 +46,33 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-Plug 'dense-analysis/ale'
-Plug 'prettier/vim-prettier'
+""Plug 'dense-analysis/ale'
+""Plug 'prettier/vim-prettier'
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
+Plug 'fisadev/vim-isort'
 
 Plug 'othree/html5.vim'
 Plug 'alvan/vim-closetag'
+Plug 'valloric/MatchTagAlways'
 
 Plug 'pangloss/vim-javascript'
 Plug 'frazrepo/vim-rainbow'
 
 " Initialize plugin system
 call plug#end()
+
+" Install Coc extentions.
+let g:coc_global_extensions = [
+    \'coc-json',
+    \'coc-tsserver',
+    \'coc-eslint',
+    \'coc-html',
+    \'coc-css',
+    \'coc-prettier',
+    \'coc-highlight',
+    \'coc-pyright'
+    \]
 
 """"""""""""""""""""
 " GENERAL SETTINGS "
@@ -199,7 +213,6 @@ autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Enable Tab completion for the command line.
 set wildmenu
-"set wildmode=list:longest,full
 set wildmode=longest,list,full
 " Ignore certain files.
 set wildignore+=*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
@@ -339,18 +352,17 @@ set signcolumn=yes
 
 " ALE Config.
 " Dont use ALE for code completion.
-let g:ale_completion_enabled = 0
+""let g:ale_completion_enabled = 0
 
-let g:ale_linters = {'python': 'all'}
-let g:ale_fixers = {'python': ['isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']}
-let g:ale_lsp_suggestions = 1
-let g:ale_fix_on_save = 1
-let g:ale_go_gofmt_options = '-s'
-let g:ale_go_gometalinter_options = '— enable=gosimple — enable=staticcheck'
-let g:ale_completion_enabled = 1
-let g:ale_echo_msg_error_str = 'E'
-let g:ale_echo_msg_warning_str = 'W'
-let g:ale_echo_msg_format = '[%linter%] [%severity%] %code: %%s'
+""let g:ale_linters = {'python': 'pyflakes'}
+""let g:ale_fixers = {'python': ['isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']}
+""let g:ale_lsp_suggestions = 1
+""let g:ale_fix_on_save = 1
+""let g:ale_go_gofmt_options = '-s'
+""let g:ale_go_gometalinter_options = '— enable=gosimple — enable=staticcheck'
+""let g:ale_echo_msg_error_str = 'E'
+""let g:ale_echo_msg_warning_str = 'W'
+""let g:ale_echo_msg_format = '[%linter%] [%severity%] %code: %%s'
 
 " CoC config.
 " Use tab for trigger completion with characters ahead and navigate.
@@ -499,15 +511,22 @@ map <Esc>l :vertical resize +1<CR>
 
 " Open a new tab with Ctrl-A.
 map  <C-A> :tabnew<CR>
-
 " Ctrl-S to select next tab.
 nmap <C-s> gT
-
-" Ctrl-D to select previous tab
+" Ctrl-D to select previous tab.
 nmap <C-d> gt
-
 " Ctrl-F to close tab.
 nmap <C-f> :tabclose<CR>
+
+" Open a new buffer with Alt-A.
+map  <M-a> :enew<CR>
+" Alt-S to select next buffer.
+nmap <M-s> :bn<CR>
+" Alt-D to select previous buffer.
+nmap <M-d> :bp<CR>
+" Alt-F to close buffer.
+nmap <M-f> :bd<CR>
+
 
 " Toggle neoterm terminal with Ctrl+T.
 map  <C-T> :Ttoggle <CR>
