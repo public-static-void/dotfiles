@@ -32,7 +32,7 @@ call plug#begin(expand('~/.config/nvim/plugged'))
 
 " Install plugins:
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'ervandew/supertab'
+"Plug 'ervandew/supertab'
 
 Plug 'preservim/nerdtree'
 Plug 'Xuyuanp/nerdtree-git-plugin'
@@ -58,7 +58,6 @@ Plug 'alvan/vim-closetag'
 Plug 'pangloss/vim-javascript'
 Plug 'frazrepo/vim-rainbow'
 
-
 " Initialize plugin system
 call plug#end()
 
@@ -72,13 +71,15 @@ set fileencoding=utf-8
 set fileencodings=utf-8
 scriptencoding utf-8
 
-
 " Set shell.
 if exists('$SHELL')
     set shell=$SHELL
 else
     set shell=/bin/sh
 endif
+
+" Leader key variable.
+let mapleader = ","
 
 " Allow plugins to determine indentation.
 filetype plugin indent on
@@ -175,6 +176,11 @@ set incsearch
 " Highlight the found search terms.
 set hlsearch
 
+" If search term contains uppercase characters, do a case sensitive search.
+set ignorecase
+" Else, ignore cases.
+set smartcase
+
 " Show matching brackets.
 set showmatch
 
@@ -199,6 +205,9 @@ set wildmode=longest,list,full
 " Ignore certain files.
 set wildignore+=*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
 
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
 " Splits behaviour:
 " Splits open at the bottom and right.
 set splitbelow
@@ -221,8 +230,10 @@ set directory=~/.local/share/nvim/swap
 
 " Delete local backup since everything is stored centrally.
 set nobackup
-" Remove buffer when tab is closed.
-set nohidden
+set nowritebackup
+
+" Dont remove buffer when tab is closed.
+set hidden
 
 " Define a function to remove trailing whitespace.
 fun! TrimTrailingWhitespace()
@@ -327,6 +338,38 @@ let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
 " Always show gitgutter.
 set signcolumn=yes
 
+" CoC config.
+" Use tab for trigger completion with characters ahead and navigate.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ CheckBackspace() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! CheckBackspace() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+if has('nvim')
+  inoremap <silent><expr> <c-space> coc#refresh()
+else
+  inoremap <silent><expr> <c-@> coc#refresh()
+endif
+
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Apply AutoFix to problem on the current line.
+nmap f <Plug>(coc-fix-current)
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
 " Prettier plugin configurations:
 " Enable auto formatting of files that have "@format" or "@prettier" tag.
 let g:prettier#autoformat = 1
@@ -371,9 +414,6 @@ let g:html_indent_tags = 'li\|p'
 """""""""""""""
 " KEYBINDINGS "
 """""""""""""""
-
-" Leader key variable.
-let mapleader = ","
 
 " Remap start/end of line/document to H,L,J,K.
 map H 0
