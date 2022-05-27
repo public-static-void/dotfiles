@@ -46,8 +46,6 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
-""Plug 'dense-analysis/ale'
-""Plug 'prettier/vim-prettier'
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'fisadev/vim-isort'
@@ -351,20 +349,6 @@ let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
 " Always show gitgutter.
 set signcolumn=yes
 
-" ALE Config.
-" Dont use ALE for code completion.
-""let g:ale_completion_enabled = 0
-
-""let g:ale_linters = {'python': 'pyflakes'}
-""let g:ale_fixers = {'python': ['isort', 'yapf', 'remove_trailing_lines', 'trim_whitespace']}
-""let g:ale_lsp_suggestions = 1
-""let g:ale_fix_on_save = 1
-""let g:ale_go_gofmt_options = '-s'
-""let g:ale_go_gometalinter_options = '— enable=gosimple — enable=staticcheck'
-""let g:ale_echo_msg_error_str = 'E'
-""let g:ale_echo_msg_warning_str = 'W'
-""let g:ale_echo_msg_format = '[%linter%] [%severity%] %code: %%s'
-
 " CoC config.
 " Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
@@ -553,24 +537,6 @@ inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 
 " Remove last search highlighting with Escape.
 nnoremap <silent><esc> :noh<return><esc>
-
-" Autocomplete parenthesis, brackets and braces.
-""inoremap ( ()<Left>
-""inoremap [ []<Left>
-""inoremap { {}<Left>
-
-" Autocomplete quotes.
-""inoremap ` ``<Left>
-""inoremap " ""<Left>
-""inoremap ' ''<Left>
-
-" If you close a bracket that is already closed, it overwrites.
-""inoremap <expr> ) strpart(getline('.'), col('.')-1, 1) == ")" ? "\<Right>" : ")"
-""inoremap <expr> } strpart(getline('.'), col('.')-1, 1) == "}" ? "\<Right>" : "}"
-""inoremap <expr> ] strpart(getline('.'), col('.')-1, 1) == "]" ? "\<Right>" : "]"
-""inoremap <expr> ` strpart(getline('.'), col('.')-1, 1) == "`" ? "\<Right>" : "``<left>"
-""inoremap <expr> ' strpart(getline('.'), col('.')-1, 1) == "'" ? "\<Right>" : "''<left>"
-""inoremap <expr> " strpart(getline('.'), col('.')-1, 1) == "\"" ? "\<Right>" : "\"\"<left>"
 
 " Keep selection after indenting in visual mode.
 vmap < <gv
