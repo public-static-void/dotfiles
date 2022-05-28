@@ -247,13 +247,23 @@ alias rm="rm -i"
 alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
 # Make "ls" print directories first and ignore colorcode if output to file.
-alias ls="ls -hNF --color=auto --group-directories-first"
+# alias ls="ls -hNF --color=auto --group-directories-first"
 
 # Show hidden files.
-alias lsa="ls -ahNF --color=auto --group-directories-first"
+# alias la="ls -ahNF --color=auto --group-directories-first"
 
 # Show hidden files and detailed information.
-alias lsl="ls -lahNF --color=auto --group-directories-first"
+# alias ll="ls -lahNF --color=auto --group-directories-first"
+
+# Use lsd instead of ls.
+# Print directories first.
+alias "ls"="lsd -h --group-dirs first"
+
+# Show hidden files.
+alias "la"="lsd -hA --group-dirs first"
+
+# Show hidden files and detailed information.
+alias "ll"="lsd -hlA --group-dirs first"
 
 # Make pacman colorful.
 alias pacman="sudo pacman --color=auto"
@@ -320,9 +330,6 @@ alias warthunder="$HOME/Games/war-thunder/aces"
 # PokeOne 1.Acc.
 alias poke1="WINEPREFIX=$HOME/.wine $HOME/.wine/drive_c/Program\ Files\ \(x86\)/PokeOne32/PokeOne32.exe"
 
-# PokeOne 2.Acc.
-alias poke2="WINEPREFIX=$HOME/.wine2 $HOME/.wine/drive_c/Program\ Files\ \(x86\)/PokeOne32/PokeOne32.exe"
-
 # Openxcom.
 alias xcom="openxcom -data $HOME/.wine/drive_c/GOG\ Games/X-COM\ UFO\ Defense"
 
@@ -335,14 +342,8 @@ alias sims2="cd $HOME/wine-3.19/a; env WINEPREFIX=~/wine-3.19/a/ ./wine $HOME/wi
 # HoI3.
 alias hoi3="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Paradox\ Interactive/Hearts\ of\ Iron\ III; wine BI\ Quick\ Launch.exe"
 
-# HoI3 black ice 8.
-alias hoi3bi8="cd $HOME/win32-HoI3/drive_c/Games/Hearts\ of\ Iron\ III/; WINEPREFIX=$HOME/win32-HoI3 WINEDEBUG=-all wine BlackICE\ by\ Panzeroo.exe"
-
 # HoI3 black ice 10.41.
 alias hoi3bi10="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Paradox\ Interactive/Hearts\ of\ Iron\ III/; wine-64 WINEDEBUG=-all wine launcher.exe"
-
-# Retro wow.
-alias wow="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/RetroWoW\ 1.12.1/RetroWoW\ 1.12.1/; WINEPREFIX=$HOME/win32-HoI3 wine WoW.exe"
 
 # Retro wow with 64bit prefix.
 alias wow2="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/RetroWoW\ 1.12.1/RetroWoW\ 1.12.1/; WINEPREFIX=$HOME/.wine64 wine WoW.exe"
