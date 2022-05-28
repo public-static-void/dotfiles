@@ -1,22 +1,68 @@
+#####################################
+# ~/.config/alacritty/alacritty.yml #
+#####################################
+
+# Any items in the `env` entry below will be added as
+# environment variables. Some entries may override variables
+# set by alacritty itself.
+env:
+  # TERM variable
+  #
+  # This value is used to set the `$TERM` environment variable for
+  # each instance of Alacritty. If it is not present, alacritty will
+  # check the local terminfo database and use `alacritty` if it is
+  # available, otherwise `xterm-256color` is used.
+  TERM: alacritty
+
 window:
+  # Background opacity
+  #
+  # Window opacity as a floating point number from `0.0` to `1.0`.
+  # The value `0.0` is completely transparent and `1.0` is opaque.
   opacity: 0.75
 
+  # Allow terminal applications to change Alacritty's window title.
+  dynamic_title: true
+
+scrolling:
+  # Maximum number of lines in the scrollback buffer.
+  # Specifying '0' will disable scrolling.
+  history: 25000
+
+  # Scrolling distance multiplier.
+  multiplier: 3
+
+# Font configuration
 font:
+  # Normal (roman) font face
   normal:
     family: MesloLGSDZ Nerd Font Mono
     style:  Regular
+  # Bold font face
   bold:
     family: MesloLGSDZ Nerd Font Mono
     style:  Bold
+  # Italic font face
   italic:
     family: MesloLGSDZ Nerd Font Mono
     style:  Italic
+  # Bold italic font face
   bold_italic:
     family: MesloLGSDZ Nerd Font Mono
     style:  Bold Italic
-  size: 13
+  # Point size
+  size:     13
+  # Offset is the extra space around each character. `offset.y` can be thought
+  # of as modifying the line spacing, and `offset.x` as modifying the letter
+  # spacing.
+  offset:
+    x: 1
+    y: 1
+
+# If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
 
+# colors: angr colorscheme.
 colors:
   primary:
     background: "#1E1E1E"
@@ -24,27 +70,58 @@ colors:
     cursor:     "#EEEEEE"
 # black.
   normal:
-    black:   "#000000"
-    red:     "#cd3131"
-    green:   "#6a9955"
-    yellow:  "#ce9178"
-    blue:    "#2472c8"
-    magenta: "#c586c0"
-    cyan:    "#11a8cd"
-    white:   "#c0c0c0"
+    black:      "#000000"
+    red:        "#cd3131"
+    green:      "#6a9955"
+    yellow:     "#ce9178"
+    blue:       "#2472c8"
+    magenta:    "#c586c0"
+    cyan:       "#11a8cd"
+    white:      "#c0c0c0"
 
   bright:
-    black:   "#666666"
-    red:     "#f14c4c"
-    green:   "#b5cea8"
-    yellow:  "#dcdcaa"
-    blue:    "#569cd6"
-    magenta: "#daadd6"
-    cyan:    "#9cdcfe"
-    white:   "#e5e5e5"
+    black:      "#666666"
+    red:        "#f14c4c"
+    green:      "#b5cea8"
+    yellow:     "#dcdcaa"
+    blue:       "#569cd6"
+    magenta:    "#daadd6"
+    cyan:       "#9cdcfe"
+    white:      "#e5e5e5"
 
 cursor:
+  # Cursor style
   style:
-    blinking: On
-    blink-interval: 750
+    # Cursor shape
+    #
+    # Values for `shape`:
+    #   - ▇ Block
+    #   - _ Underline
+    #   - | Beam
+    shape: Block
 
+    # Cursor blinking state
+    #
+    # Values for `blinking`:
+    #   - Never: Prevent the cursor from ever blinking
+    #   - Off: Disable blinking by default
+    #   - On: Enable blinking by default
+    #   - Always: Force the cursor to always blink
+    blinking: On
+    # Cursor blinking interval in milliseconds.
+    blink-interval: 750
+  # If this is `true`, the cursor will be rendered as a hollow box when the
+  # window is not focused.
+  unfocused_hollow: true
+
+# Shell
+#
+# You can set `shell.program` to the path of your favorite shell, e.g.
+# `/bin/fish`. Entries in `shell.args` are passed unmodified as arguments to the
+# shell.
+#
+shell:
+#  program: /bin/bash
+#  args:
+#    - --login
+  program: /bin/zsh
