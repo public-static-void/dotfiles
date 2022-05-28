@@ -1,0 +1,50 @@
+window:
+  opacity: 0.75
+
+font:
+  normal:
+    family: MesloLGSDZ Nerd Font Mono
+    style:  Regular
+  bold:
+    family: MesloLGSDZ Nerd Font Mono
+    style:  Bold
+  italic:
+    family: MesloLGSDZ Nerd Font Mono
+    style:  Italic
+  bold_italic:
+    family: MesloLGSDZ Nerd Font Mono
+    style:  Bold Italic
+  size: 13
+draw_bold_text_with_bright_colors: true
+
+colors:
+  primary:
+    background: "#1E1E1E"
+    foreground: "#D4D4D4"
+    cursor:     "#EEEEEE"
+# black.
+  normal:
+    black:   "#000000"
+    red:     "#cd3131"
+    green:   "#6a9955"
+    yellow:  "#ce9178"
+    blue:    "#2472c8"
+    magenta: "#c586c0"
+    cyan:    "#11a8cd"
+    white:   "#c0c0c0"
+
+  bright:
+    black:   "#666666"
+    red:     "#f14c4c"
+    green:   "#b5cea8"
+    yellow:  "#dcdcaa"
+    blue:    "#569cd6"
+    magenta: "#daadd6"
+    cyan:    "#9cdcfe"
+    white:   "#e5e5e5"
+
+cursor:
+  style:
+    blinking: On
+    blink-interval: 750
+

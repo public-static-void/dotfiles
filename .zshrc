@@ -55,7 +55,7 @@ if [[ -d $ANT_HOME/bin && -z $(echo $PATH | grep -o $ANT_HOME/bin) ]]; then
 fi
 
 # Set terminal.
-export TERM="rxvt-unicode-256color"
+#export TERM="rxvt-unicode-256color"
 
 # Enable colors for ls.
 LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS
