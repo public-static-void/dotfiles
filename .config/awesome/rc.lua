@@ -200,6 +200,11 @@ awful.key({ modkey, }, "Tab",
     awful.key({ modkey, "Shift" }, "f", function () awful.util.spawn("firefox") end,
               {description = "launch firefox", group = "applications"}),
 
+    -- Start spacefm.
+    awful.key({ modkey, "Shift" }, "w", function () awful.util.spawn("spacefm") end,
+              {description = "launch spacefm", group = "applications"}),
+
+
     -- Open awesome wm config.
     awful.key({ modkey, "Shift" }, "a", function () awful.spawn.with_shell(terminal.. " -e " ..editor.. " ~/.config/awesome/rc.lua") end,
               {description = "Open awesome wm config", group = "configs"}),
@@ -218,7 +223,21 @@ awful.key({ modkey, }, "Tab",
 
     -- Open neovim config.
     awful.key({ modkey, "Shift" }, "d", function () awful.spawn.with_shell(terminal.. " -e " ..editor.. " ~/.config/nvim/init.vim") end,
-              {description = "Open neovim config", group = "configs"})
+              {description = "Open neovim config", group = "configs"}),
+
+    -- Adjust screen brightness.
+    awful.key({ modkey, }, "F5", function () awful.spawn.with_shell("brightnessctl set 10%-") end,
+              {description = "Decrease screen brightness", group = "configs"}),
+    awful.key({ modkey, }, "F6", function () awful.spawn.with_shell("brightnessctl set 10%+") end,
+              {description = "Increase screen brightness", group = "configs"}),
+
+    -- Adjust volume.
+    awful.key({ modkey, }, "F2", function () awful.spawn.with_shell("pactl set-sink-volume 0 -5%") end,
+              {description = "Decrease volume", group = "configs"}),
+    awful.key({ modkey, }, "F3", function () awful.spawn.with_shell("pactl set-sink-volume 0 +5%") end,
+              {description = "Increase volume", group = "configs"}),
+    awful.key({ modkey, }, "F1", function () awful.spawn.with_shell("pactl set-sink-mute 0 toggle") end,
+              {description = "Increase volume", group = "configs"})
 
 )
 
