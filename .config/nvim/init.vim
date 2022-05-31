@@ -274,6 +274,9 @@ augroup skeletons
   autocmd BufNewFile *.* silent! execute '0r ~/.vim/templates/skeleton.'.expand("<afile>:e")
 augroup END
 
+" Fixes awesome/alacritty bug making nvim starting bugged.
+autocmd VimEnter * call timer_start(20, { tid -> execute(':silent exec "!kill -s SIGWINCH $PPID"')})
+
 """"""""""""""""""""""""""""
 " PLUGIN SPECIFIC SETTINGS "
 """"""""""""""""""""""""""""
@@ -541,3 +544,5 @@ nnoremap <silent><esc> :noh<return><esc>
 " Keep selection after indenting in visual mode.
 vmap < <gv
 vmap > >gv
+
+
