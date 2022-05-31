@@ -48,6 +48,7 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty"
+--terminal = "urxvt"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -103,38 +104,6 @@ root.buttons(gears.table.join(
 globalkeys = gears.table.join(
     awful.key({ modkey, }, "s", hotkeys_popup.show_help,
               {description="show help", group="awesome"}),
-
-
-
---    awful.key({ modkey, }, "k",
---        function ()
---            awful.client.focus.byidx( 1)
---        end,
---        {description = "focus next by index", group = "client"}
---    ),
---    awful.key({ modkey, }, "j",
---        function ()
---            awful.client.focus.byidx(-1)
---        end,
---        {description = "focus previous by index", group = "client"}
---    ),
---    awful.key({ modkey, }, "Right",
---        function ()
---            awful.client.focus.byidx( 1)
---        end,
---        {description = "focus next by index", group = "client"}
---    ),
---    awful.key({ modkey, }, "Left",
---        function ()
---            awful.client.focus.byidx(-1)
---        end,
---        {description = "focus previous by index", group = "client"}
---    ),
-
-
-
-
-
 
     awful.key({ modkey, }, "Tab",
         function ()
@@ -222,7 +191,6 @@ globalkeys = gears.table.join(
     -- Start shutdown script.
     awful.key({ modkey, "Shift" }, "Escape", function () awful.spawn.with_shell("~/scripts/prompt 'Rechner runterfahren?' 'sudo -A shutdown -h now' '#c0c0c0' '#666666' '#f14c4c' '#e5e5e5' 'SourceCodePro-13'") end,
               {description = "Launch shutdown script", group = "launcher"})
-
 )
 
 clientkeys = gears.table.join(
@@ -447,8 +415,11 @@ clientbuttons = gears.table.join(
 root.keys(globalkeys)
 -- }}}
 
+-- Gaps.
+beautiful.useless_gap = 0
+
 -- Borders.
-beautiful.border_width = 3
+beautiful.border_width = 2
 
 -- {{{ Rules
 -- Rules to apply to new clients (through the "manage" signal).
@@ -519,13 +490,10 @@ client.connect_signal("focus", function(c) c.border_color = beautiful.border_foc
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
 
-
 -- Autostart applications.
 awful.spawn.with_shell("picom -b -f")
 awful.spawn.with_shell("dunst")
 awful.spawn.with_shell("nitrogen --restore")
 awful.spawn.with_shell("~/.config/polybar/launch.sh")
 
--- Gaps.
-beautiful.useless_gap = 3
 
