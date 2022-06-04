@@ -18,7 +18,10 @@ font pango:sourcecodepro 13
 #############
 
 # Start compositor.
-exec_always picom -b -f
+exec_always picom -b -f &
+
+# Start URxvt daemon.
+exec_always --no-startup-id urxvtd -q -o -f &
 
 # Use nitrogen to set wallpaper.
 exec_always --no-startup-id nitrogen --restore &
@@ -189,6 +192,9 @@ bindsym $mod+r mode "resize"
 
 # Start firefox.
 bindsym $mod+Shift+f exec --no-startup-id firefox
+
+# Start telegram.
+bindsym $mod+Shift+t exec --no-startup-id telegram-desktop
 
 # Open i3 config.
 bindsym $mod+Shift+a exec --no-startup-id urxvt -e nvim ~/.config/i3/config

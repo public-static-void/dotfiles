@@ -173,9 +173,9 @@ keys = [
     Key([mod, "shift"], "r",
         lazy.reload_config(),
         desc="Reload the config"),
-    Key([mod, "shift"], "e",
-        lazy.shutdown(),
-        desc="Shutdown Qtile"),
+#    Key([mod, "shift"], "e",
+#        lazy.shutdown(),
+#        desc="Shutdown Qtile"),
 
     Key([mod, "shift"], "f",
         lazy.spawn("firefox"),
@@ -274,24 +274,82 @@ screens = [
     Screen(
         bottom=bar.Bar(
             [
-                widget.CurrentLayout(),
-                widget.TextBox("|"),
-                widget.GroupBox(),
-                widget.Prompt(),
-                widget.TextBox("|"),
-                widget.WindowName(),
-                widget.Chord(
-                    chords_colors={
-                        "launch": ("#ff0000", "#ffffff"),
-                    },
-                    name_transform=lambda name: name.upper(),
+                widget.CurrentLayoutIcon(
+                       padding = 0,
+                       scale = 0.8
                 ),
-                widget.TextBox("|"),
+                widget.Sep(),
+                widget.GroupBox(
+                       margin_y = 3,
+                       margin_x = 0,
+                       padding_y = 5,
+                       padding_x = 3,
+                       borderwidth = 3,
+                       active = colors["white_1"],
+                       inactive = colors["black_1"],
+                       #highlight_color = colors["black_0"],
+                       highlight_method = "line",
+                       this_current_screen_border = colors["cyan_0"],
+                ),
+                widget.Sep(),
+                widget.TaskList(
+                    border = colors["black_1"],
+                    borderwidth = 2,
+                    rounded = False,
+#                    max_title_width = 150,
+                    title_width_method = "uniform",
+                    padding = 1,
+                    margin_x = 1,
+                    margin_y = 2,
+                    spacing = 5
+                ),
+                widget.Sep(),
+                widget.Memory(
+                    measure_mem="G",
+                    format = " {MemUsed: .0f}{mm}/{MemTotal:.0f}{mm}",
+                ),
+                #widget.MemoryGraph(
+                #    type = "line",
+                #    line_width = 1,
+                #),
+                widget.CPU(
+                    format=' {load_percent}%'
+                ),
+                #widget.CPUGraph(
+                #    type = "line",
+                #    line_width = 1,
+                #),
+                widget.Net(
+                    #interface = "enp2s0",
+                    #format = '{interface}: {down} ↓↑ {up}'
+                    format = '{down} ↓↑ {up}',
+                ),
+                #widget.Bluetooth(),
+                widget.Sep(),
+                widget.Volume(emoji=True),
+                widget.Volume(fmt="{}"),
+                widget.Sep(),
+                widget.CheckUpdates(
+                       distro = "Arch_checkupdates",
+                       display_format = " {updates}",
+                       colour_have_updates = colors["red_0"],
+                       colour_no_updates = colors["green_0"],
+                       padding = 5,
+                ),
+
+                widget.Sep(),
+                #widget.Backlight(),
+                #widget.BatteryIcon(),
+                #widget.Battery(),
+                #widget.Sep(),
                 widget.Clock(format="%a, %d.%m.%Y %k:%M"),
-                widget.TextBox("|"),
+                widget.Sep(),
+                widget.CapsNumLockIndicator(),
+                widget.Sep(),
                 widget.Systray(),
             ],
-            24,
+            30,
+            background = colors["black_0"],
             # border_width=[2, 0, 2, 0],  # Draw top and bottom borders
             # border_color=["ff00ff", "000000", "ff00ff", "000000"]  # Borders are magenta
         ),

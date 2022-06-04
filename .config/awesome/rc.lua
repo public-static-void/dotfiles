@@ -48,7 +48,6 @@ beautiful.init(gears.filesystem.get_themes_dir() .. "default/theme.lua")
 
 -- This is used later as the default terminal and editor to run.
 terminal = "alacritty"
---terminal = "urxvt"
 editor = os.getenv("EDITOR") or "nvim"
 editor_cmd = terminal .. " -e " .. editor
 
@@ -73,23 +72,113 @@ awful.layout.layouts = {
     -- awful.layout.suit.max,
     -- awful.layout.suit.max.fullscreen,
     -- awful.layout.suit.magnifier,
-    -- awful.layout.suit.corner.nw,
+    -- wful.layout.suit.corner.nw,
     -- awful.layout.suit.corner.ne,
     -- awful.layout.suit.corner.sw,
     -- awful.layout.suit.corner.se,
 }
 -- }}}
 
--- {{{ Wibar
-awful.screen.connect_for_each_screen(function(s)
-    -- Each screen has its own tag table.
-    awful.tag({ "1", "2", "3", "4", "5", "6", "7", "8", "9" }, s, awful.layout.layouts[1])
+-- Without this setting, it defaults to 16px icons.
+awesome.set_preferred_icon_size(32)
 
-    -- This will shift the workarea on position and by pixels specified.
-    local wibar = awful.wibar {
-        position = "bottom",
-        height   = 32,
-  }
+-- {{{ Wibar
+-- Create a textclock widget
+mytextclock = wibox.widget.textclock("%a, %d.%m.%Y %k:%M")
+
+battery_status = awful.widget.watch("battery-status", 60)
+
+-- Create a wibox for each screen and add it
+local taglist_buttons = gears.table.join(
+                    awful.button({ }, 1, function(t) t:view_only() end),
+                    awful.button({ modkey }, 1, function(t)
+                                              if client.focus then
+                                                  client.focus:move_to_tag(t)
+                                              end
+                                          end),
+                    awful.button({ }, 3, awful.tag.viewtoggle),
+                    awful.button({ modkey }, 3, function(t)
+                                              if client.focus then
+                                                  client.focus:toggle_tag(t)
+                                              end
+                                          end),
+                    awful.button({ }, 5, function(t) awful.tag.viewnext(t.screen) end),
+                    awful.button({ }, 4, function(t) awful.tag.viewprev(t.screen) end)
+                )
+
+local tasklist_buttons = gears.table.join(
+                     awful.button({ }, 1, function (c)
+                                              if c == client.focus then
+                                                  c.minimized = true
+                                              else
+                                                  c:emit_signal(
+                                                      "request::activate",
+                                                      "tasklist",
+                                                      {raise = true}
+                                                  )
+                                              end
+                                          end),
+                     awful.button({ }, 3, function()
+                                              awful.menu.client_list({ theme = { width = 250 } })
+                                          end),
+                     awful.button({ }, 4, function ()
+                                              awful.client.focus.byidx(1)
+                                          end),
+                     awful.button({ }, 5, function ()
+                                              awful.client.focus.byidx(-1)
+                                          end))
+
+awful.screen.connect_for_each_screen(function(s)
+
+    -- Each screen has its own tag table.
+    awful.tag({ "  1  ", "  2  ", "  3  ", "  4  ", "  5  ", "  6  ", "  7  ", "  8  ", "  9  " }, s, awful.layout.layouts[1])
+
+    -- Create an imagebox widget which will contain an icon indicating which layout we're using.
+    -- We need one layoutbox per screen.
+--    s.mylayoutbox = awful.widget.layoutbox(s)
+--    s.mylayoutbox:buttons(gears.table.join(
+--                           awful.button({ }, 1, function () awful.layout.inc( 1) end),
+--                           awful.button({ }, 3, function () awful.layout.inc(-1) end),
+--                           awful.button({ }, 4, function () awful.layout.inc( 1) end),
+--                           awful.button({ }, 5, function () awful.layout.inc(-1) end)))
+    -- Create a taglist widget
+    s.mytaglist = awful.widget.taglist {
+        screen  = s,
+        filter  = awful.widget.taglist.filter.noempty,
+        buttons = taglist_buttons,
+    }
+
+    -- Create a tasklist widget
+    s.mytasklist = awful.widget.tasklist {
+        screen  = s,
+        filter  = awful.widget.tasklist.filter.currenttags,
+        buttons = tasklist_buttons,
+    }
+
+    -- Create the wibox
+    s.mywibox = awful.wibar({
+            position = "bottom",
+            screen = s,
+            height = 28
+        })
+
+    -- Add widgets to the wibox
+    s.mywibox:setup {
+        layout = wibox.layout.align.horizontal,
+        { -- Left widgets
+            layout = wibox.layout.fixed.horizontal,
+--            mylauncher,
+            s.mytaglist,
+            s.mypromptbox,
+        },
+        s.mytasklist, -- Middle widget
+        { -- Right widgets
+            layout = wibox.layout.fixed.horizontal,
+            battery_status,
+            mytextclock,
+            wibox.widget.systray(),
+        },
+    }
 end)
 -- }}}
 
@@ -119,8 +208,8 @@ globalkeys = gears.table.join(
               {description = "open a terminal", group = "launcher"}),
     awful.key({ modkey, "Shift" }, "r", awesome.restart,
               {description = "reload awesome", group = "awesome"}),
-    awful.key({ modkey, "Shift" }, "e", awesome.quit,
-              {description = "quit awesome", group = "awesome"}),
+--    awful.key({ modkey, "Shift" }, "e", awesome.quit,
+--              {description = "quit awesome", group = "awesome"}),
 
     -- Reshape workspace layout.
     -- Adjust rows.
@@ -468,6 +557,14 @@ awful.rules.rules = {
         }
       }, properties = { floating = true }},
 
+    {rule = {
+            class = "Polybar"
+            },
+            properties = {
+                border_width = 0,
+            }
+    },
+
 }
 -- }}}
 
@@ -486,6 +583,46 @@ client.connect_signal("manage", function (c)
     end
 end)
 
+-- Add a titlebar if titlebars_enabled is set to true in the rules.
+client.connect_signal("request::titlebars", function(c)
+    -- buttons for the titlebar
+    local buttons = gears.table.join(
+        awful.button({ }, 1, function()
+            c:emit_signal("request::activate", "titlebar", {raise = true})
+            awful.mouse.client.move(c)
+        end),
+        awful.button({ }, 3, function()
+            c:emit_signal("request::activate", "titlebar", {raise = true})
+            awful.mouse.client.resize(c)
+        end)
+    )
+
+    awful.titlebar(c) : setup {
+        { -- Left
+            awful.titlebar.widget.iconwidget(c),
+            buttons = buttons,
+            layout  = wibox.layout.fixed.horizontal
+        },
+        { -- Middle
+            { -- Title
+                align  = "center",
+                widget = awful.titlebar.widget.titlewidget(c)
+            },
+            buttons = buttons,
+            layout  = wibox.layout.flex.horizontal
+        },
+        { -- Right
+            awful.titlebar.widget.floatingbutton (c),
+            awful.titlebar.widget.maximizedbutton(c),
+            awful.titlebar.widget.stickybutton   (c),
+            awful.titlebar.widget.ontopbutton    (c),
+            awful.titlebar.widget.closebutton    (c),
+            layout = wibox.layout.fixed.horizontal()
+        },
+        layout = wibox.layout.align.horizontal
+    }
+end)
+
 client.connect_signal("focus", function(c) c.border_color = beautiful.border_focus end)
 client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_normal end)
 -- }}}
@@ -494,6 +631,6 @@ client.connect_signal("unfocus", function(c) c.border_color = beautiful.border_n
 awful.spawn.with_shell("picom -b -f")
 awful.spawn.with_shell("dunst")
 awful.spawn.with_shell("nitrogen --restore")
-awful.spawn.with_shell("~/.config/polybar/launch.sh")
+awful.spawn.with_shell("nm-applet")
 
 
