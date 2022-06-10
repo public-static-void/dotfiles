@@ -19,13 +19,13 @@ if !filereadable(vimplug_exists)
     echo ""
     silent exec "!"curl_exists" -fLo " . shellescape(vimplug_exists) . " --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
     let g:not_finish_vimplug = "yes"
-    autocmd VimEnter * PlugInstall
+    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC | q
 endif
 
 " Auto install plugins on startup.
 autocmd VimEnter *
     \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-    \|     PlugInstall --sync | q
+    \|     PlugInstall --sync | source $MYVIMRC | q
     \| endif
 
 call plug#begin(expand('~/.config/nvim/plugged'))
@@ -79,7 +79,7 @@ let g:coc_global_extensions = [
 
 " Set encoding to UTF-8.
 set encoding=utf-8
-set fileencoding=utf-8
+"set fileencoding=utf-8
 set fileencodings=utf-8
 scriptencoding utf-8
 
@@ -276,6 +276,9 @@ augroup END
 
 " Fixes awesome/alacritty bug making nvim starting bugged.
 autocmd VimEnter * call timer_start(20, { tid -> execute(':silent exec "!kill -s SIGWINCH $PPID"')})
+
+" Enables to edit protected files.
+cmap w!! w !sudo tee %
 
 """"""""""""""""""""""""""""
 " PLUGIN SPECIFIC SETTINGS "
