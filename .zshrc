@@ -32,6 +32,9 @@ export KEYTIMEOUT=1
 # ENVIRONMENT VARIABLES #
 #########################
 
+# Keeps the entries in PATH unique (due to mirroring).
+typeset -aU path
+
 # Add custom scripts folder to PATH.
 if [[ -d $HOME/scripts && -z $(echo $PATH | grep -o $HOME/scripts) ]]; then
     PATH="${PATH}:$HOME/scripts"
@@ -53,9 +56,6 @@ ANT_HOME="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/libs/ant"
 if [[ -d $ANT_HOME/bin && -z $(echo $PATH | grep -o $ANT_HOME/bin) ]]; then
     PATH="${PATH}:$ANT_HOME/bin"
 fi
-
-# Set terminal.
-#export TERM="rxvt-unicode-256color"
 
 # Enable colors for ls.
 LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS
@@ -334,7 +334,9 @@ alias poke1="WINEPREFIX=$HOME/.wine $HOME/.wine/drive_c/Program\ Files\ \(x86\)/
 alias xcom="openxcom -data $HOME/.wine/drive_c/GOG\ Games/X-COM\ UFO\ Defense"
 
 # Dwarf fortress.
-alias dwarfnew="$HOME/Games/LinuxDwarfPack-0.47.05-r3/startlnp.sh"
+alias dwarfnew="$HOME/Games/LinuxDwarfPack-0.47.05-r5/startlnp.sh"
+
+alias dwarfold="$HOME/Games/LinuxDwarfPack-0.47.05-r3/startlnp.sh"
 
 # Sims2.
 alias sims2="cd $HOME/wine-3.19/a; env WINEPREFIX=~/wine-3.19/a/ ./wine $HOME/wine-3.19/a/drive_c/Program\ Files/EA\ GAMES/Die\ Sims\ 2\ Villen-\ und\ Garten-Accessoires/TSBin/Sims2EP9.exe"

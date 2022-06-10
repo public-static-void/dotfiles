@@ -518,7 +518,6 @@ nmap <M-d> :bp<CR>
 " Alt-F to close buffer.
 nmap <M-f> :bd<CR>
 
-
 " Toggle neoterm terminal with Ctrl+T.
 map  <C-T> :Ttoggle <CR>
 tmap <C-T> exit <CR>
@@ -547,5 +546,4 @@ nnoremap <silent><esc> :noh<return><esc>
 " Keep selection after indenting in visual mode.
 vmap < <gv
 vmap > >gv
-
 
