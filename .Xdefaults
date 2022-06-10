@@ -67,7 +67,6 @@ URxvt.boldFont:       xft:MesloLGSDZ Nerd Font Mono:style=Bold:pixelsize=18
 URxvt.italicFont:     xft:MesloLGSDZ Nerd Font Mono:style=Italic:pixelsize=18
 URxvt.boldItalicFont: xft:MesloLGSDZ Nerd Font Mono:style=Bold Italic:pixelsize=18
 
-
 !----------------!
 ! COLOR SETTINGS !
 !----------------!
@@ -111,7 +110,8 @@ URxvt.boldItalicFont: xft:MesloLGSDZ Nerd Font Mono:style=Bold Italic:pixelsize=
 
 ! Use the specified colour as the windows background colour [default White].
 ! Make background black and transparent (amount specified by the number in the brackets).
-*.background:   [75]#1e1e1e
+!*.background:   [75]#1e1e1e
+*.background:       #1e1e1e
 ! Use the specified colour as the windows foreground colour [default Black].
 *.foreground:       #d4d4d4
 ! Specify cursor color.
