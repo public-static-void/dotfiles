@@ -59,6 +59,9 @@ Plug 'valloric/MatchTagAlways'
 Plug 'pangloss/vim-javascript'
 Plug 'frazrepo/vim-rainbow'
 
+Plug 'zacanger/angr.vim'
+Plug 'joshdick/onedark.vim'
+
 " Initialize plugin system
 call plug#end()
 
@@ -72,7 +75,9 @@ let g:coc_global_extensions = [
     \'coc-css',
     \'coc-prettier',
     \'coc-highlight',
-    \'coc-pyright'
+    \'coc-pyright',
+    \'coc-pydocstring',
+    \'coc-sh'
     \]
 
 """"""""""""""""""""
@@ -146,14 +151,15 @@ set noshowmode
 
 " Colors.
 colorscheme angr
+" colorscheme onedark
 
 " Makes every background transparent.
-highlight NonText     term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-highlight Normal      term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-highlight LineNr      term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-highlight signcolumn  term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-highlight ErrorMsg    term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-highlight EndOFBuffer term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+"highlight NonText     term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+"highlight Normal      term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+"highlight LineNr      term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+"highlight signcolumn  term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+"highlight ErrorMsg    term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
+"highlight EndOFBuffer term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
 
 " Highlight cursor line.
 set cursorline
@@ -375,19 +381,18 @@ function! CheckBackspace() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Use <c-space> to trigger completion.
+" Use Control-Space to trigger completion.
 if has('nvim')
   inoremap <silent><expr> <c-space> coc#refresh()
 else
   inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+" Make Enter auto-select the first completion item and notify coc.nvim to format on enter.
+inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
-" Use y to show documentation in preview window.
+" Use TAB to show documentation in preview window.
 nnoremap <silent> <TAB> :call ShowDocumentation()<CR>
 
 function! ShowDocumentation()
@@ -403,6 +408,9 @@ nmap f <Plug>(coc-fix-current)
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" coc-pydocstring code action.
+nmap <silent> ga <Plug>(coc-codeaction-line)
 
 " Prettier plugin configurations:
 " Enable auto formatting of files that have "@format" or "@prettier" tag.
@@ -552,7 +560,7 @@ let g:neoterm_default_mod='belowright'
 
 " Set Ctrl+N to open NERDTree plugin.
 " Open NERDTree in the directory of the current file (or /home if no file is open)
-nmap <silent> <C-n> :call NERDTreeToggleInCurDir()<cr>
+nmap <silent> <C-n> :call NERDTreeToggleInCurDir()<CR>
 function! NERDTreeToggleInCurDir()
   " If NERDTree is open in the current buffer
   if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
