@@ -518,6 +518,13 @@ nmap <M-d> :bp<CR>
 " Alt-F to close buffer.
 nmap <M-f> :bd<CR>
 
+" Move a whole line in normal mode.
+nnoremap <C-M-k>   :m .-2<CR>==
+nnoremap <C-M-j>   :m .+1<CR>==
+" Move multipe lines at once in visual mode.
+vnoremap <C-M-k>   :m '<-2<CR>gv=gv
+vnoremap <C-M-j>   :m '>+1<CR>gv=gv
+
 " Toggle neoterm terminal with Ctrl+T.
 map  <C-T> :Ttoggle <CR>
 tmap <C-T> exit <CR>
