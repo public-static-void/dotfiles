@@ -1,3 +1,5 @@
 [user]
 	email = ruthless_one@hotmail.de
 	name = public-static-void
+[core]
+	editor = nvim
