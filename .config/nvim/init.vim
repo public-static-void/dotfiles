@@ -60,7 +60,6 @@ Plug 'pangloss/vim-javascript'
 Plug 'frazrepo/vim-rainbow'
 
 Plug 'zacanger/angr.vim'
-Plug 'joshdick/onedark.vim'
 
 " Initialize plugin system
 call plug#end()
@@ -74,10 +73,10 @@ let g:coc_global_extensions = [
     \'coc-html',
     \'coc-css',
     \'coc-prettier',
-    \'coc-highlight',
     \'coc-pyright',
     \'coc-pydocstring',
-    \'coc-sh'
+    \'coc-sh',
+    \'coc-highlight'
     \]
 
 """"""""""""""""""""
@@ -151,15 +150,6 @@ set noshowmode
 
 " Colors.
 colorscheme angr
-" colorscheme onedark
-
-" Makes every background transparent.
-"highlight NonText     term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-"highlight Normal      term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-"highlight LineNr      term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-"highlight signcolumn  term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-"highlight ErrorMsg    term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
-"highlight EndOFBuffer term=NONE ctermfg=NONE ctermbg=NONE guifg=NONE guibg=NONE
 
 " Highlight cursor line.
 set cursorline
@@ -298,7 +288,6 @@ cmap w!! w !sudo tee %
 """"""""""""""""""""""""""""
 
 " vim-airline
-let g:airline_theme = 'powerlineish'
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
