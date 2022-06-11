@@ -46,6 +46,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
+Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
+
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'fisadev/vim-isort'
@@ -82,6 +84,11 @@ set encoding=utf-8
 "set fileencoding=utf-8
 set fileencodings=utf-8
 scriptencoding utf-8
+
+" Enables 24-bit RGB colors. Uses 'gui' attributes instead of 'cterm' attributes. Requires an ISO-8613-3 compatible terminal.
+if has('termguicolors')
+    set termguicolors
+endif
 
 " Set shell.
 if exists('$SHELL')
@@ -424,6 +431,17 @@ let g:indentLine_concealcursor = "inc"
 " Show dot character to indicate spaces.
 let g:indentLine_leadingSpaceEnabled = 1
 let g:indentLine_leadingSpaceChar = "·"
+
+" Hexokinase settings.
+" Color Patterns to match for all filetypes.
+let g:Hexokinase_optInPatterns = [
+\     'full_hex',
+\     'triple_hex',
+\     'rgb',
+\     'rgba',
+\     'hsl',
+\     'hsla'
+\ ]
 
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
