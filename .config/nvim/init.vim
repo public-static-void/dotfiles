@@ -61,6 +61,7 @@ Plug 'frazrepo/vim-rainbow'
 
 Plug 'zacanger/angr.vim'
 Plug 'tomasiser/vim-code-dark'
+Plug 'itspriddle/vim-themes'
 
 " Initialize plugin system
 call plug#end()
@@ -152,6 +153,7 @@ set noshowmode
 " Colors.
 colorscheme angr
 "colorscheme codedark
+"colorscheme sunburst
 
 " Highlight cursor line.
 set cursorline
@@ -182,6 +184,7 @@ set smarttab
 set expandtab
 " Amount of spaces for tab.
 set softtabstop=4
+set tabstop=4
 
 " Show hidden characters.
 set list
@@ -347,17 +350,17 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Variables to change custom git status symbols.
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-                \ 'Modified'  :'',
-                \ 'Staged'    :'',
-                \ 'Untracked' :'',
-                \ 'Renamed'   :'',
-                \ 'Unmerged'  :'',
-                \ 'Deleted'   :'',
-                \ 'Dirty'     :'',
-                \ 'Ignored'   :'',
-                \ 'Clean'     :'',
-                \ 'Unknown'   :'?',
-                \ }
+            \ 'Modified'  :'',
+            \ 'Staged'    :'',
+            \ 'Untracked' :'',
+            \ 'Renamed'   :'',
+            \ 'Unmerged'  :'',
+            \ 'Deleted'   :'',
+            \ 'Dirty'     :'',
+            \ 'Ignored'   :'',
+            \ 'Clean'     :'',
+            \ 'Unknown'   :'?',
+            \ }
 " Predefined map used nerdfonts.
 let g:NERDTreeGitStatusUseNerdFonts = 1 " you should install nerdfonts by yourself. default: 0
 
@@ -370,21 +373,21 @@ set signcolumn=yes
 " CoC config.
 " Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ CheckBackspace() ? "\<TAB>" :
-      \ coc#refresh()
+    \ pumvisible() ? "\<C-n>" :
+    \ CheckBackspace() ? "\<TAB>" :
+    \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! CheckBackspace() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
+    let col = col('.') - 1
+    return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Use Control-Space to trigger completion.
 if has('nvim')
-  inoremap <silent><expr> <c-space> coc#refresh()
+    inoremap <silent><expr> <c-space> coc#refresh()
 else
-  inoremap <silent><expr> <c-@> coc#refresh()
+    inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
 " Make Enter auto-select the first completion item and notify coc.nvim to format on enter.
@@ -395,15 +398,15 @@ inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm()
 nnoremap <silent> <TAB> :call ShowDocumentation()<CR>
 
 function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('TAB', 'in')
-  endif
+    if CocAction('hasProvider', 'hover')
+        call CocActionAsync('doHover')
+    else
+        call feedkeys('TAB', 'in')
+    endif
 endfunction
 
 " Apply AutoFix to problem on the current line.
-nmap f <Plug>(coc-fix-current)
+nmap gf <Plug>(coc-fix-current)
 
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
@@ -442,13 +445,13 @@ let g:indentLine_leadingSpaceChar = "·"
 " Hexokinase settings.
 " Color Patterns to match for all filetypes.
 let g:Hexokinase_optInPatterns = [
-\     'full_hex',
-\     'triple_hex',
-\     'rgb',
-\     'rgba',
-\     'hsl',
-\     'hsla'
-\ ]
+            \ 'full_hex',
+            \ 'triple_hex',
+            \ 'rgb',
+            \ 'rgba',
+            \ 'hsl',
+            \ 'hsla'
+            \ ]
 
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
@@ -562,11 +565,11 @@ let g:neoterm_default_mod='belowright'
 nmap <silent> <C-n> :call NERDTreeToggleInCurDir()<CR>
 function! NERDTreeToggleInCurDir()
   " If NERDTree is open in the current buffer
-  if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
-    exe ":NERDTreeClose"
-  else
-    exe ":NERDTreeFind"
-  endif
+    if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+        exe ":NERDTreeClose"
+    else
+        exe ":NERDTreeFind"
+    endif
 endfunction
 
 " Make <Enter> key select the highlighted menu item when the popup menu is visible.
