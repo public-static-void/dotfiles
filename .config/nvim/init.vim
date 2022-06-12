@@ -60,6 +60,7 @@ Plug 'pangloss/vim-javascript'
 Plug 'frazrepo/vim-rainbow'
 
 Plug 'zacanger/angr.vim'
+Plug 'tomasiser/vim-code-dark'
 
 " Initialize plugin system
 call plug#end()
@@ -150,6 +151,7 @@ set noshowmode
 
 " Colors.
 colorscheme angr
+"colorscheme codedark
 
 " Highlight cursor line.
 set cursorline
@@ -288,6 +290,14 @@ cmap w!! w !sudo tee %
 """"""""""""""""""""""""""""
 
 " vim-airline
+"let g:airline_theme = "powerlineish"
+"let g:airline_theme = "angr"
+"let g:airline_theme = "understated"
+"let g:airline_theme = "cobalt2"
+"let g:airline_theme = "durant"
+"let g:airline_theme = "hybridline"
+let g:airline_theme = "kalisi"
+
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#ale#enabled = 1
