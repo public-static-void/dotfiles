@@ -460,7 +460,7 @@ let g:Hexokinase_optInPatterns = [
 " #Python.
 " Max textwidth until line break (python standard = 79).
 " Also show hint for max line width. And comply to PEP8.
-autocmd FileType python setlocal softtabstop=4 tabstop=4 shiftwidth=4 textwidth=79 formatoptions+=t colorcolumn=80
+autocmd FileType python setlocal softtabstop=4 tabstop=4 shiftwidth=4 expandtab autoindent smartindent textwidth=79 formatoptions+=t colorcolumn=80
 
 " HTML.
 " Treat <li> and <p> tags like the block tags they are.
