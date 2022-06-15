@@ -219,6 +219,12 @@ bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.config/nvim/init.vim
 # Open picom config.
 bindsym $mod+Shift+less exec --no-startup-id urxvt -e nvim ~/.config/picom/picom.conf
 
+# Change transparency on the fly.
+bindsym $mod+KP_Add exec --no-startup-id picom-trans -c +5
+bindsym $mod+KP_Subtract exec --no-startup-id picom-trans -c -5
+bindsym $mod+KP_Multiply exec --no-startup-id picom-trans -c -r
+bindsym $mod+KP_Divide exec --no-startup-id picom-trans -c -t
+
 # Start Spacefm.
 bindsym $mod+Shift+w exec --no-startup-id spacefm
 

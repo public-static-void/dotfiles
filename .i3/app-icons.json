@@ -2,12 +2,20 @@
     "firefox": "firefox",
     "x-terminal-emulator": "terminal",
     "URxvt": "terminal",
+    "Alacritty": "terminal",
     "code-oss": "edit",
+    "vscodium": "edit",
     "gedit": "edit",
     "vim": "edit",
+    "nvim": "edit",
     "Spacefm": "folder-open",
     "vlc": "play",
     "qpdfview": "file-pdf",
+    "TelegramDesktop": "telegram",
+    "Pavucontrol": "headphones",
+    "Dwarf_Fortress": "gamepad",
+    "dosbox": "gamepad",
     "_no_match": "question"
+
 }
 
