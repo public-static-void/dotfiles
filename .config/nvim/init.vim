@@ -524,6 +524,9 @@ nnoremap k gk
 " Same for arrow keys.
 nnoremap <down> gj
 nnoremap <up>   gk
+" Same for insert mode.
+inoremap <down> <C-o>gj
+inoremap <up>   <C-o>gk
 
 " Remap some command typos.
 :command W  w
@@ -614,4 +617,15 @@ nnoremap <silent><esc> :noh<return><esc>
 " Keep selection after indenting in visual mode.
 vmap < <gv
 vmap > >gv
+
+" Prevent x and the delete key from overriding what's in the clipboard.
+noremap x "_x
+noremap X "_x
+noremap <Del> "_x
+
+" Prevent selecting and pasting from overwriting what you originally copied.
+xnoremap p pgvy
+
+" Keep cursor at the bottom of the visual selection after you yank it.
+vmap y ygv<Esc>
 
