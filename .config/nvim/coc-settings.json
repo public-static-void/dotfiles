@@ -1,0 +1,27 @@
+{
+  // General settings.
+  // Define filetypes to format on save.
+  "coc.preferences.formatOnSaveFiletypes": [
+    "html",
+    "css",
+    "javascript",
+    "python",
+    "java",
+    "json",
+    "jsonc"
+  ],
+
+  // Python config.
+  // Pyright config.
+  "pyright.enable": true,
+  "python.analysis.autoImportCompletions": true,
+  "python.formatting.provider": "autopep8",
+  "python.linting.enabled": true,
+  "python.linting.pylintEnabled": true,
+  "python.linting.pycodestyleEnabled": true,
+  "python.linting.pydocstyleEnabled": true,
+  "python.linting.flake8Enabled": true,
+  "pyright.completion.importSupport": true,
+  // Pydoctring config.
+  "pydocstring.formatter": "numpy"
+}

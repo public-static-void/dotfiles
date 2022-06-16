@@ -139,7 +139,6 @@ set title
 " Enable line numbers.
 set number
 set relativenumber
-set numberwidth=5
 
 " Show row and column information.
 set ruler
@@ -292,6 +291,15 @@ autocmd VimEnter * call timer_start(20, { tid -> execute(':silent exec "!kill -s
 " Enables to edit protected files.
 cmap w!! w !sudo tee %
 
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("nvim-0.5.0") || has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
 """"""""""""""""""""""""""""
 " PLUGIN SPECIFIC SETTINGS "
 """"""""""""""""""""""""""""
@@ -377,10 +385,15 @@ let g:NERDTreeGitStatusUseNerdFonts = 1 " you should install nerdfonts by yourse
 " Hide the boring brackets([ ]).
 let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
 
-" Always show gitgutter.
-set signcolumn=yes
-
 " CoC config.
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Add (Neo)Vim's native statusline support.
+set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
 " Use tab for trigger completion with characters ahead and navigate.
 inoremap <silent><expr> <TAB>
     \ pumvisible() ? "\<C-n>" :
@@ -404,6 +417,12 @@ endif
 inoremap <silent><expr> <CR> pumvisible() ? coc#_select_confirm()
                               \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
+" Navigate diagnostics.
+nmap <silent> <leader>b <Plug>(coc-diagnostic-prev)
+nmap <silent> <leader>n <Plug>(coc-diagnostic-next)
+" Show all diagnostics.
+nmap <silent> <leader>v :CocDiagnostics<CR>
+
 " Use TAB to show documentation in preview window.
 nnoremap <silent> <TAB> :call ShowDocumentation()<CR>
 
@@ -416,27 +435,32 @@ function! ShowDocumentation()
 endfunction
 
 " Apply AutoFix to problem on the current line.
-nmap gf <Plug>(coc-fix-current)
+nmap <leader>q <Plug>(coc-fix-current)
 
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
+" Apply codeAction to current line.
+nmap <leader>a <Plug>(coc-codeaction-line)
 
-" coc-pydocstring code action.
-nmap <silent> ga <Plug>(coc-codeaction-line)
+" Apply codeAction to the selected region.
+xmap <leader>a <Plug>(coc-codeaction-selected)<CR>
+nmap <leader>a <Plug>(coc-codeaction-selected)<CR>
 
-" Prettier plugin configurations:
-" Enable auto formatting of files that have "@format" or "@prettier" tag.
-let g:prettier#autoformat = 1
+" Apply codeAction to the current buffer.
+nmap <leader>s <Plug>(coc-codeaction)
 
-"Allow auto formatting also for files without "@format" or "@prettier" tag.
-" The previous line is still required for this one to work.
-let g:prettier#autoformat_require_pragma = 0
+" Format selected code.
+xmap <leader>f <Plug>(coc-format-selected)<CR>
+nmap <leader>f <Plug>(coc-format-selected)<CR>
 
-" Make prettier async.
-let g:prettier#exec_cmd_async = 1
+augroup mygroup
+  autocmd!
+  " Setup formatexpr specified filetype(s).
+  autocmd FileType typescript,json,python setl formatexpr=CocAction('formatSelected')
+  " Update signature help on jump placeholder.
+  autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+augroup end
 
-" By default parsing errors will open the quickfix but can also be disabled.
-let g:prettier#quickfix_enabled = 0
+" Format current buffer.
+nmap <leader>f :call CocActionAsync('format')<CR>
 
 " IndentLine settings.
 " Exclude filetypes from showing indentation.
