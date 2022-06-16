@@ -6,6 +6,9 @@
 " PLUGINS "
 """""""""""
 
+" Turn off filetype detection for a second. Will be turned back on later on.
+filetype off
+
 " Use vim-plug to take care of plugin management.
 " Check for curl and vim-plug to be installed. Install vim-plug if its not.
 let vimplug_exists=expand('~/.config/nvim/autoload/plug.vim')
@@ -51,6 +54,7 @@ Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'fisadev/vim-isort'
+Plug 'https://github.com/tpope/vim-commentary'
 
 Plug 'othree/html5.vim'
 Plug 'alvan/vim-closetag'
@@ -279,7 +283,7 @@ augroup END
 " Set up skeletons.
 augroup skeletons
   au!
-  autocmd BufNewFile *.* silent! execute '0r ~/.vim/templates/skeleton.'.expand("<afile>:e")
+  autocmd BufNewFile *.* silent! execute '0r ~/.config/nvim/templates/skeleton.'.expand("<afile>:e")
 augroup END
 
 " Fixes awesome/alacritty bug making nvim starting bugged.
@@ -293,12 +297,6 @@ cmap w!! w !sudo tee %
 """"""""""""""""""""""""""""
 
 " vim-airline
-"let g:airline_theme = "powerlineish"
-"let g:airline_theme = "angr"
-"let g:airline_theme = "understated"
-"let g:airline_theme = "cobalt2"
-"let g:airline_theme = "durant"
-"let g:airline_theme = "hybridline"
 let g:airline_theme = "kalisi"
 
 let g:airline_powerline_fonts = 1
@@ -343,6 +341,18 @@ let NERDTreeShowLineNumbers=1
 let NERDTreeShowHidden=1
 let NERDTreeMinimalUI = 1
 let g:NERDTreeWinSize=38
+
+" Set Ctrl+N to open NERDTree plugin.
+" Open NERDTree in the directory of the current file (or /home if no file is open)
+nmap <silent> <C-n> :call NERDTreeToggleInCurDir()<CR>
+function! NERDTreeToggleInCurDir()
+  " If NERDTree is open in the current buffer
+    if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
+        exe ":NERDTreeClose"
+    else
+        exe ":NERDTreeFind"
+    endif
+endfunction
 
 " Autostart NERDTree with vim.
 autocmd StdinReadPre * let s:std_in=1
@@ -453,6 +463,9 @@ let g:Hexokinase_optInPatterns = [
             \ 'hsla'
             \ ]
 
+" Make sure neoterm starts in horizontal split.
+let g:neoterm_default_mod='belowright'
+
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
 """""""""""""""""""""""""""
@@ -529,7 +542,7 @@ map <Esc>h :vertical resize -1<CR>
 map <Esc>l :vertical resize +1<CR>
 
 " Open a new tab with Ctrl-A.
-map  <C-A> :tabnew<CR>
+map  <C-a> :tabnew<CR>
 " Ctrl-S to select next tab.
 nmap <C-s> gT
 " Ctrl-D to select previous tab.
@@ -546,31 +559,27 @@ nmap <M-d> :bp<CR>
 " Alt-F to close buffer.
 nmap <M-f> :bd<CR>
 
+" Open up splits with Alt-v abn Alt-b.
+nmap <M-v> :vsplit<CR>
+nmap <M-b> :split<CR>
+" Swap splits positions.
+nmap <M-x> <C-w>x
+" Move splits.
+nmap <M-y> <C-w><S-h>
+nmap <M-c> <C-w><S-k>
+nmap <M-S-y> <C-w><S-l>
+nmap <M-S-c> <C-w><S-j>
+
 " Move a whole line in normal mode.
-nnoremap <C-M-k>   :m .-2<CR>==
-nnoremap <C-M-j>   :m .+1<CR>==
+nnoremap <C-M-k> :m .-2<CR>==
+nnoremap <C-M-j> :m .+1<CR>==
 " Move multipe lines at once in visual mode.
-vnoremap <C-M-k>   :m '<-2<CR>gv=gv
-vnoremap <C-M-j>   :m '>+1<CR>gv=gv
+vnoremap <C-M-k> :m '<-2<CR>gv=gv
+vnoremap <C-M-j> :m '>+1<CR>gv=gv
 
 " Toggle neoterm terminal with Ctrl+T.
-map  <C-T> :Ttoggle <CR>
-tmap <C-T> exit <CR>
-
-" Make sure neoterm starts in horizontal split.
-let g:neoterm_default_mod='belowright'
-
-" Set Ctrl+N to open NERDTree plugin.
-" Open NERDTree in the directory of the current file (or /home if no file is open)
-nmap <silent> <C-n> :call NERDTreeToggleInCurDir()<CR>
-function! NERDTreeToggleInCurDir()
-  " If NERDTree is open in the current buffer
-    if (exists("t:NERDTreeBufName") && bufwinnr(t:NERDTreeBufName) != -1)
-        exe ":NERDTreeClose"
-    else
-        exe ":NERDTreeFind"
-    endif
-endfunction
+map  <C-t> :Ttoggle <CR>
+tmap <C-t> exit <CR>
 
 " Make <Enter> key select the highlighted menu item when the popup menu is visible.
 inoremap <expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
