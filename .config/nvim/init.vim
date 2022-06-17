@@ -66,6 +66,10 @@ Plug 'frazrepo/vim-rainbow'
 Plug 'zacanger/angr.vim'
 Plug 'tomasiser/vim-code-dark'
 Plug 'itspriddle/vim-themes'
+Plug 'srcery-colors/srcery-vim'
+Plug 'KabbAmine/yowish.vim'
+Plug 'habamax/vim-saturnite'
+Plug 'mhinz/vim-janah'
 
 " Initialize plugin system
 call plug#end()
@@ -154,9 +158,13 @@ set nomodeline
 set noshowmode
 
 " Colors.
-colorscheme angr
+"colorscheme angr
 "colorscheme codedark
 "colorscheme sunburst
+" colorscheme srcery
+" colorscheme yowish
+" colorscheme saturnite
+colorscheme janah
 
 " Highlight cursor line.
 set cursorline
@@ -210,20 +218,12 @@ set showmatch
 " Show incomplete commands.
 set showcmd
 
-" Enable omni completion.
-set omnifunc=syntaxcomplete#Complete
-
-" Add spellcheck and keywords to autocompletion.
-set complete+=spell,keyword
-" Let popup menu insert the longest common text of all matches instead of selecting the first completion item, and make the menu come up even if there's only one match.
-set completeopt+=longest,menuone
-
 " Disables automatic commenting on newline.
 autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 
 " Enable Tab completion for the command line.
 set wildmenu
-set wildmode=longest,list,full
+set wildmode=list:full
 " Ignore certain files.
 set wildignore+=*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
 
