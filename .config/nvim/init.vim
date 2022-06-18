@@ -57,6 +57,8 @@ Plug 'fisadev/vim-isort'
 Plug 'https://github.com/tpope/vim-commentary'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
+Plug 'python-rope/ropevim'
+
 Plug 'othree/html5.vim'
 Plug 'alvan/vim-closetag'
 Plug 'valloric/MatchTagAlways'
@@ -86,6 +88,7 @@ let g:coc_global_extensions = [
     \'coc-emmet',
     \'coc-css',
     \'coc-prettier',
+    \'coc-jedi',
     \'coc-pyright',
     \'coc-pydocstring',
     \'coc-java',
