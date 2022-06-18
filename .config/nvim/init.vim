@@ -55,13 +55,15 @@ Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'fisadev/vim-isort'
 Plug 'https://github.com/tpope/vim-commentary'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 Plug 'othree/html5.vim'
 Plug 'alvan/vim-closetag'
 Plug 'valloric/MatchTagAlways'
 
 Plug 'pangloss/vim-javascript'
-Plug 'frazrepo/vim-rainbow'
+
+Plug 'p00f/nvim-ts-rainbow'
 
 Plug 'zacanger/angr.vim'
 Plug 'tomasiser/vim-code-dark'
@@ -85,6 +87,7 @@ let g:coc_global_extensions = [
     \'coc-prettier',
     \'coc-pyright',
     \'coc-pydocstring',
+    \'coc-java',
     \'coc-sh',
     \'coc-highlight'
     \]
@@ -158,13 +161,13 @@ set nomodeline
 set noshowmode
 
 " Colors.
-"colorscheme angr
-"colorscheme codedark
-"colorscheme sunburst
+colorscheme angr
+" colorscheme saturnite
+" colorscheme codedark
+" colorscheme sunburst
 " colorscheme srcery
 " colorscheme yowish
-" colorscheme saturnite
-colorscheme janah
+" colorscheme janah
 
 " Highlight cursor line.
 set cursorline
@@ -490,6 +493,39 @@ let g:Hexokinase_optInPatterns = [
 " Make sure neoterm starts in horizontal split.
 let g:neoterm_default_mod='belowright'
 
+" Treesitter config.
+function! TreesitterConfig()
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "bash", "bibtex", "c", "cpp", "css", "html", "java", "javascript", "json", "latex", "lua", "python", "scss", "typescript", "vim", "yaml" },
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  highlight = {
+    -- `false` will disable the whole extension
+    enable = true,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+  rainbow = {
+    enable = true,
+    -- disable = { "jsx", "cpp" }, list of languages you want to disable the plugin for
+    extended_mode = true, -- Also highlight non-bracket delimiters like html tags, boolean or table: lang -> boolean
+    max_file_lines = nil, -- Do not enable for files with more than n lines, int
+    -- colors = {}, -- table of hex strings
+    -- termcolors = {} -- table of colour name strings
+  }
+}
+EOF
+endfunction
+call TreesitterConfig()
+
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
 """""""""""""""""""""""""""
@@ -503,6 +539,11 @@ autocmd FileType python setlocal softtabstop=4 tabstop=4 shiftwidth=4 expandtab 
 " Treat <li> and <p> tags like the block tags they are.
 let g:html_indent_tags = 'li\|p'
 
+" CSS.
+" "ords are exetracted by iskeyword option of buffer. Adjust it by:
+autocmd FileType css setl iskeyword+=-
+" For scss files to add @ to iskeyword option.
+autocmd FileType scss setl iskeyword+=@-@
 """""""""""""""
 " KEYBINDINGS "
 """""""""""""""
@@ -617,11 +658,6 @@ nnoremap <silent><esc> :noh<return><esc>
 " Keep selection after indenting in visual mode.
 vmap < <gv
 vmap > >gv
-
-" Prevent x and the delete key from overriding what's in the clipboard.
-noremap x "_x
-noremap X "_x
-noremap <Del> "_x
 
 " Prevent selecting and pasting from overwriting what you originally copied.
 xnoremap p pgvy

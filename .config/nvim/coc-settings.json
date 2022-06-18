@@ -11,7 +11,14 @@
     "jsonc"
   ],
 
-  // Python config.
+  // Language Servers setup.
+
+  // Java.
+  // Download following archive: //https://download.eclipse.org/jdtls/milestones/0.57.0/jdt-language-server-0.57.0-202006172108.tar.gz
+  // and replace $HOME/.config/coc/extensions/coc-java-data/server/
+  // with its content.
+
+  // Python.
   // Pyright config.
   "pyright.enable": true,
   "python.analysis.autoImportCompletions": true,
