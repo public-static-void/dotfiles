@@ -11,7 +11,12 @@
     "jsonc"
   ],
 
-  // Language Servers setup.
+  // Trigger completion list manually.
+  "suggest.autoTrigger": "none",
+
+  "suggest.defaultSortMethod": "alphabetical",
+
+  // Language Serverssetup.
 
   // Java.
   // Download following archive: //https://download.eclipse.org/jdtls/milestones/0.57.0/jdt-language-server-0.57.0-202006172108.tar.gz

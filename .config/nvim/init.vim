@@ -83,6 +83,7 @@ let g:coc_global_extensions = [
     \'coc-tsserver',
     \'coc-eslint',
     \'coc-html',
+    \'coc-emmet',
     \'coc-css',
     \'coc-prettier',
     \'coc-pyright',
@@ -538,12 +539,24 @@ autocmd FileType python setlocal softtabstop=4 tabstop=4 shiftwidth=4 expandtab 
 " HTML.
 " Treat <li> and <p> tags like the block tags they are.
 let g:html_indent_tags = 'li\|p'
+autocmd FileType html setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
 
 " CSS.
-" "ords are exetracted by iskeyword option of buffer. Adjust it by:
-autocmd FileType css setl iskeyword+=-
+" Words are exetracted by iskeyword option of buffer. Adjust it by:
+autocmd FileType css setlocal iskeyword+=- softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
 " For scss files to add @ to iskeyword option.
-autocmd FileType scss setl iskeyword+=@-@
+autocmd FileType scss setlocal iskeyword+=@-@ softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
+
+" JSON.
+autocmd FileType json setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
+autocmd FileType jsonc setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
+
+" Java.
+autocmd FileType java setlocal softtabstop=4 tabstop=4 shiftwidth=4 expandtab autoindent smartindent
+
+" JS.
+autocmd FileType javascript setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
+
 """""""""""""""
 " KEYBINDINGS "
 """""""""""""""
