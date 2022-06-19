@@ -342,7 +342,7 @@ let g:airline_symbols.dirty = ''
 let g:airline_symbols.colnr = ''
 let g:airline_symbols.keymap = ''
 let g:airline_symbols.crypt = ''
-let g:airline_symbols.notexists = ''
+let g:airline_symbols.notexists = ' '
 
 " NERDTree settings:
 " Set size.

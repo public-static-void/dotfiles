@@ -192,6 +192,9 @@ preexec() { echo -ne "\e[5 q" ;} # Use beam shape cursor for each new prompt.
 # KEYBINDINGS #
 ###############
 
+# Shift-tab to browse completion menu backwards.
+bindkey -M menuselect '^[[Z' reverse-menu-complete
+
 # Use vim keys in tab complete menu.
 bindkey -M menuselect "h" vi-backward-char
 bindkey -M menuselect "j" vi-down-line-or-history
