@@ -581,6 +581,12 @@ nnoremap k gk
 " Same for arrow keys.
 nnoremap <down> gj
 nnoremap <up>   gk
+" Same for visual mode.
+vnoremap j gj
+vnoremap k gk
+" Same for arrow keys.
+vnoremap <down> gj
+vnoremap <up>   gk
 " Same for insert mode.
 inoremap <down> <C-o>gj
 inoremap <up>   <C-o>gk
