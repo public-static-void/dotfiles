@@ -338,7 +338,7 @@ let g:airline_symbols.maxlinenr = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.spell = '暈'
 let g:airline_symbols.linenr = ''
-let g:airline_symbols.dirty = ''
+let g:airline_symbols.dirty = ' '
 let g:airline_symbols.colnr = ''
 let g:airline_symbols.keymap = ''
 let g:airline_symbols.crypt = ''
@@ -440,6 +440,15 @@ function! ShowDocumentation()
         call feedkeys('TAB', 'in')
     endif
 endfunction
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
 
 " Apply AutoFix to problem on the current line.
 nmap <leader>q <Plug>(coc-fix-current)
@@ -550,6 +559,9 @@ autocmd FileType css setlocal iskeyword+=- softtabstop=2 tabstop=2 shiftwidth=2 
 " For scss files to add @ to iskeyword option.
 autocmd FileType scss setlocal iskeyword+=@-@ softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
 
+" JS.
+autocmd FileType javascript setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
+
 " JSON.
 autocmd FileType json setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
 autocmd FileType jsonc setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
@@ -557,12 +569,17 @@ autocmd FileType jsonc setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab a
 " Java.
 autocmd FileType java setlocal softtabstop=4 tabstop=4 shiftwidth=4 expandtab autoindent smartindent
 
-" JS.
-autocmd FileType javascript setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
-
 """""""""""""""
 " KEYBINDINGS "
 """""""""""""""
+
+" Remap some command typos.
+:command W  w
+:command Q  q
+:command WQ wq
+:command Wq wq
+:command QA qa
+:command Qa qa
 
 " Remap start/end of line/document to H,L,J,K.
 map H 0
@@ -590,14 +607,6 @@ vnoremap <up>   gk
 " Same for insert mode.
 inoremap <down> <C-o>gj
 inoremap <up>   <C-o>gk
-
-" Remap some command typos.
-:command W  w
-:command Q  q
-:command WQ wq
-:command Wq wq
-:command QA qa
-:command Qa qa
 
 " Remap split navigation to Ctrl+H,J,K,L.
 map <C-h> <C-w>h
