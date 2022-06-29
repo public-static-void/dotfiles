@@ -161,7 +161,7 @@ set showtabline=2
 set modelines=0
 set nomodeline
 
-" Uncomment to prevent non-normal modes showing in powerline and below powerline.
+" Prevent non-normal modes showing in statusline and below statusline.
 set noshowmode
 
 " Colors.
@@ -295,9 +295,6 @@ augroup END
 " Fixes awesome/alacritty bug making nvim starting bugged.
 autocmd VimEnter * call timer_start(20, { tid -> execute(':silent exec "!kill -s SIGWINCH $PPID"')})
 
-" Enables to edit protected files.
-cmap w!! w !sudo tee %
-
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
 if has("nvim-0.5.0") || has("patch-8.1.1564")
@@ -346,16 +343,14 @@ let g:airline_symbols.notexists = ' '
 
 " NERDTree settings:
 " Set size.
-let g:NERDTreeWinSize=30
+let g:NERDTreeWinSize = 30
 " Show hidden files by default.
-let NERDTreeShowHidden=1
-
+let NERDTreeShowHidden = 1
 let g:NERDTreeDirArrowExpandable = '►'
 let g:NERDTreeDirArrowCollapsible = '▼'
-let NERDTreeShowLineNumbers=1
-let NERDTreeShowHidden=1
+let NERDTreeShowLineNumbers = 1
+let NERDTreeShowHidden = 1
 let NERDTreeMinimalUI = 1
-let g:NERDTreeWinSize=38
 
 " Set Ctrl+N to open NERDTree plugin.
 " Open NERDTree in the directory of the current file (or /home if no file is open)
@@ -375,13 +370,13 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Variables to change custom git status symbols.
 let g:NERDTreeGitStatusIndicatorMapCustom = {
-            \ 'Modified'  :'',
-            \ 'Staged'    :'',
+            \ 'Modified'  :'',
+            \ 'Staged'    :'',
             \ 'Untracked' :'',
             \ 'Renamed'   :'',
             \ 'Unmerged'  :'',
             \ 'Deleted'   :'',
-            \ 'Dirty'     :'',
+            \ 'Dirty'     :'',
             \ 'Ignored'   :'',
             \ 'Clean'     :'',
             \ 'Unknown'   :'?',
@@ -580,6 +575,9 @@ autocmd FileType java setlocal softtabstop=4 tabstop=4 shiftwidth=4 expandtab au
 :command Wq wq
 :command QA qa
 :command Qa qa
+
+" Enables to edit protected files.
+cmap w!! w !sudo tee %
 
 " Remap start/end of line/document to H,L,J,K.
 map H 0
