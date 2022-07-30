@@ -377,6 +377,12 @@ alias subsis="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Subsistence.v30.07.
 # Revolution under Siege.
 alias revo="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Revolution\ Under\ Siege\ Gold\ Edition; wine-64 WINEDEBUG=-all wine RUS.exe"
 
+# Call of Duty Modern Warfare 3.
+alias mw3="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Call\ of\ Duty\ \ Modern\ Warfare\ 3; wine-64 WINEDEBUG=-all wine iw5sp.exe"
+
+# Factorio.
+alias factorio="cd $HOME/.wine64/drive_c/GOG\ Games/Factorio; wine-64 WINEDEBUG=-all wine Launch\ Factorio.lnk"
+
 ###########
 # PLUGINS #
 ###########

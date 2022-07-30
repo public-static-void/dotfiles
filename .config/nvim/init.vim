@@ -63,6 +63,8 @@ Plug 'othree/html5.vim'
 Plug 'alvan/vim-closetag'
 Plug 'valloric/MatchTagAlways'
 
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+
 Plug 'pangloss/vim-javascript'
 
 Plug 'p00f/nvim-ts-rainbow'
@@ -93,7 +95,11 @@ let g:coc_global_extensions = [
     \'coc-pydocstring',
     \'coc-java',
     \'coc-sh',
-    \'coc-highlight'
+    \'coc-highlight',
+    \'coc-markdownlint',
+    \'coc-spell-checker',
+    \'coc-cspell-dicts',
+    \'coc-dictionary'
     \]
 
 """"""""""""""""""""
@@ -475,7 +481,7 @@ nmap <leader>f :call CocActionAsync('format')<CR>
 
 " IndentLine settings.
 " Exclude filetypes from showing indentation.
-let g:indentLine_fileTypeExclude = ["help", "diff", "nerdtree"]
+let g:indentLine_fileTypeExclude = ["help", "diff", "nerdtree", "markdown"]
 " Exclude buffertypes from showing indentation.
 let g:indentLine_bufTypeExclude = ["help", "terminal", "nofile"]
 
@@ -534,6 +540,22 @@ EOF
 endfunction
 call TreesitterConfig()
 
+" MarkdownPreview config.
+
+" set to 1, nvim will open the preview window after entering the markdown buffer
+" default: 0
+let g:mkdp_auto_start = 1
+
+" set to 1, the vim will refresh markdown when save the buffer or
+" leave from insert mode, default 0 is auto refresh markdown as you edit or
+" move the cursor
+" default: 0
+let g:mkdp_refresh_slow = 1
+
+" recognized filetypes
+" these filetypes will have MarkdownPreview... commands
+let g:mkdp_filetypes = ['markdown']
+
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
 """""""""""""""""""""""""""
@@ -563,6 +585,9 @@ autocmd FileType jsonc setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab a
 
 " Java.
 autocmd FileType java setlocal softtabstop=4 tabstop=4 shiftwidth=4 expandtab autoindent smartindent
+
+" Markdown.
+autocmd FileType markdown setlocal softtabstop=2 tabstop=2 shiftwidth=2 textwidth=79 formatoptions+=t
 
 """""""""""""""
 " KEYBINDINGS "
