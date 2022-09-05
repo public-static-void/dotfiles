@@ -303,6 +303,18 @@ alias univpn="univpn.sh"
 # Renew.
 alias renew="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/; java -p dist:dist/libs -m de.renew.loader gui"
 
+# Renew Mulan.
+alias renewmulan="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Mulan/workspace/Renew/; java -p dist:dist/libs -m de.renew.loader gui"
+
+# Renew Settler.
+alias renewsettler="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Settler/workspace/Renew/; java -p dist:dist/libs -m de.renew.loader gui"
+
+# Renew WebChat.
+alias renewwebchat="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Mulan/workspace/lehre-ss22-mvs-uebungen/WebChat; bash testing/start.sh"
+
+# Renew WebChat.
+alias renewwebchatdc="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Mulan/workspace/lehre-ss22-mvs-uebungen/WebChatDC; bash testing/start.sh"
+
 alias makestub="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/Core/bin/unix/makestub"
 
 alias compilestub="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/Core/bin/unix/compilestub"
@@ -347,8 +359,8 @@ alias sims2="cd $HOME/wine-3.19/a; env WINEPREFIX=~/wine-3.19/a/ ./wine $HOME/wi
 # HoI3.
 alias hoi3="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Paradox\ Interactive/Hearts\ of\ Iron\ III; wine BI\ Quick\ Launch.exe"
 
-# HoI3 black ice 10.41.
-alias hoi3bi10="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Paradox\ Interactive/Hearts\ of\ Iron\ III/; wine-64 WINEDEBUG=-all wine launcher.exe"
+# HoI3 black ice 11.2.1.
+alias hoi3bi11="cd $HOME/.wine64/drive_c/GOG\ Games/Hearts\ of\ Iron\ III/; wine-64 WINEDEBUG=-all wine launcher.exe"
 
 # Retro wow with 64bit prefix.
 alias wow2="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/RetroWoW\ 1.12.1/RetroWoW\ 1.12.1/; WINEPREFIX=$HOME/.wine64 wine WoW.exe"
@@ -382,6 +394,9 @@ alias mw3="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Call\ of\ Duty\ \ Mo
 
 # Factorio.
 alias factorio="cd $HOME/.wine64/drive_c/GOG\ Games/Factorio; wine-64 WINEDEBUG=-all wine Launch\ Factorio.lnk"
+
+# Shadow Empire.
+alias shemp="cd $HOME/.wine64/drive_c/GOG\ Games/Shadow\ Empire; wine-64 WINEDEBUG=-all wine ShadowEmpire.exe"
 
 ###########
 # PLUGINS #
