@@ -214,7 +214,8 @@ bindsym $mod+Shift+s exec --no-startup-id urxvt -e nvim ~/.zshrc
 # Open vimrc.
 #bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.vimrc
 # Open neovim config.
-bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.config/nvim/init.vim
+#bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.config/nvim/init.vim
+bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.config/nvim/init.lua
 
 # Open picom config.
 bindsym $mod+Shift+less exec --no-startup-id urxvt -e nvim ~/.config/picom/picom.conf
