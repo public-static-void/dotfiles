@@ -105,12 +105,14 @@ return packer.startup(function(use)
 	use({
 		"iamcco/markdown-preview.nvim",
 		run = "cd app && npm install",
-		setup = function()
-			vim.g.mkdp_filetypes = { "markdown" }
-			vim.g.mkdp_auto_start = 1
-		end,
 		ft = { "markdown" },
 	})
+	use("NvChad/nvim-colorizer.lua")
+	use("f3fora/cmp-spell")
+	use("RRethy/vim-illuminate")
+	use("mfussenegger/nvim-dap")
+	use("rcarriga/nvim-dap-ui")
+	use("ravenxrz/DAPInstall.nvim")
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins

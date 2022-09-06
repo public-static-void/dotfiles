@@ -122,6 +122,10 @@ local options = {
 
 	-- Always show the signcolumn (where diagnostics etc. appear).
 	signcolumn = "yes",
+
+	-- Set up spellchecking.
+	spell = true,
+	spelllang = { "de_de", "en_us" },
 }
 
 -- Set up backups directory.
@@ -143,7 +147,9 @@ for k, v in pairs(options) do
 end
 
 -- Ignore certain folders/filetypes in the wildmenu.
-vim.opt.wildignore:append("*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx")
+vim.opt.wildignore:append(
+	"*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx"
+)
 
 -- Don't pass messages to |ins-completion-menu|.
 vim.opt.shortmess:append("c")

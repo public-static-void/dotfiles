@@ -159,8 +159,10 @@ keymap("n", "<leader>k", "<cmd>Gitsigns preview_hunk<cr>", opts)
 -- Nvimtree --
 keymap("n", "<C-n>", ":NvimTreeToggle<cr>", opts)
 
--- Open netrw to the left with a width of 20.
---keymap("n", "<C-n>", ":Lex 20<cr>", opts)
-
---keymap("", "<C-t>", "<Nop>", opts)
 keymap("", "<C-t>", ":ToggleTerm", opts)
+
+-- Debugging --
+keymap("n", "<leader>p", ":DapToggleBreakpoint<CR>", opts)
+keymap("n", "<leader>c", ":DapContinue<CR>", opts)
+keymap("n", "<leader>o", ":DapStepOver<CR>", opts)
+keymap("n", "<leader>i", ":DapStepInto<CR>", opts)
