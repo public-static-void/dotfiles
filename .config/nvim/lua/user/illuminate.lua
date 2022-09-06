@@ -1,5 +1,9 @@
--- default configuration
-require("illuminate").configure({
+local status_ok, illuminate = pcall(require, "illuminate")
+if not status_ok then
+	return
+end
+
+illuminate.configure({
 	-- providers: provider used to get references in the buffer, ordered by priority
 	providers = {
 		"lsp",
