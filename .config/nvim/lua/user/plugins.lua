@@ -62,11 +62,6 @@ return packer.startup(function(use)
 	use("lunarvim/colorschemes") -- A bunch of colorschemes you can try out
 	use("lunarvim/darkplus.nvim")
 
-	use("zacanger/angr.vim")
-	use("tomasiser/vim-code-dark")
-	use("srcery-colors/srcery-vim")
-	use("mhinz/vim-janah")
-
 	-- cmp plugins
 	use("hrsh7th/nvim-cmp") -- The completion plugin
 	use("hrsh7th/cmp-buffer") -- buffer completions
@@ -102,11 +97,22 @@ return packer.startup(function(use)
 	use("lewis6991/gitsigns.nvim")
 
 	-- Additional plugins
+	use("zacanger/angr.vim")
+	use("tomasiser/vim-code-dark")
+	use("srcery-colors/srcery-vim")
+	use("mhinz/vim-janah")
+
 	use({
 		"iamcco/markdown-preview.nvim",
 		run = "cd app && npm install",
+		setup = function()
+			vim.g.mkdp_filetypes = { "markdown" }
+      vim.g.mkdp_auto_start = 1
+      vim.g.mkdp_theme = "light"
+		end,
 		ft = { "markdown" },
 	})
+
 	use("NvChad/nvim-colorizer.lua")
 	use("f3fora/cmp-spell")
 	use("RRethy/vim-illuminate")

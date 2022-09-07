@@ -18,6 +18,6 @@ require("user.impatient")
 require("user.indentline")
 require("user.alpha")
 require("user.colorizer")
-require("user.markdown")
 require("user.illuminate")
 require("user.dap")
+

@@ -124,8 +124,8 @@ local options = {
 	signcolumn = "yes",
 
 	-- Set up spellchecking.
-	spell = true,
-	spelllang = { "de_de", "en_us" },
+	--spell = true,
+	--spelllang = { "de_de", "en_us" },
 }
 
 -- Set up backups directory.
