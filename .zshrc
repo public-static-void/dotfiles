@@ -46,16 +46,24 @@ if [[ -d $HOME/.local/bin && -z $(echo $PATH | grep -o $HOME/.local/bin) ]]; the
 fi
 
 # Set JAVA_HOME and add java 16 to PATH (for renew).
-JAVA_HOME="/usr/lib/jvm/java-15-adoptopenjdk"
+# JAVA_HOME="/usr/lib/jvm/java-15-adoptopenjdk"
+# if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
+#     PATH="${PATH}:$JAVA_HOME/bin"
+# fi
+# JAVA_HOME="/usr/lib/jvm/java-18-openjdk"
+# if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
+#     PATH="${PATH}:$JAVA_HOME/bin"
+# fi
+JAVA_HOME="/usr/lib/jvm/default"
 if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
     PATH="${PATH}:$JAVA_HOME/bin"
 fi
 
 # Set ANT_HOME and add ant to PATH (for renew).
-ANT_HOME="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/libs/ant"
-if [[ -d $ANT_HOME/bin && -z $(echo $PATH | grep -o $ANT_HOME/bin) ]]; then
-    PATH="${PATH}:$ANT_HOME/bin"
-fi
+# ANT_HOME="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/libs/ant"
+# if [[ -d $ANT_HOME/bin && -z $(echo $PATH | grep -o $ANT_HOME/bin) ]]; then
+#     PATH="${PATH}:$ANT_HOME/bin"
+# fi
 
 # Enable colors for ls.
 LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS

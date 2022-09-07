@@ -107,8 +107,8 @@ return packer.startup(function(use)
 		run = "cd app && npm install",
 		setup = function()
 			vim.g.mkdp_filetypes = { "markdown" }
-      vim.g.mkdp_auto_start = 1
-      vim.g.mkdp_theme = "light"
+			vim.g.mkdp_auto_start = 1
+			vim.g.mkdp_theme = "light"
 		end,
 		ft = { "markdown" },
 	})
@@ -119,6 +119,7 @@ return packer.startup(function(use)
 	use("mfussenegger/nvim-dap")
 	use("rcarriga/nvim-dap-ui")
 	use("ravenxrz/DAPInstall.nvim")
+	use("mfussenegger/nvim-jdtls")
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
