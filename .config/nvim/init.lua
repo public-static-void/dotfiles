@@ -20,4 +20,4 @@ require("user.alpha")
 require("user.colorizer")
 require("user.illuminate")
 require("user.dap")
-
+require("user.autocommands")

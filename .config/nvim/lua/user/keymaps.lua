@@ -73,6 +73,9 @@ keymap("", "k", "gk", opts)
 keymap("", "<Down>", "gj", opts)
 keymap("", "<Up>", "gk", opts)
 
+keymap("i", "<Down>", "<C-o>gj", opts)
+keymap("i", "<Up>", "<C-o>gk", opts)
+
 -- Stay in indent mode.
 keymap("v", "<", "<gv", opts)
 keymap("v", ">", ">gv", opts)
@@ -140,9 +143,9 @@ keymap("n", "<C-f>", ":tabclose<CR>", opts)
 -- Open new buffer.
 keymap("n", "<M-a>", ":enew<CR>", opts)
 -- Select next buffer.
-keymap("n", "<M-s>", ":bn<CR>", opts)
+keymap("n", "<M-d>", ":bn<CR>", opts)
 -- Select previous buffer.
-keymap("n", "<M-d>", ":bp<CR>", opts)
+keymap("n", "<M-s>", ":bp<CR>", opts)
 -- Close current buffer.
 keymap("n", "<M-f>", ":bd<CR>", opts)
 

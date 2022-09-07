@@ -16,10 +16,8 @@ end
 dap_install.setup({
 	installation_path = vim.fn.stdpath("data") .. "/dapinstall/",
 	dap_install.config("python", {}),
+	dap_install.config("lua", {}),
 })
-
-dap_install.config("python", {})
-dap_install.config("lua", {})
 
 -- dapui.setup()
 dapui.setup({

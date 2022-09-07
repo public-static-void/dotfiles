@@ -3,7 +3,13 @@ if not status_ok then
 	return
 end
 
+local status_ft_ok, ft = pcall(require, "Comment.ft")
+if not status_ft_ok then
+	return
+end
+
 comment.setup({
+  print("asdf"),
 	pre_hook = function(ctx)
 		local U = require("Comment.utils")
 

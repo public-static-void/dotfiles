@@ -36,12 +36,6 @@ local options = {
 	modelines = 0,
 	modeline = false,
 
-	-- Prevent non-normal modes showing in statusline and below statusline.
-	--showmode = false,
-
-	-- Colors.
-	--colorscheme = "angr",
-
 	-- Highlight cursor line.
 	cursorline = true,
 
@@ -122,10 +116,6 @@ local options = {
 
 	-- Always show the signcolumn (where diagnostics etc. appear).
 	signcolumn = "yes",
-
-	-- Set up spellchecking.
-	--spell = true,
-	--spelllang = { "de_de", "en_us" },
 }
 
 -- Set up backups directory.
@@ -160,33 +150,3 @@ vim.cmd("set whichwrap+=<,>,[,],h,l")
 -- Treat compound words connected with "-" as single words.
 vim.cmd("set iskeyword+=-")
 
--- Disables automatic commenting on newline.
-vim.cmd("autocmd FileType * setlocal formatoptions-=cro")
-
--- Remove trailing whitespace.
-vim.cmd([[
-  fun! TrimTrailingWhitespace()
-    if !&binary && &filetype != 'diff'
-      let l:save = winsaveview()
-      keeppatterns %s/\s\+$//e
-      call winrestview(l:save)
-    endif
-  endfun
-
-  augroup vimrc
-    au!
-    autocmd BufReadPost *
-    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-    \ |   exe "normal! g`\""
-    \ | endif
-    autocmd BufWritePre * :call TrimTrailingWhitespace()
-  augroup END
-]])
-
--- Set up skeletons.
-vim.cmd([[
-  augroup skeletons
-    au!
-    autocmd BufNewFile *.* silent! execute '0r ~/.config/nvim/templates/skeleton.'.expand("<afile>:e")
-  augroup END
-]])
