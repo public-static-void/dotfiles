@@ -102,6 +102,9 @@ M.on_attach = function(client, bufnr)
 	if client.name == "pylsp" then
 		client.resolved_capabilities.document_formatting = false
 	end
+	if client.name == "remark_ls" then
+		client.resolved_capabilities.document_formatting = false
+	end
 	lsp_keymaps(bufnr)
 	lsp_highlight_document(client)
 end
