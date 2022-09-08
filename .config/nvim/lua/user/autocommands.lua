@@ -1,3 +1,51 @@
+-- General --
+
+-- Disables automatic commenting on newline and sets some general format options.
+vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
+	callback = function()
+		vim.opt.formatoptions = "cjoqt"
+	end,
+})
+
+-- Remove trailing whitespace.
+vim.cmd([[
+  fun! TrimTrailingWhitespace()
+    if !&binary && &filetype != 'diff'
+      let l:save = winsaveview()
+      keeppatterns %s/\s\+$//e
+      call winrestview(l:save)
+    endif
+  endfun
+
+  augroup vimrc
+    au!
+    autocmd BufReadPost *
+    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+    \ |   exe "normal! g`\""
+    \ | endif
+    autocmd BufWritePre * :call TrimTrailingWhitespace()
+  augroup END
+]])
+
+-- Set up skeletons.
+vim.cmd([[
+  augroup skeletons
+    au!
+    autocmd BufNewFile *.* silent! execute '0r ~/.config/nvim/templates/skeleton.'.expand("<afile>:e")
+  augroup END
+]])
+
+-- Run code --
+
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	pattern = { "python" },
+	callback = function()
+		vim.cmd([[
+      nnoremap <buffer> <leader>e :sp<CR> :term python %<CR> :startinsert<CR>
+    ]])
+	end,
+})
+
 -- Filetypes --
 
 -- Markdown
@@ -33,44 +81,5 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 		vim.opt_local.smartindent = true
 		vim.opt_local.textwidth = 79
 		vim.opt_local.colorcolumn = "80"
-		vim.opt.formatoptions:remove("ro")
-		vim.opt.formatoptions:append("ct")
 	end,
 })
-
--- Other --
-
--- Disables automatic commenting on newline.
-vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
-	callback = function()
-		vim.opt.formatoptions:remove("cro")
-	end,
-})
-
--- Remove trailing whitespace.
-vim.cmd([[
-  fun! TrimTrailingWhitespace()
-    if !&binary && &filetype != 'diff'
-      let l:save = winsaveview()
-      keeppatterns %s/\s\+$//e
-      call winrestview(l:save)
-    endif
-  endfun
-
-  augroup vimrc
-    au!
-    autocmd BufReadPost *
-    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-    \ |   exe "normal! g`\""
-    \ | endif
-    autocmd BufWritePre * :call TrimTrailingWhitespace()
-  augroup END
-]])
-
--- Set up skeletons.
-vim.cmd([[
-  augroup skeletons
-    au!
-    autocmd BufNewFile *.* silent! execute '0r ~/.config/nvim/templates/skeleton.'.expand("<afile>:e")
-  augroup END
-]])

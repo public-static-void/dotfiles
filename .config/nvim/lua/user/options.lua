@@ -149,4 +149,3 @@ vim.cmd("set whichwrap+=<,>,[,],h,l")
 
 -- Treat compound words connected with "-" as single words.
 vim.cmd("set iskeyword+=-")
-

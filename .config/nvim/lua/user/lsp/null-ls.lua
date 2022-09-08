@@ -11,10 +11,31 @@ local diagnostics = null_ls.builtins.diagnostics
 null_ls.setup({
 	debug = false,
 	sources = {
-		formatting.prettier.with({ extra_args = { "--no-semi", "--single-quote", "--jsx-single-quote" } }),
-		formatting.black.with({ extra_args = { "--fast" } }),
+		-- js
+		diagnostics.eslint,
+		diagnostics.jshint,
+		formatting.prettier,
+		-- css
+		diagnostics.stylelint,
+		-- html
+		diagnostics.tidy,
+		-- lua
 		formatting.stylua,
-    formatting.google_java_format,
+		-- sh
+		diagnostics.shellcheck,
+		formatting.shfmt,
+		-- java
+		formatting.google_java_format,
+		-- python
 		diagnostics.flake8,
+		diagnostics.pylint,
+		diagnostics.vulture,
+		formatting.isort,
+		formatting.black,
+		formatting.autopep8,
+		-- git commit
+		diagnostics.gitlint,
+		-- general
+		diagnostics.codespell,
 	},
 })
