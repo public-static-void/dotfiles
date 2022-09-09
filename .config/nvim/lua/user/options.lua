@@ -88,6 +88,9 @@ local options = {
 	-- Show incomplete commands.
 	showcmd = true,
 
+  -- Keep 1 line below status bar.
+  cmdheight = 1,
+
 	-- Completion options suggested by cmp-plugin.
 	completeopt = { "menu", "menuone", "noselect" },
 
