@@ -120,6 +120,7 @@ return packer.startup(function(use)
 	use("rcarriga/nvim-dap-ui")
 	use("ravenxrz/DAPInstall.nvim")
 	use("mfussenegger/nvim-jdtls")
+	use("https://github.com/danymat/neogen")
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
