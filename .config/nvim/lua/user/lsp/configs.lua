@@ -18,8 +18,12 @@ for _, server in pairs(servers) do
 		capabilities = require("user.lsp.handlers").capabilities,
 	}
 	local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.settings." .. server)
+	if server == "jdtls" then
+		goto continue
+	end
 	if has_custom_opts then
 		opts = vim.tbl_deep_extend("force", opts, server_custom_opts)
 	end
 	lspconfig[server].setup(opts)
+	::continue::
 end
