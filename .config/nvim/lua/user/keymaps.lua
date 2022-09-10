@@ -162,8 +162,6 @@ keymap("n", "<leader>k", ":Gitsigns preview_hunk<cr>", opts)
 -- Nvimtree --
 keymap("n", "<C-n>", ":NvimTreeToggle<cr>", opts)
 
-keymap("", "<C-t>", ":ToggleTerm", opts)
-
 -- Debugging --
 keymap("n", "<leader>p", ":DapToggleBreakpoint<CR>", opts)
 keymap("n", "<leader>c", ":DapContinue<CR>", opts)
@@ -175,13 +173,33 @@ keymap("n", "<leader>f", ":lua vim.lsp.buf.formatting({async = true})<CR>", opts
 keymap("n", "<leader>n", ":lua vim.diagnostic.goto_next({ border = 'rounded' })<CR>", opts)
 keymap("n", "<leader>b", ":lua vim.diagnostic.goto_prev({ border = 'rounded' })<CR>", opts)
 keymap("n", "<leader>v", ":lua vim.diagnostic.setloclist()<CR>", opts)
+keymap("n", "<TAB>", ":lua vim.lsp.buf.hover()<CR>", opts)
 keymap("n", "gD", ":lua vim.lsp.buf.declaration()<CR>", opts)
 keymap("n", "gd", ":lua vim.lsp.buf.definition()<CR>", opts)
-keymap("n", "<TAB>", ":lua vim.lsp.buf.hover()<CR>", opts)
 keymap("n", "gi", ":lua vim.lsp.buf.implementation()<CR>", opts)
+keymap("n", "gr", ":lua vim.lsp.buf.references()<CR>", opts)
 keymap("n", "gs", ":lua vim.lsp.buf.signature_help()<CR>", opts)
 keymap("n", "<leader>r", ":lua vim.lsp.buf.rename()<CR>", opts)
-keymap("n", "gr", ":lua vim.lsp.buf.references()<CR>", opts)
 keymap("n", "<leader>a", ":lua vim.lsp.buf.code_action()<CR>", opts)
 keymap("n", "<leader>m", ":lua vim.diagnostic.open_float()<CR>", opts)
-keymap("n", "<Leader>d", ":lua require('neogen').generate()<CR>", opts)
+
+keymap("n", "<Leader>s", ":lua require('neogen').generate()<CR>", opts)
+
+-- Terminal --
+keymap("", "<C-t>", ":ToggleTerm<CR>", opts)
+keymap("t", "<esc>", [[<C-\><C-n>]], opts)
+keymap("t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
+keymap("t", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
+keymap("t", "<C-k>", [[<C-\><C-n><C-W>k]], opts)
+keymap("t", "<C-l>", [[<C-\><C-n><C-W>l]], opts)
+keymap("t", "<C-Left>", [[<C-\><C-n><C-W>h]], opts)
+keymap("t", "<C-Down>", [[<C-\><C-n><C-W>j]], opts)
+keymap("t", "<C-Up>", [[<C-\><C-n><C-W>k]], opts)
+keymap("t", "<C-Right>", [[<C-\><C-n><C-W>l]], opts)
+
+-- Other --
+
+-- Place date and time string at current cursor position
+keymap("n", "<leader>d", "i<C-R>=strftime('%c')<CR>", comm_opts)
+-- Replace selection with date and time string
+keymap("v", "<leader>d", "c<C-R>=strftime('%c')<CR><ESC>", comm_opts)

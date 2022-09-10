@@ -40,12 +40,7 @@ if [[ -d $HOME/scripts && -z $(echo $PATH | grep -o $HOME/scripts) ]]; then
     PATH="${PATH}:$HOME/scripts"
 fi
 
-# Add Haskell Stack to PATH.
-if [[ -d $HOME/.local/bin && -z $(echo $PATH | grep -o $HOME/.local/bin) ]]; then
-    PATH="${PATH}:$HOME/.local/bin"
-fi
-
-# Set JAVA_HOME and add java 16 to PATH (for renew).
+# Set JAVA_HOME and add java 15 to PATH (for renew).
 # JAVA_HOME="/usr/lib/jvm/java-15-adoptopenjdk"
 # if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
 #     PATH="${PATH}:$JAVA_HOME/bin"
@@ -58,6 +53,8 @@ JAVA_HOME="/usr/lib/jvm/default"
 if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
     PATH="${PATH}:$JAVA_HOME/bin"
 fi
+
+JDTLS_HOME="/usr/bin/jdtls"
 
 # Set ANT_HOME and add ant to PATH (for renew).
 # ANT_HOME="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/libs/ant"
