@@ -1,4 +1,4 @@
-""""""""
+""""""""""""
 " ~/.vimrc "
 """"""""""""
 
@@ -320,7 +320,7 @@ let g:NERDTreeWinSize = 30
 let NERDTreeShowHidden = 1
 let g:NERDTreeDirArrowExpandable = '►'
 let g:NERDTreeDirArrowCollapsible = '▼'
-let NERDTreeShowLineNumbers = 1
+let NERDTreeShowLineNumbers = 0
 let NERDTreeShowHidden = 1
 let NERDTreeMinimalUI = 1
 
