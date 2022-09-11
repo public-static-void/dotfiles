@@ -11,24 +11,22 @@ local diagnostics = null_ls.builtins.diagnostics
 null_ls.setup({
 	debug = false,
 	sources = {
+		-- css
+		diagnostics.stylelint,
+		-- git commit
+		diagnostics.gitlint,
+		-- general
+		diagnostics.codespell,
+		-- html
+		diagnostics.tidy,
+		-- java
+		formatting.google_java_format,
 		-- js
 		diagnostics.eslint,
 		diagnostics.jshint,
 		formatting.prettier,
-		-- css
-		diagnostics.stylelint,
-		-- html
-		diagnostics.tidy,
 		-- lua
 		formatting.stylua,
-		-- sh
-		diagnostics.shellcheck,
-		formatting.shfmt,
-		-- zsh
-		diagnostics.zsh,
-		formatting.beautysh,
-		-- java
-		formatting.google_java_format,
 		-- python
 		diagnostics.flake8,
 		diagnostics.pylint,
@@ -36,9 +34,13 @@ null_ls.setup({
 		formatting.isort,
 		formatting.black,
 		formatting.autopep8,
-		-- git commit
-		diagnostics.gitlint,
-		-- general
-		diagnostics.codespell,
+		-- sh
+		diagnostics.shellcheck,
+		formatting.shfmt,
+		-- vimscript
+		diagnostics.vint,
+		-- zsh
+		diagnostics.zsh,
+		formatting.beautysh,
 	},
 })

@@ -87,8 +87,8 @@ keymap("n", "<C-M-k>", ":m .-2<CR>==", opts)
 keymap("v", "<C-M-j>", ":m .+1<CR>==", opts)
 keymap("v", "<C-M-k>", ":m .-2<CR>==", opts)
 
-keymap("x", "<C-M-j>", ":move '>+1<CR>gv-gv", opts)
-keymap("x", "<C-M-k>", ":move '<-2<CR>gv-gv", opts)
+keymap("x", "<C-M-j>", ":m '>+1<CR>gv-gv", opts)
+keymap("x", "<C-M-k>", ":m '<-2<CR>gv-gv", opts)
 
 -- Splits --
 
