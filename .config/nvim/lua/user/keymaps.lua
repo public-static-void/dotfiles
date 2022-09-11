@@ -19,22 +19,24 @@ vim.g.maplocalleader = ","
 
 -- Commands --
 
--- Fix some common command typos.
-keymap("c", "W", "w", comm_opts)
-keymap("c", "Q", "q", comm_opts)
+vim.cmd("cabbrev Q q")
+vim.cmd("cabbrev W w")
 
-keymap("c", "WQ", "wq", comm_opts)
-keymap("c", "Wq", "wq", comm_opts)
-keymap("c", "wQ", "wq", comm_opts)
+vim.cmd("cabbrev WQ wq")
+vim.cmd("cabbrev Wq wq")
+vim.cmd("cabbrev wQ wq")
 
-keymap("c", "qw", "wq", comm_opts)
-keymap("c", "qW", "wq", comm_opts)
-keymap("c", "Qw", "wq", comm_opts)
-keymap("c", "QW", "wq", comm_opts)
+vim.cmd("cabbrev qw wq")
+vim.cmd("cabbrev qW wq")
+vim.cmd("cabbrev Qw wq")
+vim.cmd("cabbrev QW wq")
 
-keymap("c", "QA", "qa", comm_opts)
-keymap("c", "Qa", "qa", comm_opts)
-keymap("c", "qA", "qa", comm_opts)
+vim.cmd("cabbrev qA qa")
+vim.cmd("cabbrev QA qa")
+vim.cmd("cabbrev Qa qa")
+
+-- Ex Mode is annoying. Use this for formatting instead.
+keymap("n", "Q", "<Nop>", opts)
 
 -- Enable to edit protected files.
 keymap("c", "w!!", "w !sudo tee %", comm_opts)

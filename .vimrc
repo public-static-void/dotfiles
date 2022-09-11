@@ -454,21 +454,24 @@ autocmd FileType markdown setlocal softtabstop=2 tabstop=2 shiftwidth=2 textwidt
 " Commands.
 
 " Fix some common command typos.
-cnoremap W  w
-cnoremap Q  q
+cabbrev Q q
+cabbrev W w
 
-cnoremap WQ wq
-cnoremap Wq wq
-cnoremap wQ wq
+cabbrev WQ wq
+cabbrev Wq wq
+cabbrev wQ wq
 
-cnoremap qw wq
-cnoremap qW wq
-cnoremap Qw wq
-cnoremap QW wq
+cabbrev qw wq
+cabbrev qW wq
+cabbrev Qw wq
+cabbrev QW wq
 
-cnoremap QA qa
-cnoremap Qa qa
-cnoremap qA wq
+cabbrev qA qa
+cabbrev QA qa
+cabbrev Qa qa
+
+" Ex Mode is annoying.
+noremap Q <Nop>
 
 " Enable to edit protected files.
 cnoremap w!! w !sudo tee %
