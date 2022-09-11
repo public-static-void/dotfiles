@@ -200,6 +200,6 @@ keymap("t", "<C-Right>", [[<C-\><C-n><C-W>l]], opts)
 -- Other --
 
 -- Place date and time string at current cursor position
-keymap("n", "<leader>d", "i<C-R>=strftime('%c')<CR>", comm_opts)
+keymap("n", "<leader>d", "i<C-R>=strftime('%c')<CR><ESC>", comm_opts)
 -- Replace selection with date and time string
 keymap("v", "<leader>d", "c<C-R>=strftime('%c')<CR><ESC>", comm_opts)

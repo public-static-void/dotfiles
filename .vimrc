@@ -52,7 +52,16 @@ Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
 Plug 'Yggdroot/indentLine'
 Plug 'sheerun/vim-polyglot'
 Plug 'fisadev/vim-isort'
-Plug 'https://github.com/tpope/vim-commentary'
+Plug 'tpope/vim-commentary'
+Plug 'luochen1990/rainbow'
+
+Plug 'dense-analysis/ale'
+
+Plug 'Shougo/deoplete.nvim'
+Plug 'roxma/nvim-yarp'
+Plug 'roxma/vim-hug-neovim-rpc'
+
+Plug 'jiangmiao/auto-pairs'
 
 Plug 'python-rope/ropevim'
 
@@ -196,7 +205,7 @@ autocmd FileType * setlocal formatoptions=cjoqt
 
 " Enable Tab completion for the command line.
 set wildmenu
-set wildmode=list:full
+set wildmode=longest:list,full
 " Ignore certain files.
 set wildignore+=*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
 
@@ -260,12 +269,8 @@ augroup END
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
-if has('nvim-0.5.0') || has('patch-8.1.1564')
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
+
+set signcolumn=yes
 
 " Change cursor from beam to block depending on mode.
 let &t_SI = "\e[6 q"
@@ -381,6 +386,33 @@ let g:Hexokinase_optInPatterns = [
 
 " Make sure neoterm starts in horizontal split.
 let g:neoterm_default_mod='belowright'
+
+" Gitgutter keymaps.
+nnoremap <silent><leader>k :GitGutterPreviewHunk<CR>
+nnoremap <silent><leader>j :GitGutterNextHunk<CR>
+nnoremap <silent><leader>h :GitGutterPrevHunk<CR>
+
+" Rainbow.
+let g:rainbow_active = 1
+
+" ALE.
+" let g:ale_completion_enabled = 1
+
+nnoremap <silent><leader>f :ALEFix trim_whitespace<CR>:ALEFix remove_trailing_lines<CR>
+nnoremap <silent><leader>n :ALENext<CR>
+nnoremap <silent><leader>b :ALEPrevious<CR>
+nnoremap <silent><leader>v :lopen<CR>
+nnoremap <silent><TAB> :ALEHover<CR>
+nnoremap <silent>gd :ALEGoToDefinition<CR>
+nnoremap <silent>gi :ALEGoToImplementation<CR>
+nnoremap <silent>gr :ALEFindReferences<CR>
+nnoremap <silent>gs :ALEGoToTypeDefinition<CR>
+nnoremap <silent><leader>r :ALERename<CR>
+nnoremap <silent><leader>a :ALECodeAction<CR>
+nnoremap <silent><leader>m :ALEDetail<CR>
+
+" Deoplete.
+let g:deoplete#enable_at_startup = 1
 
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
@@ -567,3 +599,17 @@ tnoremap <C-left>  <C-w>h
 tnoremap <C-down>  <C-w>j
 tnoremap <C-up>    <C-w>k
 tnoremap <C-right> <C-w>l
+
+" Other.
+
+" Place date and time string at current cursor position
+nnoremap <silent><leader>d i<C-R>=strftime('%c')<CR><ESC>
+" Replace selection with date and time string
+vnoremap <silent><leader>d c<C-R>=strftime('%c')<CR><ESC>
+
+" Completion
+imap <C-@> <C-n>
+inoremap <silent><expr> <TAB> pumvisible()? "\<C-n>" : "<TAB>"
+inoremap <silent><expr> <S-TAB> pumvisible()? "\<C-p>" : "<S-TAB>"
+" Make <Enter> key select the highlighted menu item when the popup menu is visible."
+inoremap <silent><expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
