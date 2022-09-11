@@ -24,6 +24,9 @@ null_ls.setup({
 		-- sh
 		diagnostics.shellcheck,
 		formatting.shfmt,
+		-- zsh
+		diagnostics.zsh,
+		formatting.beautysh,
 		-- java
 		formatting.google_java_format,
 		-- python

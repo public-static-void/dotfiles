@@ -67,7 +67,7 @@ LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS
 
 # Preferred editor for local and remote sessions.
 if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR="nvim"
+    export EDITOR="vim"
 else
     export EDITOR="nvim"
 fi
@@ -86,7 +86,7 @@ neofetch --ascii_colors 14 23
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
 if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 fi
 
 # Enable colors.
@@ -173,15 +173,15 @@ zle -N blanktab && bindkey "^I" blanktab
 
 # Change cursor shape for different vi modes.
 function zle-keymap-select {
-  if [[ ${KEYMAP} == vicmd ]] ||
-     [[ $1 = "block" ]]; then
-    echo -ne "\e[1 q"
-  elif [[ ${KEYMAP} == main ]] ||
-       [[ ${KEYMAP} == viins ]] ||
-       [[ ${KEYMAP} = "" ]] ||
-       [[ $1 = "beam" ]]; then
-    echo -ne "\e[5 q"
-  fi
+    if [[ ${KEYMAP} == vicmd ]] ||
+    [[ $1 = "block" ]]; then
+        echo -ne "\e[1 q"
+    elif [[ ${KEYMAP} == main ]] ||
+    [[ ${KEYMAP} == viins ]] ||
+    [[ ${KEYMAP} = "" ]] ||
+    [[ $1 = "beam" ]]; then
+        echo -ne "\e[5 q"
+    fi
 }
 
 zle -N zle-keymap-select
@@ -244,7 +244,7 @@ bindkey -a "^[[8~" end-of-line
 ###########
 
 # Neovim is the new vim.
-alias vim="nvim"
+# alias vim="nvim"
 
 # Confirm before overwriting something
 alias cp="cp -i"
