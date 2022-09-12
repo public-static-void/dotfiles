@@ -71,6 +71,8 @@ Plug 'valloric/MatchTagAlways'
 
 Plug 'pangloss/vim-javascript'
 
+Plug 'mhinz/vim-startify'
+
 Plug 'zacanger/angr.vim'
 Plug 'tomasiser/vim-code-dark'
 
@@ -329,7 +331,10 @@ let NERDTreeMinimalUI = 1
 nmap <silent> <C-n> :call NERDTreeToggleInCurDir()<CR>
 function! NERDTreeToggleInCurDir()
   " If NERDTree is open in the current buffer
-    if (exists('t:NERDTreeBufName') && bufwinnr(t:NERDTreeBufName) != -1)
+
+    if len(filter(range(1, bufnr('$')), '! empty(bufname(v:val)) &&         buflisted(v:val)')) != 1
+        exe ':NERDTreeToggle'
+    elseif (exists('t:NERDTreeBufName') && bufwinnr(t:NERDTreeBufName) != -1)
         exe ':NERDTreeClose'
     else
         exe ':NERDTreeFind'
@@ -337,8 +342,8 @@ function! NERDTreeToggleInCurDir()
 endfunction
 
 " Autostart NERDTree with vim.
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Variables to change custom git status symbols.
 let g:NERDTreeGitStatusIndicatorMapCustom = {
@@ -413,6 +418,23 @@ nnoremap <silent><leader>m :ALEDetail<CR>
 
 " Deoplete.
 let g:deoplete#enable_at_startup = 1
+
+" Startify.
+    let g:startify_custom_header = [
+\'                                .                        ',
+\'                               @88>                      ',
+\'             ...     ..        %8P      ..    .     :    ',
+\'          :~""888h.:^"888:      .     .888: x888  x888.  ',
+\'         8X   `8888X  8888>   .@88u  ~`8888~`888X`?888f` ',
+\'        X888n. 8888X  ?888>   "888E`   X888  888X ´888>  ',
+\'        `88888 8888X   ?**h.   888E    X888  888X |888>  ',
+\'          `*88 8888~ x88x.     888E    X888  888X |888>  ',
+\'         ..<"  88*`  88888X    888E    X888  888X l888>  ',
+\'            ..XC.    `*8888k   888&   "*88%""*88" `888!` ',
+\'          :888888H.    `%88>   R888"    `~    "    `"`   ',
+\'         <  `"888888:    X"     ""                       ',
+\'               %888888x.-`                               ',
+\'                 ""**""                                  ',]
 
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
