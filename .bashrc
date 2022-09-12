@@ -84,6 +84,10 @@ alias dotfiles='/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
 # Make 'ls' print directories first and ignore colorcode if output to file.
 alias ls='ls -hN --color=auto --group-directories-first'
 
+
+alias la='ls -ahN --color=auto --group-directories-first'
+alias ll='ls -lahN --color=auto --group-directories-first'
+
 # Make pacman colorful.
 alias pacman="sudo pacman --color=auto"
 

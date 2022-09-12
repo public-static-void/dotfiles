@@ -57,10 +57,6 @@ Plug 'luochen1990/rainbow'
 
 Plug 'dense-analysis/ale'
 
-Plug 'Shougo/deoplete.nvim'
-Plug 'roxma/nvim-yarp'
-Plug 'roxma/vim-hug-neovim-rpc'
-
 Plug 'jiangmiao/auto-pairs'
 
 Plug 'python-rope/ropevim'
@@ -401,7 +397,7 @@ nnoremap <silent><leader>h :GitGutterPrevHunk<CR>
 let g:rainbow_active = 1
 
 " ALE.
-" let g:ale_completion_enabled = 1
+let g:ale_completion_enabled = 1
 
 nnoremap <silent><leader>f :ALEFix trim_whitespace<CR>:ALEFix remove_trailing_lines<CR>
 nnoremap <silent><leader>n :ALENext<CR>
@@ -415,9 +411,6 @@ nnoremap <silent>gs :ALEGoToTypeDefinition<CR>
 nnoremap <silent><leader>r :ALERename<CR>
 nnoremap <silent><leader>a :ALECodeAction<CR>
 nnoremap <silent><leader>m :ALEDetail<CR>
-
-" Deoplete.
-let g:deoplete#enable_at_startup = 1
 
 " Startify.
     let g:startify_custom_header = [
@@ -435,6 +428,9 @@ let g:deoplete#enable_at_startup = 1
 \'         <  `"888888:    X"     ""                       ',
 \'               %888888x.-`                               ',
 \'                 ""**""                                  ',]
+
+" Hexokinase.
+let g:Hexokinase_highlighters = [ 'backgroundfull' ]
 
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "

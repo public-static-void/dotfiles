@@ -163,13 +163,17 @@ zle -N blanktab && bindkey "^I" blanktab
 # PROMPT SETTINGS #
 ###################
 
-# Powerline.
-#if [ -f `which powerline-daemon` ]; then
-#   powerline-daemon -q
-#   POWERLINE_ZSH_CONTINUATION=1
-#   POWERLINE_ZSH_SELECT=1
-#   . /usr/lib/python3.10/site-packages/powerline/bindings/zsh/powerline.zsh
-#fi
+# Git integration.
+autoload -Uz vcs_info
+precmd_vcs_info() { vcs_info }
+precmd_functions+=( precmd_vcd_info )
+setopt prompt_subst
+PROMPT='%F{red}%n@%m:%F{cyan}%2~%f${vcs_info_msg_0_}%# '
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' unstagedstr ' *'
+zstyle ':vcs_info:*' stagedstr ' +'
+zstyle ':vcs_info:git:*' formats '(%b%u%c)'
+zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
 
 # Change cursor shape for different vi modes.
 function zle-keymap-select {
