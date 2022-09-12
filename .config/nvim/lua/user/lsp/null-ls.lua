@@ -32,7 +32,7 @@ null_ls.setup({
 		diagnostics.pylint,
 		diagnostics.vulture,
 		formatting.isort,
-		formatting.black,
+		formatting.black.with({ extra_args = { "--preview", "-l 80" } }),
 		formatting.autopep8,
 		-- sh
 		diagnostics.shellcheck,
