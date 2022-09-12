@@ -189,6 +189,7 @@ keymap("n", "<Leader>s", ":lua require('neogen').generate()<CR>", opts)
 
 -- Terminal --
 keymap("", "<C-t>", ":ToggleTerm<CR>", opts)
+keymap("t", "<C-t>", [[<C-\><C-n>:ToggleTerm<CR>]], opts)
 keymap("t", "<esc>", [[<C-\><C-n>]], opts)
 keymap("t", "<C-h>", [[<C-\><C-n><C-W>h]], opts)
 keymap("t", "<C-j>", [[<C-\><C-n><C-W>j]], opts)
