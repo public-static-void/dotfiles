@@ -29,7 +29,7 @@ null_ls.setup({
 		formatting.stylua,
 		-- python
 		diagnostics.flake8,
-		diagnostics.pylint,
+		-- diagnostics.pylint,
 		diagnostics.vulture,
 		formatting.isort,
 		formatting.black.with({ extra_args = { "--preview", "-l 80" } }),

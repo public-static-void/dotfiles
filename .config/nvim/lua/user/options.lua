@@ -36,6 +36,9 @@ local options = {
 	modelines = 0,
 	modeline = false,
 
+	-- Don't show mode.
+	showmode = false,
+
 	-- Highlight cursor line.
 	cursorline = true,
 

@@ -113,7 +113,7 @@ return packer.startup(function(use)
 		ft = { "markdown" },
 	})
 
-	use("NvChad/nvim-colorizer.lua")
+  use("NvChad/nvim-colorizer.lua")
 	use("f3fora/cmp-spell")
 	use("RRethy/vim-illuminate")
 	use("mfussenegger/nvim-dap")
@@ -121,6 +121,12 @@ return packer.startup(function(use)
 	use("ravenxrz/DAPInstall.nvim")
 	use("mfussenegger/nvim-jdtls")
 	use("https://github.com/danymat/neogen")
+
+  -- Some more color schemes.
+  use("Mofiqul/vscode.nvim")
+
+  use("RRethy/nvim-base16")
+  use("savq/melange")
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
