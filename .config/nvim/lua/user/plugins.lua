@@ -61,6 +61,12 @@ return packer.startup(function(use)
 	-- Colorschemes
 	use("lunarvim/colorschemes") -- A bunch of colorschemes you can try out
 	use("lunarvim/darkplus.nvim")
+	use("zacanger/angr.vim")
+	use("tomasiser/vim-code-dark")
+	use("srcery-colors/srcery-vim")
+	use("mhinz/vim-janah")
+	use("Mofiqul/vscode.nvim")
+	use("RRethy/nvim-base16")
 
 	-- cmp plugins
 	use("hrsh7th/nvim-cmp") -- The completion plugin
@@ -97,10 +103,6 @@ return packer.startup(function(use)
 	use("lewis6991/gitsigns.nvim")
 
 	-- Additional plugins
-	use("zacanger/angr.vim")
-	use("tomasiser/vim-code-dark")
-	use("srcery-colors/srcery-vim")
-	use("mhinz/vim-janah")
 
 	use({
 		"iamcco/markdown-preview.nvim",
@@ -113,7 +115,7 @@ return packer.startup(function(use)
 		ft = { "markdown" },
 	})
 
-  use("NvChad/nvim-colorizer.lua")
+	use("NvChad/nvim-colorizer.lua")
 	use("f3fora/cmp-spell")
 	use("RRethy/vim-illuminate")
 	use("mfussenegger/nvim-dap")
@@ -122,11 +124,7 @@ return packer.startup(function(use)
 	use("mfussenegger/nvim-jdtls")
 	use("https://github.com/danymat/neogen")
 
-  -- Some more color schemes.
-  use("Mofiqul/vscode.nvim")
-
-  use("RRethy/nvim-base16")
-  use("savq/melange")
+	use({ "AlphaTechnolog/pywal.nvim", as = "pywal" })
 
 	-- Automatically set up your configuration after cloning packer.nvim
 	-- Put this at the end after all plugins
