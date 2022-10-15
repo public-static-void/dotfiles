@@ -171,7 +171,7 @@ keymap("n", "<leader>o", ":DapStepOver<CR>", opts)
 keymap("n", "<leader>i", ":DapStepInto<CR>", opts)
 
 -- LSP --
-keymap("n", "<leader>f", ":lua vim.lsp.buf.formatting({async = true})<CR>", opts)
+keymap("n", "<leader>f", ":lua vim.lsp.buf.format({async = true})<CR>", opts)
 keymap("n", "<leader>n", ":lua vim.diagnostic.goto_next({ border = 'rounded' })<CR>", opts)
 keymap("n", "<leader>b", ":lua vim.diagnostic.goto_prev({ border = 'rounded' })<CR>", opts)
 keymap("n", "<leader>v", ":lua vim.diagnostic.setloclist()<CR>", opts)

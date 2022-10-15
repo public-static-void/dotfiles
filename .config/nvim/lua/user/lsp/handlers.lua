@@ -61,28 +61,28 @@ M.on_attach = function(client)
 	-- vim.notify(client.name .. " starting...")
 	-- TODO: refactor this into a method that checks if string in list
 	if client.name == "jsonls" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.document_formatting = false
 	end
 	if client.name == "tsserver" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.document_formatting = false
 	end
 	if client.name == "sumneko_lua" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.document_formatting = false
 	end
 	if client.name == "html" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.document_formatting = false
 	end
 	if client.name == "pylsp" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.document_formatting = false
 	end
 	if client.name == "remark_ls" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.document_formatting = false
 	end
 	if client.name == "jdtls" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.document_formatting = false
 	end
 	if client.name == "jdt.ls" then
-		client.resolved_capabilities.document_formatting = false
+		client.server_capabilities.document_formatting = false
 		require("jdtls").setup_dap({ hotcodereplace = "auto" })
 		require("jdtls.dap").setup_dap_main_class_configs()
 	end
