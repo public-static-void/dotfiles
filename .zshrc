@@ -313,7 +313,7 @@ alias univpn="univpn.sh"
 # alias renew="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/; java -p dist:dist/libs -m de.renew.loader gui"
 
 # Renew MAKS (preliminary).
-alias renewmaks="cd $HOME/UNI/MASTER/3-WiSe2223/MAKS/renew2.6-fgi2/renew2.6/; java -jar loader.jar gui"
+alias renewmaks="cd $HOME/UNI/MASTER/3-WiSe2223/MAKS/renew2.6dev-maks-newUI-lin64/renew2.6dev/; java -jar loader.jar gui"
 
 # Renew Mulan.
 alias renewmulan="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Mulan/workspace/Renew/; java -p dist:dist/libs -m de.renew.loader gui"
