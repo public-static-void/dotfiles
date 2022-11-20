@@ -309,6 +309,12 @@ alias webcam2="guvcview"
 # Uni vpn tunnel.
 alias univpn="univpn.sh"
 
+# Uni ssh.
+alias unissh="unissh.sh"
+
+# Tensorboard ssh port forwarding.
+alias tensorssh="tensorssh.sh"
+
 # Renew.
 # alias renew="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/; java -p dist:dist/libs -m de.renew.loader gui"
 
@@ -354,16 +360,16 @@ alias cc3="cd $HOME/.wine64/drive_c/GOG\ Games/Close\ Combat\ 3; wine-64 WINEDEB
 # Warthunder.
 alias warthunder="$HOME/Games/war-thunder/aces"
 
-# PokeOne 1.Acc.
+# PokeOne.
 alias poke1="WINEPREFIX=$HOME/.wine $HOME/.wine/drive_c/Program\ Files\ \(x86\)/PokeOne32/PokeOne32.exe"
 
 # Openxcom.
 alias xcom="openxcom -data $HOME/.wine/drive_c/GOG\ Games/X-COM\ UFO\ Defense"
 
 # Dwarf fortress.
-alias dwarfnew="$HOME/Games/LinuxDwarfPack-0.47.05-r5/startlnp.sh"
+alias dwarfnew="$HOME/Games/LinuxDwarfPack-0.47.05-r7/startlnp.sh"
 
-alias dwarfold="$HOME/Games/LinuxDwarfPack-0.47.05-r3/startlnp.sh"
+alias dwarfold="$HOME/Games/LinuxDwarfPack-0.47.05-r5/startlnp.sh"
 
 # Sims2.
 alias sims2="cd $HOME/wine-3.19/a; env WINEPREFIX=~/wine-3.19/a/ ./wine $HOME/wine-3.19/a/drive_c/Program\ Files/EA\ GAMES/Die\ Sims\ 2\ Villen-\ und\ Garten-Accessoires/TSBin/Sims2EP9.exe"
