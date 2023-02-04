@@ -45,7 +45,7 @@ fi
 # if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
 #     PATH="${PATH}:$JAVA_HOME/bin"
 # fi
-# JAVA_HOME="/usr/lib/jvm/java-18-openjdk"
+# JAVA_HOME="/usr/lib/jvm/java-19-openjdk"
 # if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
 #     PATH="${PATH}:$JAVA_HOME/bin"
 # fi
