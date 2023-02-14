@@ -14,8 +14,9 @@ local servers = {
 	"pylsp",
 	"pyright",
 	-- "remark_ls",
-  "marksman",
-	"sumneko_lua",
+	"marksman",
+	-- "sumneko_lua",
+	"lua_ls",
 	"tsserver",
 	"vimls",
 }
