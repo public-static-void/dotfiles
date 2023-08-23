@@ -15,6 +15,7 @@
     "Pavucontrol": "headphones",
     "Dwarf_Fortress": "gamepad",
     "dosbox": "gamepad",
+    "steam": "steam",
     "_no_match": "question"
 
 }

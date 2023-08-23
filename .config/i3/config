@@ -36,7 +36,7 @@ exec --no-startup-id dunst
 
 # Dynamically changes the names of workspaces depending on what windows are open in them.
 # Names of applications and keywords are replaced with icons from FontAwesome.
-exec_always --no-startup-id exec i3-workspace-names-daemon
+exec_always --no-startup-id i3-workspace-names-daemon
 
 ##############
 # WORKSPACES #

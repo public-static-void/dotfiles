@@ -75,6 +75,9 @@ M.on_attach = function(client)
 	if client.name == "html" then
 		client.server_capabilities.document_formatting = false
 	end
+	if client.name == "xml" then
+		client.server_capabilities.document_formatting = false
+	end
 	if client.name == "pylsp" then
 		client.server_capabilities.document_formatting = false
 	end

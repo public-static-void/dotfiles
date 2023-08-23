@@ -17,8 +17,10 @@ null_ls.setup({
 		diagnostics.gitlint,
 		-- general
 		diagnostics.codespell,
-		-- html
+		-- html, xml
 		diagnostics.tidy,
+    -- xml
+    formatting.xq,
 		-- java
 		formatting.google_java_format,
 		-- js
