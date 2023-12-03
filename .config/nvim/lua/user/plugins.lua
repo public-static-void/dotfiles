@@ -1,131 +1,112 @@
 local fn = vim.fn
 
--- Automatically install packer
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-	PACKER_BOOTSTRAP = fn.system({
+-- Automatically install lazy.nvim
+local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+if not vim.loop.fs_stat(lazypath) then
+	vim.fn.system({
 		"git",
 		"clone",
-		"--depth",
-		"1",
-		"https://github.com/wbthomason/packer.nvim",
-		install_path,
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable", -- latest stable release
+		lazypath,
 	})
-	print("Installing packer close and reopen Neovim...")
-	vim.cmd([[packadd packer.nvim]])
 end
-
--- Autocommand that reloads neovim whenever you save the plugins.lua file
-vim.cmd([[
-  augroup packer_user_config
-    autocmd!
-    autocmd BufWritePost plugins.lua source <afile> | PackerSync
-  augroup end
-]])
+vim.opt.rtp:prepend(lazypath)
 
 -- Use a protected call so we don't error out on first use
-local status_ok, packer = pcall(require, "packer")
+local status_ok, lazy = pcall(require, "lazy")
 if not status_ok then
 	return
 end
 
--- Have packer use a popup window
-packer.init({
-	display = {
-		open_fn = function()
-			return require("packer.util").float({ border = "rounded" })
-		end,
-	},
-})
-
 -- Install your plugins here
-return packer.startup(function(use)
+return lazy.setup({
 	-- Plugins from Chris@Machine Neovim as IDE setup
-	use("wbthomason/packer.nvim") -- Have packer manage itself
-	use("nvim-lua/popup.nvim") -- An implementation of the Popup API from vim in Neovim
-	use("nvim-lua/plenary.nvim") -- Useful lua functions used by lots of plugins
-	use("windwp/nvim-autopairs") -- Autopairs, integrates with both cmp and treesitter
-	use("numToStr/Comment.nvim") -- Easily comment stuff
-	use("kyazdani42/nvim-web-devicons")
-	use("kyazdani42/nvim-tree.lua")
-	use("akinsho/bufferline.nvim")
-	use("moll/vim-bbye")
-	use("nvim-lualine/lualine.nvim")
-	use("akinsho/toggleterm.nvim")
-	use("ahmedkhalf/project.nvim")
-	use("lewis6991/impatient.nvim")
-	use("lukas-reineke/indent-blankline.nvim")
-	use("goolord/alpha-nvim")
-	use("antoinemadec/FixCursorHold.nvim") -- This is needed to fix lsp doc highlight
+	"nvim-lua/popup.nvim", -- An implementation of the Popup API from vim in Neovim
+	"nvim-lua/plenary.nvim", -- Useful lua functions used by lots of plugins
+	"windwp/nvim-autopairs", -- Autopairs, integrates with both cmp and treesitter
+	"numToStr/Comment.nvim", -- Easily comment stuff
+	"kyazdani42/nvim-web-devicons",
+	"kyazdani42/nvim-tree.lua",
+	"akinsho/bufferline.nvim",
+	"moll/vim-bbye",
+	"nvim-lualine/lualine.nvim",
+	"akinsho/toggleterm.nvim",
+	"ahmedkhalf/project.nvim",
+	"lewis6991/impatient.nvim",
+	"lukas-reineke/indent-blankline.nvim",
+	"goolord/alpha-nvim",
+	"antoinemadec/FixCursorHold.nvim", -- This is needed to fix lsp doc highlight
 
 	-- Colorschemes
-	use("lunarvim/colorschemes") -- A bunch of colorschemes you can try out
-	use("lunarvim/darkplus.nvim")
-	use("zacanger/angr.vim")
-	use("tomasiser/vim-code-dark")
-	use("srcery-colors/srcery-vim")
-	use("mhinz/vim-janah")
-	use("Mofiqul/vscode.nvim")
-	use("RRethy/nvim-base16")
+	"lunarvim/colorschemes", -- A bunch of colorschemes you can try out
+	"lunarvim/darkplus.nvim",
+	"zacanger/angr.vim",
+	"tomasiser/vim-code-dark",
+	"srcery-colors/srcery-vim",
+	"mhinz/vim-janah",
+	"Mofiqul/vscode.nvim",
+	"RRethy/nvim-base16",
 
 	-- cmp plugins
-	use("hrsh7th/nvim-cmp") -- The completion plugin
-	use("hrsh7th/cmp-buffer") -- buffer completions
-	use("hrsh7th/cmp-path") -- path completions
-	use("hrsh7th/cmp-cmdline") -- cmdline completions
-	use("saadparwaiz1/cmp_luasnip") -- snippet completions
-	use("hrsh7th/cmp-nvim-lsp")
-	use("hrsh7th/cmp-nvim-lua")
+	"hrsh7th/nvim-cmp", -- The completion plugin
+	"hrsh7th/cmp-buffer", -- buffer completions
+	"hrsh7th/cmp-path", -- path completions
+	"hrsh7th/cmp-cmdline", -- cmdline completions
+	"saadparwaiz1/cmp_luasnip", -- snippet completions
+	"hrsh7th/cmp-nvim-lsp",
+	"hrsh7th/cmp-nvim-lua",
 
 	-- snippets
-	use("L3MON4D3/LuaSnip") --snippet engine
-	use("rafamadriz/friendly-snippets") -- a bunch of snippets to use
+	"L3MON4D3/LuaSnip", --snippet engine
+	"rafamadriz/friendly-snippets", -- a bunch of snippets to use
 
 	-- LSP
-	use("neovim/nvim-lspconfig") -- enable LSP
-	use("williamboman/nvim-lsp-installer") -- simple to use language server installer
-	use("jose-elias-alvarez/null-ls.nvim") -- for formatters and linters
+	"neovim/nvim-lspconfig", -- enable LSP
+	"williamboman/nvim-lsp-installer", -- simple to use language server installer
+	"jose-elias-alvarez/null-ls.nvim", -- for formatters and linters
 
 	-- Telescope
-	use("nvim-telescope/telescope.nvim")
+	"nvim-telescope/telescope.nvim",
 
 	-- Treesitter
-	use({
+	{
 		"nvim-treesitter/nvim-treesitter",
-		run = function()
-			require("nvim-treesitter.install").update({ with_sync = true })
-		end,
-	})
-	use("p00f/nvim-ts-rainbow")
-	use("JoosepAlviste/nvim-ts-context-commentstring")
+		build = ":TSUpdate",
+	},
+	"p00f/nvim-ts-rainbow",
+	"JoosepAlviste/nvim-ts-context-commentstring",
 
 	-- Git
-	use("lewis6991/gitsigns.nvim")
+	"lewis6991/gitsigns.nvim",
 
 	-- Additional plugins
-
-	use({
+	{
 		"iamcco/markdown-preview.nvim",
-		run = "cd app && npm install",
-		setup = function()
+		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+		ft = { "markdown" },
+		build = function()
+			vim.fn["mkdp#util#install"]()
+		end,
+		init = function()
 			vim.g.mkdp_filetypes = { "markdown" }
 			vim.g.mkdp_auto_start = 1
 			vim.g.mkdp_theme = "light"
 		end,
-		ft = { "markdown" },
-	})
+	},
+	"NvChad/nvim-colorizer.lua",
+	"f3fora/cmp-spell",
+	"RRethy/vim-illuminate",
+	"mfussenegger/nvim-dap",
+	"rcarriga/nvim-dap-ui",
+	"ravenxrz/DAPInstall.nvim",
+	"mfussenegger/nvim-jdtls",
+	"danymat/neogen",
 
-	use("NvChad/nvim-colorizer.lua")
-	use("f3fora/cmp-spell")
-	use("RRethy/vim-illuminate")
-	use("mfussenegger/nvim-dap")
-	use("rcarriga/nvim-dap-ui")
-	use("ravenxrz/DAPInstall.nvim")
-	use("mfussenegger/nvim-jdtls")
-	use("https://github.com/danymat/neogen")
-
-	use({ "AlphaTechnolog/pywal.nvim", as = "pywal" })
-	use({
+	-- { "AlphaTechnolog/pywal.nvim", as = "pywal" },
+	{ "AlphaTechnolog/pywal.nvim" },
+	{
 		"cameron-wags/rainbow_csv.nvim",
 		config = function()
 			require("rainbow_csv").setup()
@@ -144,29 +125,24 @@ return packer.startup(function(use)
 			"rfc_csv",
 			"rfc_semicolon",
 		},
-	})
-	use({
+	},
+	{
 		"kylechui/nvim-surround",
-		tag = "*", -- Use for stability; omit to use `main` branch for the latest features
+		version = "*", -- Use for stability; omit to use `main` branch for the latest features
+		event = "VeryLazy",
 		config = function()
 			require("nvim-surround").setup({
 				-- Configuration here, or leave empty to use defaults
 			})
 		end,
-	})
-	use({
-		"sunjon/shade.nvim",
-		config = function()
-			require("shade").setup({
-				overlay_opacity = 75,
-				opacity_step = 5,
-			})
-		end,
-	})
-
-	-- Automatically set up your configuration after cloning packer.nvim
-	-- Put this at the end after all plugins
-	if PACKER_BOOTSTRAP then
-		require("packer").sync()
-	end
-end)
+	},
+	-- {
+	-- 	"sunjon/shade.nvim",
+	-- 	config = function()
+	-- 		require("shade").setup({
+	-- 			overlay_opacity = 75,
+	-- 			opacity_step = 5,
+	-- 		})
+	-- 	end,
+	-- },
+})
