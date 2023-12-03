@@ -128,8 +128,11 @@ return lazy.setup({
 		lazy = true,
 	},
 	{
-		-- simple to use language server installer
-		"williamboman/nvim-lsp-installer",
+		"williamboman/mason.nvim",
+		lazy = true,
+	},
+	{
+		"williamboman/mason-lspconfig.nvim",
 		lazy = true,
 	},
 	{
@@ -297,6 +300,6 @@ return lazy.setup({
 				filter_percent = 0.25,
 			})
 		end,
-    lazy = true,
+		lazy = true,
 	},
 })

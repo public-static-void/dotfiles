@@ -1,5 +1,10 @@
-local status_ok, lsp_installer = pcall(require, "nvim-lsp-installer")
+local status_ok, lsp_installer = pcall(require, "mason")
 if not status_ok then
+	return
+end
+
+local config_status_ok, lsp_config = pcall(require, "mason-lspconfig")
+if not config_status_ok then
 	return
 end
 
@@ -15,13 +20,15 @@ local servers = {
 	"pyright",
 	"remark_ls",
 	-- "marksman",
-	-- "sumneko_lua",
 	"lua_ls",
 	"tsserver",
 	"vimls",
+  "typos_lsp",
 }
 
-lsp_installer.setup({
+lsp_installer.setup({})
+
+lsp_config.setup({
 	ensure_installed = servers,
 })
 
