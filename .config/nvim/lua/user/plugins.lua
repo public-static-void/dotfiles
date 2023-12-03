@@ -14,72 +14,206 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
--- Use a protected call so we don't error out on first use
 local status_ok, lazy = pcall(require, "lazy")
 if not status_ok then
 	return
 end
 
--- Install your plugins here
+-- Install plugins
 return lazy.setup({
-	-- Plugins from Chris@Machine Neovim as IDE setup
-	"nvim-lua/popup.nvim", -- An implementation of the Popup API from vim in Neovim
-	"nvim-lua/plenary.nvim", -- Useful lua functions used by lots of plugins
-	"windwp/nvim-autopairs", -- Autopairs, integrates with both cmp and treesitter
-	"numToStr/Comment.nvim", -- Easily comment stuff
-	"kyazdani42/nvim-web-devicons",
-	"kyazdani42/nvim-tree.lua",
-	"akinsho/bufferline.nvim",
-	"moll/vim-bbye",
-	"nvim-lualine/lualine.nvim",
-	"akinsho/toggleterm.nvim",
-	"ahmedkhalf/project.nvim",
-	"lewis6991/impatient.nvim",
-	"lukas-reineke/indent-blankline.nvim",
-	"goolord/alpha-nvim",
-	"antoinemadec/FixCursorHold.nvim", -- This is needed to fix lsp doc highlight
+	{
+		-- An implementation of the Popup API from vim in Neovim
+		"nvim-lua/popup.nvim",
+		lazy = true,
+	},
+	{
+		-- Useful lua functions used by lots of plugins
+		"nvim-lua/plenary.nvim",
+		lazy = true,
+	},
+	{
+		-- Autopairs, integrates with both cmp and treesitter
+		"windwp/nvim-autopairs",
+		lazy = true,
+	},
+	{
+		-- Easily comment stuff
+		"numToStr/Comment.nvim",
+		lazy = true,
+	},
+	{
+		"kyazdani42/nvim-web-devicons",
+		lazy = true,
+	},
+	{
+		"kyazdani42/nvim-tree.lua",
+		lazy = true,
+	},
+	{
+		"akinsho/bufferline.nvim",
+		lazy = true,
+	},
+	{
+		"moll/vim-bbye",
+		lazy = false,
+	},
+	{
+		"nvim-lualine/lualine.nvim",
+		lazy = true,
+	},
+	{
+		"akinsho/toggleterm.nvim",
+		lazy = true,
+	},
+	{
+		"ahmedkhalf/project.nvim",
+		lazy = true,
+	},
+	{
+		"lewis6991/impatient.nvim",
+		lazy = true,
+	},
+	{
+		"lukas-reineke/indent-blankline.nvim",
+		lazy = true,
+	},
+	{
+		"goolord/alpha-nvim",
+		lazy = true,
+	},
+	{
+		-- This is needed to fix lsp doc highlight
+		"antoinemadec/FixCursorHold.nvim",
+		lazy = false,
+	},
 
 	-- Colorschemes
-	"lunarvim/colorschemes", -- A bunch of colorschemes you can try out
-	"lunarvim/darkplus.nvim",
-	"zacanger/angr.vim",
-	"tomasiser/vim-code-dark",
-	"srcery-colors/srcery-vim",
-	"mhinz/vim-janah",
-	"Mofiqul/vscode.nvim",
-	"RRethy/nvim-base16",
-
-	-- cmp plugins
-	"hrsh7th/nvim-cmp", -- The completion plugin
-	"hrsh7th/cmp-buffer", -- buffer completions
-	"hrsh7th/cmp-path", -- path completions
-	"hrsh7th/cmp-cmdline", -- cmdline completions
-	"saadparwaiz1/cmp_luasnip", -- snippet completions
-	"hrsh7th/cmp-nvim-lsp",
-	"hrsh7th/cmp-nvim-lua",
-
-	-- snippets
-	"L3MON4D3/LuaSnip", --snippet engine
-	"rafamadriz/friendly-snippets", -- a bunch of snippets to use
+	{
+		"lunarvim/colorschemes",
+		lazy = true,
+	},
+	{
+		"lunarvim/darkplus.nvim",
+		lazy = true,
+	},
+	{
+		"zacanger/angr.vim",
+		lazy = true,
+	},
+	{
+		"tomasiser/vim-code-dark",
+		lazy = true,
+	},
+	{
+		"srcery-colors/srcery-vim",
+		lazy = true,
+	},
+	{
+		"mhinz/vim-janah",
+		lazy = true,
+	},
+	{
+		"Mofiqul/vscode.nvim",
+		lazy = true,
+	},
+	{
+		"RRethy/nvim-base16",
+		lazy = true,
+	},
 
 	-- LSP
-	"neovim/nvim-lspconfig", -- enable LSP
-	"williamboman/nvim-lsp-installer", -- simple to use language server installer
-	"jose-elias-alvarez/null-ls.nvim", -- for formatters and linters
+	{
+		-- enable LSP
+		"neovim/nvim-lspconfig",
+		lazy = true,
+	},
+	{
+		-- simple to use language server installer
+		"williamboman/nvim-lsp-installer",
+		lazy = true,
+	},
+	{
+		-- for formatters and linters
+		"jose-elias-alvarez/null-ls.nvim",
+		lazy = true,
+	},
+	{
+		"mfussenegger/nvim-jdtls",
+		lazy = true,
+	},
+
+	-- snippets
+	{
+		-- snippet engine
+		"L3MON4D3/LuaSnip",
+		lazy = true,
+		dependencies = {
+			-- a bunch of snippets to use
+			"rafamadriz/friendly-snippets",
+		},
+	},
+
+	-- completion
+	{
+		-- The completion plugin
+		"hrsh7th/nvim-cmp",
+		lazy = true,
+		event = "InsertEnter",
+		dependencies = {
+			-- buffer completions
+			"hrsh7th/cmp-buffer",
+			-- path completions
+			"hrsh7th/cmp-path",
+			-- cmdline completions
+			"hrsh7th/cmp-cmdline",
+			-- snippet completions
+			"saadparwaiz1/cmp_luasnip",
+			"hrsh7th/cmp-nvim-lsp",
+			"hrsh7th/cmp-nvim-lua",
+			"f3fora/cmp-spell",
+		},
+	},
+
+	-- debugger
+	{
+		"mfussenegger/nvim-dap",
+		lazy = true,
+	},
+	{
+		"rcarriga/nvim-dap-ui",
+		lazy = true,
+	},
+	{
+		"ravenxrz/DAPInstall.nvim",
+		lazy = true,
+	},
 
 	-- Telescope
-	"nvim-telescope/telescope.nvim",
+	{
+		"nvim-telescope/telescope.nvim",
+		lazy = true,
+	},
 
 	-- Treesitter
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
+		lazy = true,
 	},
-	"p00f/nvim-ts-rainbow",
-	"JoosepAlviste/nvim-ts-context-commentstring",
+	{
+		"p00f/nvim-ts-rainbow",
+		lazy = true,
+	},
+	{
+		"JoosepAlviste/nvim-ts-context-commentstring",
+		lazy = false,
+	},
 
 	-- Git
-	"lewis6991/gitsigns.nvim",
+	{
+		"lewis6991/gitsigns.nvim",
+		lazy = true,
+	},
 
 	-- Additional plugins
 	{
@@ -94,18 +228,25 @@ return lazy.setup({
 			vim.g.mkdp_auto_start = 1
 			vim.g.mkdp_theme = "light"
 		end,
+		lazy = true,
 	},
-	"NvChad/nvim-colorizer.lua",
-	"f3fora/cmp-spell",
-	"RRethy/vim-illuminate",
-	"mfussenegger/nvim-dap",
-	"rcarriga/nvim-dap-ui",
-	"ravenxrz/DAPInstall.nvim",
-	"mfussenegger/nvim-jdtls",
-	"danymat/neogen",
+	{
+		"NvChad/nvim-colorizer.lua",
+		lazy = true,
+	},
+	{
+		"RRethy/vim-illuminate",
+		lazy = true,
+	},
+	{
+		"danymat/neogen",
+		lazy = true,
+	},
 
-	-- { "AlphaTechnolog/pywal.nvim", as = "pywal" },
-	{ "AlphaTechnolog/pywal.nvim" },
+	-- {
+	-- 	"AlphaTechnolog/pywal.nvim",
+	-- 	name = "pywal",
+	-- },
 	{
 		"cameron-wags/rainbow_csv.nvim",
 		config = function()
@@ -125,6 +266,7 @@ return lazy.setup({
 			"rfc_csv",
 			"rfc_semicolon",
 		},
+		lazy = true,
 	},
 	{
 		"kylechui/nvim-surround",
@@ -135,6 +277,7 @@ return lazy.setup({
 				-- Configuration here, or leave empty to use defaults
 			})
 		end,
+		lazy = true,
 	},
 	-- {
 	-- 	"sunjon/shade.nvim",
@@ -144,5 +287,6 @@ return lazy.setup({
 	-- 			opacity_step = 5,
 	-- 		})
 	-- 	end,
+ --    lazy = true,
 	-- },
 })
