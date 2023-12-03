@@ -23,7 +23,7 @@ local servers = {
 	"lua_ls",
 	"tsserver",
 	"vimls",
-  "typos_lsp",
+	"typos_lsp",
 }
 
 lsp_installer.setup({})
