@@ -170,6 +170,21 @@ keymap("n", "<leader>c", ":DapContinue<CR>", opts)
 keymap("n", "<leader>o", ":DapStepOver<CR>", opts)
 keymap("n", "<leader>i", ":DapStepInto<CR>", opts)
 
+-- Java-specific
+-- manually init debugger
+keymap("n", "<leader>jd", "<Cmd>lua require('jdtls.dap').setup_dap_main_class_configs()<CR>", opts)
+
+keymap("n", "<leader>jo", "<Cmd>lua require('jdtls').organize_imports()<CR>", opts)
+keymap("n", "<leader>jv", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts)
+keymap("n", "<leader>jc", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts)
+keymap("n", "<leader>jt", "<Cmd>lua require('jdtls').test_nearest_method()<CR>", opts)
+keymap("n", "<leader>jT", "<Cmd>lua require('jdtls').test_class()<CR>", opts)
+keymap("n", "<leader>ju", "<Cmd>JdtUpdateConfig<CR>", opts)
+
+keymap("v", "<leader>jv", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts)
+keymap("v", "<leader>jc", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts)
+keymap("v", "<leader>jm", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts)
+
 -- LSP --
 keymap("n", "<leader>f", ":lua vim.lsp.buf.format({async = true})<CR>", opts)
 keymap("n", "<leader>n", ":lua vim.diagnostic.goto_next({ border = 'rounded' })<CR>", opts)
@@ -208,6 +223,10 @@ keymap("n", "<leader>d", "i<C-R>=strftime('%c')<CR><ESC>", comm_opts)
 keymap("v", "<leader>d", "c<C-R>=strftime('%c')<CR><ESC>", comm_opts)
 
 -- Shade
-keymap("", "<leader>h", ":lua require('shade').toggle()<CR>", comm_opts)
-keymap("", "<M-+>", ":lua require('shade').brightness_up()<CR>", comm_opts)
-keymap("", "<M-->", ":lua require('shade').brightness_down()<CR>", comm_opts)
+-- keymap("", "<leader>h", ":lua require('shade').toggle()<CR>", comm_opts)
+-- keymap("", "<M-+>", ":lua require('shade').brightness_up()<CR>", comm_opts)
+-- keymap("", "<M-->", ":lua require('shade').brightness_down()<CR>", comm_opts)
+
+
+
+

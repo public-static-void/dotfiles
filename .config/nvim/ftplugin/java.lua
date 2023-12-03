@@ -187,31 +187,3 @@ vim.cmd(
 )
 vim.cmd("command! -buffer JdtUpdateConfig lua require('jdtls').update_project_config()")
 vim.cmd("command! -buffer JdtBytecode lua require('jdtls').javap()")
-
--- automatically init debugger
-config["on_attach"] = function(client, bufnr)
-	-- With `hotcodereplace = 'auto' the debug adapter will try to apply code changes
-	-- you make during a debug session immediately.
-	-- Remove the option if you do not want that.
-	require("jdtls").setup_dap({ hotcodereplace = "auto" })
-	require("jdtls.dap").setup_dap_main_class_configs()
-end
-
--- Shorten function name
-local keymap = vim.keymap.set
--- Silent keymap option
-local opts = { silent = true }
-
--- manually init debugger
-keymap("n", "<leader>jd", "<Cmd>lua require('jdtls.dap').setup_dap_main_class_configs()<CR>", opts)
-
-keymap("n", "<leader>jo", "<Cmd>lua require('jdtls').organize_imports()<CR>", opts)
-keymap("n", "<leader>jv", "<Cmd>lua require('jdtls').extract_variable()<CR>", opts)
-keymap("n", "<leader>jc", "<Cmd>lua require('jdtls').extract_constant()<CR>", opts)
-keymap("n", "<leader>jt", "<Cmd>lua require('jdtls').test_nearest_method()<CR>", opts)
-keymap("n", "<leader>jT", "<Cmd>lua require('jdtls').test_class()<CR>", opts)
-keymap("n", "<leader>ju", "<Cmd>JdtUpdateConfig<CR>", opts)
-
-keymap("v", "<leader>jv", "<Esc><Cmd>lua require('jdtls').extract_variable(true)<CR>", opts)
-keymap("v", "<leader>jc", "<Esc><Cmd>lua require('jdtls').extract_constant(true)<CR>", opts)
-keymap("v", "<leader>jm", "<Esc><Cmd>lua require('jdtls').extract_method(true)<CR>", opts)
