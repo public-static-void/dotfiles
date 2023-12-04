@@ -141,6 +141,14 @@ return lazy.setup({
 		lazy = true,
 	},
 	{
+		"jay-babu/mason-null-ls.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		dependencies = {
+			"williamboman/mason.nvim",
+			"jose-elias-alvarez/null-ls.nvim",
+		},
+	},
+	{
 		"mfussenegger/nvim-jdtls",
 		lazy = true,
 	},
@@ -174,6 +182,8 @@ return lazy.setup({
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-nvim-lua",
 			"f3fora/cmp-spell",
+			-- nvim-cmp source for nvim-dap REPL and nvim-dap-ui buffers
+			"rcarriga/cmp-dap",
 		},
 	},
 
@@ -190,6 +200,10 @@ return lazy.setup({
 		"ravenxrz/DAPInstall.nvim",
 		lazy = true,
 	},
+	{
+		"jay-babu/mason-nvim-dap.nvim",
+		lazy = true,
+	},
 
 	-- Telescope
 	{
@@ -201,6 +215,7 @@ return lazy.setup({
 	{
 		"nvim-treesitter/nvim-treesitter",
 		build = ":TSUpdate",
+		event = "BufReadPost",
 		lazy = true,
 	},
 	{

@@ -13,6 +13,15 @@ if not dap_install_status_ok then
 	return
 end
 
+local mason_dap_status_ok, mason_dap = pcall(require, "mason-nvim-dap")
+if not mason_dap_status_ok then
+	return
+end
+
+mason_dap.setup({
+	ensure_installed = { "python" },
+})
+
 dap_install.setup({
 	installation_path = vim.fn.stdpath("data") .. "/dapinstall/",
 	dap_install.config("python", {}),
