@@ -366,7 +366,6 @@ alias fallout2="cd $HOME/.wine64/drive_c/GOG\ Games/Fallout\ 2/; wine-64 WINEDLL
 
 # Dwarf fortress.
 alias dwarfnew="$HOME/Games/LinuxDwarfPack-0.47.05-r7/startlnp.sh"
-alias dwarfold="$HOME/Games/LinuxDwarfPack-0.47.05-r5/startlnp.sh"
 
 # Sims2.
 alias sims2="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/The\ Sims\ 2\ Ultimate\ Collection/The\ Sims\ 2\ Mansion\ and\ Garden\ Stuff/TSBin;wine-64 wine Sims2EP9.exe"
@@ -380,17 +379,38 @@ alias hoi2mds="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Modern\ Day\ Sce
 # HoI3.
 alias hoi3="cd $HOME/.wine64/drive_c/GOG\ Games/Hearts\ of\ Iron\ III/; wine-64 wine launcher.exe"
 
-# HoI3 black ice 11.
+# HoI3 Black Ice 11.
 alias hoi3bi="cd $HOME/.winehoi/drive_c/GOG\ Games/Hearts\ of\ Iron\ III/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
 
-# Medieval total war.
+# Europa Universalis 3.
+alias eu3="cd $HOME/.wine64/drive_c/GOG\ Games/Europa\ Universalis\ III/; wine-64 wine Launch\ Europa\ Universalis\ III\ Complete.lnk"
+
+# Victoria 2.
+alias vic2="cd $HOME/.wine64/drive_c/GOG\ Games/Victoria\ II/; wine-64 wine Launch\ Victoria\ II\ -\ Civil\ War\ Edition.lnk"
+
+# Project Zomboid.
+alias pjz="cd $HOME/.wine64/drive_c/GOG\ Games/Project\ Zomboid/; wine-64 wine ProjectZomboid64.exe"
+
+# Medieval Total War.
 alias metw="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/The\ Creative\ Assembly/Medieval\ -\ Total\ War\ -\ Gold\ Edition; wine-64 wine Medieval_TW.exe"
 
-# Medieval dynasty.
+# Medieval Dynasty.
 alias medy="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Medieval.Dynasty.v0.3.1.4/Medieval.Dynasty.v0.3.1.4/Medieval.Dynasty.v0.3.1.4; wine-64 wine Medieval_Dynasty.exe"
 
 # Neverwinter.
 alias nwo="cd $HOME/.local/share/Steam/steamapps/common/Cryptic\ Studios; wine-64 wine Neverwinter.exe"
+
+# Vanilla WoW.
+alias wow1="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/WoW; wine-64 wine WoW.exe"
+
+# TBC WoW.
+alias wow2="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/TBC; wine-64 wine WoW.exe"
+
+# WoTLK WoW.
+alias wow3="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/WoTLK; wine-64 wine WoW.exe"
+
+# Arcadia RoM.
+alias arcadia="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Chronicles\ of\ Arcadia; wine-64 wine Launcher.exe"
 
 # Diablo 2.
 alias diablo2="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Diablo\ II/Mod\ PlugY; wine-64 wine PlugY.exe"
