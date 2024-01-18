@@ -9,7 +9,7 @@ project.setup({
 
 	on_config_done = nil,
 
-	---@usage set to true to disable setting the current-woriking directory
+	---@usage set to true to disable setting the current-working directory
 	--- Manual mode doesn't automatically change your root directory, so you have
 	--- the option to manually do so using `:ProjectRoot` command.
 	manual_mode = false,

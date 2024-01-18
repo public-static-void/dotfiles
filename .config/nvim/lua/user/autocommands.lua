@@ -35,17 +35,6 @@ vim.cmd([[
   augroup END
 ]])
 
--- Run code --
-
-vim.api.nvim_create_autocmd({ "FileType" }, {
-	pattern = { "python" },
-	callback = function()
-		vim.cmd([[
-      nnoremap <buffer> <leader>e :sp<CR> :term python %<CR> :startinsert<CR>
-    ]])
-	end,
-})
-
 -- Filetypes --
 
 -- Markdown
@@ -79,7 +68,18 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 		vim.opt_local.expandtab = true
 		vim.opt_local.autoindent = true
 		vim.opt_local.smartindent = true
-		vim.opt_local.textwidth = 79
+		-- vim.opt_local.textwidth = 79
 		vim.opt_local.colorcolumn = "80"
+	end,
+})
+
+-- Run code --
+
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	pattern = { "python" },
+	callback = function()
+		vim.cmd([[
+      nnoremap <buffer> <leader>e :sp<CR> :term python %<CR> :startinsert<CR>
+    ]])
 	end,
 })

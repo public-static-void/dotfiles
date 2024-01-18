@@ -8,8 +8,27 @@ if not mason_null_ls_status_ok then
 	return
 end
 
+local servers = {
+	"beautysh",
+	"codespell",
+	"djlint",
+	"eslint",
+	"gitlint",
+	"google_java_format",
+	"jshint",
+	"prettier",
+	"python",
+	"shellcheck",
+	"shfmt",
+	"stylelint",
+	"tidy",
+	"vint",
+	"xq",
+	"zsh",
+}
+
 mason_null_ls.setup({
-	ensure_installed = { "python" },
+	ensure_installed = servers,
 })
 
 -- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
@@ -28,6 +47,9 @@ null_ls.setup({
 		diagnostics.codespell,
 		-- html, xml
 		diagnostics.tidy,
+		-- htmldjango
+		diagnostics.djlint,
+		formatting.djlint,
 		-- xml
 		formatting.xq,
 		-- java
@@ -40,10 +62,10 @@ null_ls.setup({
 		formatting.stylua,
 		-- python
 		diagnostics.flake8,
-		-- diagnostics.pylint,
+		diagnostics.pylint,
 		diagnostics.vulture,
 		formatting.isort,
-		formatting.black.with({ extra_args = { "--preview", "-l 80" } }),
+		formatting.black.with({ extra_args = { "--preview", "-l 79" } }),
 		formatting.autopep8,
 		-- sh
 		diagnostics.shellcheck,

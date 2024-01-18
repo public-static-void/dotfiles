@@ -226,7 +226,3 @@ keymap("v", "<leader>d", "c<C-R>=strftime('%c')<CR><ESC>", comm_opts)
 -- keymap("", "<leader>h", ":lua require('shade').toggle()<CR>", comm_opts)
 -- keymap("", "<M-+>", ":lua require('shade').brightness_up()<CR>", comm_opts)
 -- keymap("", "<M-->", ":lua require('shade').brightness_down()<CR>", comm_opts)
-
-
-
-

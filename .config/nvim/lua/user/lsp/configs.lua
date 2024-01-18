@@ -16,14 +16,13 @@ local servers = {
 	"html",
 	"jdtls",
 	"jsonls",
+	"lua_ls",
 	"pylsp",
 	"pyright",
 	"remark_ls",
-	-- "marksman",
-	"lua_ls",
 	"tsserver",
-	"vimls",
 	"typos_lsp",
+	"vimls",
 }
 
 lsp_installer.setup({})
