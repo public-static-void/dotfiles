@@ -74,12 +74,21 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 })
 
 -- Run code --
-
+-- Python
 vim.api.nvim_create_autocmd({ "FileType" }, {
 	pattern = { "python" },
 	callback = function()
 		vim.cmd([[
       nnoremap <buffer> <leader>e :sp<CR> :term python %<CR> :startinsert<CR>
+    ]])
+	end,
+})
+-- JS
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	pattern = { "javascript" },
+	callback = function()
+		vim.cmd([[
+      nnoremap <buffer> <leader>e :sp<CR> :term node %<CR> :startinsert<CR>
     ]])
 	end,
 })
