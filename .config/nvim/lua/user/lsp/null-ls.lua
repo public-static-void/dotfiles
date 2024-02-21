@@ -15,7 +15,7 @@ local servers = {
 	-- "eslint",
 	"gitlint",
 	"google_java_format",
-	"jshint",
+	-- "jshint",
 	"prettier",
 	"python",
 	"shellcheck",
@@ -55,8 +55,8 @@ null_ls.setup({
 		-- java
 		formatting.google_java_format,
 		-- js
-		diagnostics.eslint,
-		diagnostics.jshint,
+		-- diagnostics.eslint,
+		-- diagnostics.jshint,
 		formatting.prettier,
 		-- lua
 		formatting.stylua,
