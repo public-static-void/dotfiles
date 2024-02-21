@@ -12,7 +12,7 @@ local servers = {
 	"beautysh",
 	"codespell",
 	"djlint",
-	"eslint",
+	-- "eslint",
 	"gitlint",
 	"google_java_format",
 	"jshint",
