@@ -12,6 +12,7 @@ local lspconfig = require("lspconfig")
 
 local servers = {
   "cssls",
+  "emmet_ls",
   "eslint",
   "html",
   "jdtls",
