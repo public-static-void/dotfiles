@@ -226,12 +226,20 @@ return lazy.setup({
     event = "BufReadPost",
     lazy = true,
   },
-  {
-    "p00f/nvim-ts-rainbow",
-    lazy = true,
-  },
+  -- {
+  --   "p00f/nvim-ts-rainbow",
+  --   lazy = true,
+  -- },
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
+    lazy = false,
+  },
+  {
+    "windwp/nvim-ts-autotag",
+    lazy = false,
+  },
+  {
+    "HiPhish/rainbow-delimiters.nvim",
     lazy = false,
   },
 
