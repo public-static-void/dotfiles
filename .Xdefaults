@@ -59,7 +59,7 @@ URxvt.pointerBlank: true
 ! The first font defines the cell size for characters; other fonts might be smaller, but not (in general) larger
 ! URxvt.font:           xft:SauceCodePro Nerd Font Mono:style=Regular:pixelsize=18
 ! URxvt.boldFont:       xft:SauceCodePro Nerd Font Mono:style=Bold:pixelsize=18
-! URxvt.italicFont:     xft:SauceCodePro Nerd Font Mono:stlye=Italic:pixelsize=18
+! URxvt.italicFont:     xft:SauceCodePro Nerd Font Mono:style=Italic:pixelsize=18
 ! URxvt.boldItalicFont: xft:SauceCodePro Nerd Font Mono:style=Bold Italic:pixelsize=18
 
 ! URxvt.font:           xft:MesloLGSDZ Nerd Font Mono:style=Regular:pixelsize=18
@@ -69,7 +69,7 @@ URxvt.pointerBlank: true
 
 URxvt.font:           xft:MesloLGSDZ Nerd Font Mono:style=Regular:pixelsize=18     , xft:SauceCodePro Nerd Font Mono:style=Regular:pixelsize=18
 URxvt.boldFont:       xft:MesloLGSDZ Nerd Font Mono:style=Bold:pixelsize=18        , xft:SauceCodePro Nerd Font Mono:style=Bold:pixelsize=18
-URxvt.italicFont:     xft:MesloLGSDZ Nerd Font Mono:style=Italic:pixelsize=18      , xft:SauceCodePro Nerd Font Mono:stlye=Italic:pixelsize=18
+URxvt.italicFont:     xft:MesloLGSDZ Nerd Font Mono:style=Italic:pixelsize=18      , xft:SauceCodePro Nerd Font Mono:style=Italic:pixelsize=18
 URxvt.boldItalicFont: xft:MesloLGSDZ Nerd Font Mono:style=Bold Italic:pixelsize=18 , xft:SauceCodePro Nerd Font Mono:style=Bold Italic:pixelsize=18
 !----------------!
 ! COLOR SETTINGS !
@@ -150,7 +150,7 @@ URxvt.cursorColor:  #EEEEEE
 ! PLUGINS !
 !---------!
 
-! Perl Extentions.
+! Perl Extensions.
 URxvt.perl-ext-common: default, resize-font
 
 !---------!
