@@ -222,7 +222,7 @@ return lazy.setup({
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdate",
+    build = ":TSUpdateSync",
     event = "BufReadPost",
     lazy = true,
   },
