@@ -11,6 +11,7 @@ end
 local lspconfig = require("lspconfig")
 
 local servers = {
+  "clangd",
   "cssls",
   "emmet_ls",
   "eslint",

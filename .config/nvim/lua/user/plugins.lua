@@ -128,6 +128,7 @@ return lazy.setup({
   {
     "williamboman/mason.nvim",
     lazy = true,
+    build = ":MasonUpdate",
   },
   {
     "williamboman/mason-lspconfig.nvim",
