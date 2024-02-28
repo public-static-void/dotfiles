@@ -168,7 +168,7 @@ return lazy.setup({
     -- The completion plugin
     "hrsh7th/nvim-cmp",
     lazy = true,
-    event = "InsertEnter",
+    event = { "InsertEnter", "CmdlineEnter" },
     dependencies = {
       -- buffer completions
       "hrsh7th/cmp-buffer",
