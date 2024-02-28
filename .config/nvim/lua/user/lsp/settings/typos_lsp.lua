@@ -1,5 +1,10 @@
+local home = os.getenv("HOME")
 return {
   filetypes = {
-    "*-toggleterm",
+    "*",
+  },
+  init_options = {
+    diagnosticSeverity = "Warning",
+    config = home .. "/.config/nvim/lua/user/lsp/settings/typos.toml",
   },
 }

@@ -22,6 +22,7 @@ local servers = {
   "pylsp",
   "pyright",
   "remark_ls",
+  "taplo",
   "tsserver",
   "typos_lsp",
   "vimls",
