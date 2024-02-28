@@ -311,12 +311,6 @@ alias webcam1="qv4l2"
 # Webcam software 2.
 alias webcam2="guvcview"
 
-# Uni vpn tunnel.
-alias univpn="univpn.sh"
-
-# Uni ssh.
-alias unissh="unissh.sh"
-
 # Tensorboard ssh port forwarding.
 alias tensorssh="tensorssh.sh"
 
@@ -376,11 +370,17 @@ alias cwg2="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/SIERRA/CWG2;sudo mo
 # HoI2 ModernDayScenario.
 alias hoi2mds="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Modern\ Day\ Scenario\ 2; wine-64 wine HoI2.exe"
 
-# HoI3.
-alias hoi3="cd $HOME/.wine64/drive_c/GOG\ Games/Hearts\ of\ Iron\ III/; wine-64 wine launcher.exe"
+# HoI3 Black Ice 7.
+alias hoi3bi7="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi7/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
+
+# HoI3 Black Ice 9.
+alias hoi3bi9="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi9/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
+
+# HoI3 Black Ice 10.
+alias hoi3bi10="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi10/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
 
 # HoI3 Black Ice 11.
-alias hoi3bi="cd $HOME/.winehoi/drive_c/GOG\ Games/Hearts\ of\ Iron\ III/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
+alias hoi3bi11="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi11/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
 
 # Europa Universalis 3.
 alias eu3="cd $HOME/.wine64/drive_c/GOG\ Games/Europa\ Universalis\ III/; wine-64 wine Launch\ Europa\ Universalis\ III\ Complete.lnk"
@@ -438,6 +438,9 @@ alias shemp="cd $HOME/.wine64/drive_c/GOG\ Games/Shadow\ Empire; wine-64 wine Sh
 
 # Close Combat 3.
 alias cc3="cd $HOME/.wine32/drive_c/GOG\ Games/Close\ Combat\ 3; wine-32 wine explorer /desktop=cc3,800x600 CC3.exe"
+
+# PalWorld.
+alias palworld="cd $HOME/.wine64/drive_c/Games/Palworld; wine-64 wine Palworld.exe"
 
 ###########
 # PLUGINS #
