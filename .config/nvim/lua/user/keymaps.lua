@@ -150,6 +150,7 @@ keymap("n", "<M-d>", ":bn<CR>", opts)
 keymap("n", "<M-s>", ":bp<CR>", opts)
 -- Close current buffer.
 keymap("n", "<M-f>", ":bd<CR>", opts)
+keymap("n", "<M-g>", ":Bdelete<CR>", opts)
 
 -- Telescope --
 keymap("n", "<leader>t", ":Telescope find_files<cr>", opts)

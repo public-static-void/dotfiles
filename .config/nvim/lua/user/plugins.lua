@@ -334,4 +334,8 @@ return lazy.setup({
     end,
     lazy = true,
   },
+  {
+    "famiu/bufdelete.nvim",
+    lazy = true,
+  },
 })
