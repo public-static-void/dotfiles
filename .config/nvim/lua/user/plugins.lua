@@ -210,7 +210,6 @@ return lazy.setup({
   {
     "microsoft/vscode-js-debug",
     version = "1.x",
-    -- build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out && rm -f package-lock.json",
     build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out && git restore .",
   },
 
@@ -227,10 +226,6 @@ return lazy.setup({
     event = "BufReadPost",
     lazy = true,
   },
-  -- {
-  --   "p00f/nvim-ts-rainbow",
-  --   lazy = true,
-  -- },
   {
     "JoosepAlviste/nvim-ts-context-commentstring",
     lazy = false,
@@ -314,16 +309,6 @@ return lazy.setup({
     end,
     lazy = true,
   },
-  -- {
-  -- 	"sunjon/shade.nvim",
-  -- 	config = function()
-  -- 		require("shade").setup({
-  -- 			overlay_opacity = 75,
-  -- 			opacity_step = 5,
-  -- 		})
-  -- 	end,
-  --    lazy = true,
-  -- },
   {
     "miversen33/sunglasses.nvim",
     event = "UIEnter",
