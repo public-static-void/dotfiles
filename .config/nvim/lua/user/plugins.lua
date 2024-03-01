@@ -17,6 +17,14 @@ if not status_ok then
   return
 end
 
+-- -- Auto update on startup
+-- vim.api.nvim_create_autocmd("User", {
+--   pattern = "LazyVimStarted",
+--   callback = function()
+--     lazy.sync({ wait = false, show = true })
+--   end,
+-- })
+
 -- Install plugins
 return lazy.setup({
   {
@@ -222,7 +230,8 @@ return lazy.setup({
   -- Treesitter
   {
     "nvim-treesitter/nvim-treesitter",
-    build = ":TSUpdateSync",
+    -- build = ":TSUpdateSync",
+    build = ":TSUpdate",
     event = "BufReadPost",
     lazy = true,
   },
