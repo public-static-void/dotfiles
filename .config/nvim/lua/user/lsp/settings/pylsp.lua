@@ -3,8 +3,11 @@ return {
 		pylsp = {
 			plugins = {
 				flake8 = {
-					enabled = true,
+					enabled = false,
 				},
+        pyflakes = {
+          enabled = false,
+        },
 				pydocstyle = {
 					enabled = true,
 				},

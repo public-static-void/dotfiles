@@ -20,7 +20,7 @@ local servers = {
   "python",
   "shellcheck",
   "shfmt",
-  "stylelint",
+  -- "stylelint",
   "tidy",
   "vint",
   "xq",
@@ -61,12 +61,13 @@ null_ls.setup({
     -- lua
     formatting.stylua,
     -- python
-    diagnostics.flake8,
-    diagnostics.pylint,
+    -- diagnostics.flake8,
+    -- diagnostics.mypy,
+    diagnostics.pylint.with({ extra_args = { "--max-line-length=79" } }),
     diagnostics.vulture,
+    formatting.autopep8.with({ extra_args = { "--max_line_length=79" } }),
+    formatting.black.with({ extra_args = { "--preview", "--line-length=79" } }),
     formatting.isort,
-    formatting.black.with({ extra_args = { "--preview", "-l 79" } }),
-    formatting.autopep8,
     -- sh
     diagnostics.shellcheck,
     formatting.shfmt,

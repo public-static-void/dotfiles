@@ -72,6 +72,9 @@ M.on_attach = function(client)
   if client.name == "lua_ls" then
     client.server_capabilities.document_formatting = false
   end
+  if client.name == "cssls" then
+    client.server_capabilities.document_formatting = false
+  end
   if client.name == "html" then
     client.server_capabilities.document_formatting = false
   end

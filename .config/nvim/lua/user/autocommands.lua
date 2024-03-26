@@ -3,7 +3,7 @@
 -- Disables automatic commenting on newline and sets some general format options.
 vim.api.nvim_create_autocmd({ "BufWinEnter" }, {
   callback = function()
-    vim.opt.formatoptions = "cjoqt"
+    vim.opt.formatoptions = "cjqt"
   end,
 })
 
@@ -68,7 +68,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     vim.opt_local.expandtab = true
     vim.opt_local.autoindent = true
     vim.opt_local.smartindent = true
-    -- vim.opt_local.textwidth = 79
+    vim.opt_local.textwidth = 79
     vim.opt_local.colorcolumn = "80"
   end,
 })
