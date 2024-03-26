@@ -68,7 +68,7 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     vim.opt_local.expandtab = true
     vim.opt_local.autoindent = true
     vim.opt_local.smartindent = true
-    vim.opt_local.textwidth = 79
+    -- vim.opt_local.textwidth = 79
     vim.opt_local.colorcolumn = "80"
   end,
 })

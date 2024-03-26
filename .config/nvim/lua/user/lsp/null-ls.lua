@@ -66,7 +66,14 @@ null_ls.setup({
     diagnostics.pylint.with({ extra_args = { "--max-line-length=79" } }),
     diagnostics.vulture,
     formatting.autopep8.with({ extra_args = { "--max_line_length=79" } }),
-    formatting.black.with({ extra_args = { "--preview", "--line-length=79" } }),
+    formatting.black.with({
+      extra_args = {
+        "--preview",
+        "--line-length=79",
+        "--enable-unstable-feature=string_processing",
+        "--enable-unstable-feature=multiline_string_handling",
+      },
+    }),
     formatting.isort,
     -- sh
     diagnostics.shellcheck,
