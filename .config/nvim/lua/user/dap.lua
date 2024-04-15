@@ -69,8 +69,18 @@ dap_go.setup({
 		detached = true,
 	},
 })
+
 mason_dap.setup({
-	ensure_installed = { "python" },
+	ensure_installed = {
+		"python",
+		"delve",
+		"debugpy",
+		"go-debug-adapter",
+		"java-debug-adapter",
+		"java-language-server",
+		"java-test",
+		"js-debug-adapter",
+	},
 })
 
 dap_install.setup({

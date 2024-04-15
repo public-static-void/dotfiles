@@ -101,3 +101,12 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     ]])
   end,
 })
+-- Go
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = { "go" },
+  callback = function()
+    vim.cmd([[
+      nnoremap <buffer> <leader>e :sp<CR> :term go run %<CR> :startinsert<CR>
+    ]])
+  end,
+})

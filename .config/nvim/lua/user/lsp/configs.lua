@@ -25,6 +25,7 @@ local servers = {
 	"eslint",
 	"gopls",
 	"html",
+	"java_language_server",
 	"jdtls",
 	"jsonls",
 	"lua_ls",
