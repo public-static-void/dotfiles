@@ -19,6 +19,7 @@ local servers = {
 	"google_java_format",
 	"isort",
 	-- "jshint",
+	"markuplint",
 	"prettier",
 	-- "python",
 	"shellcheck",
@@ -51,6 +52,7 @@ null_ls.setup({
 		-- general
 		diagnostics.codespell,
 		-- html, xml
+		diagnostics.markuplint,
 		-- diagnostics.tidy,
 		-- htmldjango
 		diagnostics.djlint,
