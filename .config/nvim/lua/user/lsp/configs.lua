@@ -32,6 +32,7 @@ local servers = {
 	"pylsp",
 	"pyright",
 	"remark_ls",
+  -- "rust_analyzer",
 	"tailwindcss",
 	"taplo",
 	"tsserver",

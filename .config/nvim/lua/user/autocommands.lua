@@ -110,3 +110,12 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     ]])
   end,
 })
+-- Rust
+vim.api.nvim_create_autocmd({ "FileType" }, {
+  pattern = { "rust" },
+  callback = function()
+    vim.cmd([[
+      nnoremap <buffer> <leader>e :sp<CR> :term cargo run %<CR> :startinsert<CR>
+    ]])
+  end,
+})
