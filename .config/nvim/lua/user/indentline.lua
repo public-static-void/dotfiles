@@ -8,6 +8,29 @@ if not hooks_status_ok then
 	return
 end
 
+local highlight = {
+	"RainbowRed",
+	"RainbowYellow",
+	"RainbowBlue",
+	"RainbowOrange",
+	"RainbowGreen",
+	"RainbowViolet",
+	"RainbowCyan",
+}
+
+-- rainbow-delimiters.nvim integration
+vim.g.rainbow_delimiters = { highlight = highlight }
+
+hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
+	vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
+	vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
+	vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
+	vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
+	vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
+	vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
+	vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+end)
+
 indent_blankline.setup({
 	enabled = true,
 	exclude = {
@@ -54,10 +77,16 @@ indent_blankline.setup({
 	indent = {
 		char = { "┊" },
 		tab_char = { "╎" },
+		highlight = highlight,
 	},
 	whitespace = {
-		-- highlight = { "Function", "Label" },
-		highlight = { "Function", "Label", "Whitespace", "NonText" },
+		highlight = {
+			"CursorColumn",
+			"Function",
+			"Label",
+			"NonText",
+			"Whitespace",
+		},
 		remove_blankline_trail = true,
 	},
 	scope = {
@@ -65,6 +94,7 @@ indent_blankline.setup({
 		char = "┃",
 		show_start = false,
 		show_end = false,
+		highlight = highlight,
 		include = {
 			node_type = {
 				["*"] = {
@@ -140,6 +170,7 @@ indent_blankline.setup({
 					"switch_body",
 					"switch_case",
 					"switch_default",
+					"switch_expression",
 					"switch_statement",
 					"SwitchExpr",
 					"table",
@@ -169,3 +200,4 @@ indent_blankline.setup({
 
 -- hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_space_indent_level)
 -- hooks.register(hooks.type.WHITESPACE, hooks.builtin.hide_first_tab_indent_level)
+hooks.register(hooks.type.SCOPE_HIGHLIGHT, hooks.builtin.scope_highlight_from_extmark)
