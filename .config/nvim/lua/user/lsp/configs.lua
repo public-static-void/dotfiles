@@ -25,13 +25,14 @@ local servers = {
 	"eslint",
 	"gopls",
 	"html",
-	"java_language_server",
+	-- "java_language_server",
 	"jdtls",
 	"jsonls",
 	"lua_ls",
+	"marksman",
 	"pylsp",
 	"pyright",
-	"remark_ls",
+	-- "remark_ls",
 	-- "rust_analyzer",
 	-- "tailwindcss",
 	"taplo",
@@ -61,5 +62,5 @@ for _, server in pairs(servers) do
 		opts = vim.tbl_deep_extend("force", opts, server_custom_opts)
 	end
 	lspconfig[server].setup(opts)
-	::continue::
+	-- ::continue::
 end
