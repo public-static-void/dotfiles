@@ -294,7 +294,9 @@ return lazy.setup({
 	},
 	{
 		"HiPhish/rainbow-delimiters.nvim",
-		lazy = false,
+		dependencies = "nvim-treesitter/nvim-treesitter",
+		event = { "BufReadPost", "BufNewFile", "BufWritePre", "VeryLazy" },
+		lazy = true,
 	},
 
 	-- Git
