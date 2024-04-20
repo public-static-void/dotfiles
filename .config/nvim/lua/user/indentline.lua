@@ -8,27 +8,58 @@ if not hooks_status_ok then
 	return
 end
 
+local rainbow_status_ok, rainbow = pcall(require, "rainbow-delimiters")
+if not rainbow_status_ok then
+	return
+end
+
+local rainbow_setup_status_ok, rainbow_setup = pcall(require, "rainbow-delimiters.setup")
+if not rainbow_setup_status_ok then
+	return
+end
+
 local highlight = {
-	"RainbowRed",
-	"RainbowYellow",
-	"RainbowBlue",
-	"RainbowOrange",
-	"RainbowGreen",
-	"RainbowViolet",
-	"RainbowCyan",
+	"RainbowDelimiterRed",
+	"RainbowDelimiterYellow",
+	"RainbowDelimiterBlue",
+	"RainbowDelimiterOrange",
+	"RainbowDelimiterGreen",
+	"RainbowDelimiterViolet",
+	"RainbowDelimiterCyan",
 }
 
+rainbow_setup.setup({
+	strategy = {
+		[""] = rainbow.strategy["global"],
+		vim = rainbow.strategy["local"],
+		commonlisp = rainbow.strategy["local"],
+	},
+	query = {
+		[""] = "rainbow-delimiters",
+		lua = "rainbow-blocks",
+		latex = "rainbow-blocks",
+		javascript = "rainbow-delimiters-react",
+		tsx = "rainbow-delimiters",
+		typescript = "rainbow-delimiters",
+	},
+	priority = {
+		[""] = 110,
+		lua = 210,
+	},
+	highlight = highlight,
+})
+
 -- rainbow-delimiters.nvim integration
-vim.g.rainbow_delimiters = { highlight = highlight }
+-- vim.g.rainbow_delimiters = { highlight = highlight }
 
 hooks.register(hooks.type.HIGHLIGHT_SETUP, function()
-	vim.api.nvim_set_hl(0, "RainbowRed", { fg = "#E06C75" })
-	vim.api.nvim_set_hl(0, "RainbowYellow", { fg = "#E5C07B" })
-	vim.api.nvim_set_hl(0, "RainbowBlue", { fg = "#61AFEF" })
-	vim.api.nvim_set_hl(0, "RainbowOrange", { fg = "#D19A66" })
-	vim.api.nvim_set_hl(0, "RainbowGreen", { fg = "#98C379" })
-	vim.api.nvim_set_hl(0, "RainbowViolet", { fg = "#C678DD" })
-	vim.api.nvim_set_hl(0, "RainbowCyan", { fg = "#56B6C2" })
+	vim.api.nvim_set_hl(0, "RainbowDelimiterRed", { fg = "#E06C75" })
+	vim.api.nvim_set_hl(0, "RainbowDelimiterYellow", { fg = "#E5C07B" })
+	vim.api.nvim_set_hl(0, "RainbowDelimiterBlue", { fg = "#61AFEF" })
+	vim.api.nvim_set_hl(0, "RainbowDelimiterOrange", { fg = "#D19A66" })
+	vim.api.nvim_set_hl(0, "RainbowDelimiterGreen", { fg = "#98C379" })
+	vim.api.nvim_set_hl(0, "RainbowDelimiterViolet", { fg = "#C678DD" })
+	vim.api.nvim_set_hl(0, "RainbowDelimiterCyan", { fg = "#56B6C2" })
 end)
 
 indent_blankline.setup({
