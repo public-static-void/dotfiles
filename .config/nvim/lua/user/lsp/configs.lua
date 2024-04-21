@@ -19,26 +19,47 @@ if not lspconfig_status_ok then
 end
 
 local servers = {
+	"angularls",
+	"ansiblels",
+	"autotools_ls",
+	"bashls",
 	"clangd",
+	"clojure_lsp",
+	"cmake",
 	"cssls",
+	"docker_compose_language_service",
+	"dockerls",
 	"emmet_ls",
 	"eslint",
 	"gopls",
 	"html",
-	-- "java_language_server",
+	"htmx",
+	"intelephense",
 	"jdtls",
+	"jinja_lsp",
 	"jsonls",
+	"kotlin_language_server",
+	"lemminx",
+	"ltex",
 	"lua_ls",
 	"marksman",
+	"omnisharp",
+	"perlnavigator",
 	"pylsp",
 	"pyright",
-	-- "remark_ls",
-	-- "rust_analyzer",
-	-- "tailwindcss",
+	"rubocop",
+	"somesass_ls",
+	"sqls",
+	"svelte",
 	"taplo",
+	"terraformls",
 	"tsserver",
 	"typos_lsp",
 	"vimls",
+	"vuels",
+	"yamlls",
+	"zls",
+	"hls",
 }
 
 java.setup({})
@@ -55,12 +76,8 @@ for _, server in pairs(servers) do
 		capabilities = require("user.lsp.handlers").capabilities,
 	}
 	local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.settings." .. server)
-	-- if server == "jdtls" then
-	-- 	goto continue
-	-- end
 	if has_custom_opts then
 		opts = vim.tbl_deep_extend("force", opts, server_custom_opts)
 	end
 	lspconfig[server].setup(opts)
-	-- ::continue::
 end
