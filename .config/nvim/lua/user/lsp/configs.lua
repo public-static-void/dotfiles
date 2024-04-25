@@ -32,6 +32,7 @@ local servers = {
 	"emmet_ls",
 	"eslint",
 	"gopls",
+	"hls",
 	"html",
 	"htmx",
 	"intelephense",
@@ -59,7 +60,6 @@ local servers = {
 	"vuels",
 	"yamlls",
 	"zls",
-	"hls",
 }
 
 java.setup({})

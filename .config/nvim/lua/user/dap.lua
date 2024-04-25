@@ -70,18 +70,18 @@ dap_go.setup({
 	},
 })
 
+local adapters = {
+	"codelldb",
+	"debugpy",
+	"delve",
+	"go-debug-adapter",
+	"java-debug-adapter",
+	"java-test",
+	"js-debug-adapter",
+}
+
 mason_dap.setup({
-	ensure_installed = {
-		"codelldb",
-		"debugpy",
-		"delve",
-		"go-debug-adapter",
-		"java-debug-adapter",
-		"java-language-server",
-		"java-test",
-		"js-debug-adapter",
-		"python",
-	},
+	ensure_installed = adapters,
 })
 
 dap_install.setup({
