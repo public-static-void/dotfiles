@@ -128,3 +128,12 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
     ]])
 	end,
 })
+-- Lua
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	pattern = { "lua" },
+	callback = function()
+		vim.cmd([[
+      nnoremap <buffer> <leader>e :sp<CR> :term lua %<CR> :startinsert<CR>
+    ]])
+	end,
+})
