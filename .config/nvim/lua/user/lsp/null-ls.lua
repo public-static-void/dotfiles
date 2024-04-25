@@ -14,23 +14,15 @@ local servers = {
 	"black",
 	"codespell",
 	"djlint",
-	-- "eslint",
 	"gitlint",
 	"google_java_format",
 	"isort",
-	-- "jshint",
 	"markuplint",
 	"prettier",
-	-- "python",
-	"shellcheck",
-	"shfmt",
 	"stylelint",
 	"stylua",
-	-- "tidy",
 	"vint",
 	"vulture",
-	-- "xq",
-	-- "zsh",
 }
 
 mason_null_ls.setup({
@@ -53,22 +45,16 @@ null_ls.setup({
 		diagnostics.codespell,
 		-- html, xml
 		diagnostics.markuplint,
-		-- diagnostics.tidy,
 		-- htmldjango
 		diagnostics.djlint,
 		formatting.djlint,
-		-- xml
-		-- formatting.xq,
 		-- java
 		formatting.google_java_format,
 		-- js
-		-- diagnostics.eslint,
-		-- diagnostics.jshint,
 		formatting.prettier,
 		-- lua
 		formatting.stylua,
 		-- python
-		-- diagnostics.flake8,
 		-- diagnostics.mypy,
 		diagnostics.pylint.with({ extra_args = { "--max-line-length=79" } }),
 		diagnostics.vulture,
@@ -81,14 +67,12 @@ null_ls.setup({
 				"--enable-unstable-feature=multiline_string_handling",
 			},
 		}),
-		formatting.isort,
 		-- sh
-		diagnostics.shellcheck,
-		formatting.shfmt,
+		formatting.beautysh.with({ extra_args = {
+			"--indent-size=2",
+		} }),
+		formatting.isort,
 		-- vimscript
 		diagnostics.vint,
-		-- zsh
-		-- diagnostics.zsh,
-		formatting.beautysh,
 	},
 })

@@ -84,9 +84,6 @@ M.on_attach = function(client)
 	if client.name == "pyright" then
 		client.server_capabilities.completionProvider = false
 	end
-	-- if client.name == "remark_ls" then
-	-- 	client.server_capabilities.document_formatting = false
-	-- end
 	if client.name == "marksman" then
 		client.server_capabilities.document_formatting = false
 	end
