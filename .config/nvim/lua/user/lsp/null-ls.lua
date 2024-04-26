@@ -19,6 +19,7 @@ local servers = {
 	"isort",
 	"markuplint",
 	"prettier",
+	"pylint",
 	"stylelint",
 	"stylua",
 	"vint",
