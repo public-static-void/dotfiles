@@ -10,7 +10,6 @@ end
 
 local servers = {
 	"autopep8",
-	"beautysh",
 	"black",
 	"codespell",
 	"djlint",
@@ -20,10 +19,12 @@ local servers = {
 	"markuplint",
 	"prettier",
 	"pylint",
+	"shfmt",
 	"stylelint",
 	"stylua",
 	"vint",
 	"vulture",
+	"zsh",
 }
 
 mason_null_ls.setup({
@@ -68,12 +69,12 @@ null_ls.setup({
 				"--enable-unstable-feature=multiline_string_handling",
 			},
 		}),
-		-- sh
-		formatting.beautysh.with({ extra_args = {
-			"--indent-size=2",
-		} }),
 		formatting.isort,
+		-- sh
+		formatting.shfmt,
 		-- vimscript
 		diagnostics.vint,
+		-- zsh
+		diagnostics.zsh,
 	},
 })
