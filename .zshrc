@@ -45,27 +45,20 @@ if [[ -d $HOME/.local/bin && -z $(echo $PATH | grep -o $HOME/.local/bin) ]]; the
     PATH="${PATH}:$HOME/.local/bin"
 fi
 
-# Set JAVA_HOME and add java 15 to PATH (for renew).
-# JAVA_HOME="/usr/lib/jvm/java-15-adoptopenjdk"
-# if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
-#     PATH="${PATH}:$JAVA_HOME/bin"
-# fi
-# JAVA_HOME="/usr/lib/jvm/java-19-openjdk"
-# if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
-#     PATH="${PATH}:$JAVA_HOME/bin"
-# fi
+# Java path.
 JAVA_HOME="/usr/lib/jvm/default"
 if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
     PATH="${PATH}:$JAVA_HOME/bin"
 fi
 
-JDTLS_HOME="/usr/bin/jdtls"
+# Ruby path.
+GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
+if [[ -d $GEM_HOME/bin && -z $(echo $PATH | grep -o $GEM_HOME/bin) ]]; then
+    PATH="${PATH}:$GEM_HOME/bin"
+fi
 
-# Set ANT_HOME and add ant to PATH (for renew).
-# ANT_HOME="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/libs/ant"
-# if [[ -d $ANT_HOME/bin && -z $(echo $PATH | grep -o $ANT_HOME/bin) ]]; then
-#     PATH="${PATH}:$ANT_HOME/bin"
-# fi
+# Perl.
+eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
 
 # Enable colors for ls.
 LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS

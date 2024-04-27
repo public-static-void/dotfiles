@@ -159,3 +159,5 @@ vim.cmd("set iskeyword+=-")
 local home = os.getenv("HOME")
 -- Set Neovim specific Python path.
 vim.g.python3_host_prog = home .. "/.local/share/nvim/py3nvim/bin/python"
+-- Set Neovim specific Perl path.
+vim.g.perl_host_prog = "/usr/bin/perl"
