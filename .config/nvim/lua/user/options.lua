@@ -155,3 +155,7 @@ vim.cmd("set whichwrap+=<,>,[,],h,l")
 
 -- Treat compound words connected with "-" as single words.
 vim.cmd("set iskeyword+=-")
+
+local home = os.getenv("HOME")
+-- Set Neovim specific Python path.
+vim.g.python3_host_prog = home .. "/.local/share/nvim/py3nvim/bin/python"
