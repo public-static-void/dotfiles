@@ -46,8 +46,10 @@ if [[ -d $HOME/.local/bin && -z $(echo $PATH | grep -o $HOME/.local/bin) ]]; the
 fi
 
 # PyEnv.
-export PYENV_ROOT="$HOME/.pyenv"
-export PATH="$PYENV_ROOT/bin:$PATH"
+PYENV_ROOT="$HOME/.pyenv"
+if [[ -d $PYENV_ROOT/bin && -z $(echo $PATH | grep -o $PYENV_ROOT/bin) ]]; then
+    PATH="${PATH}:$PYENV_ROOT/bin"
+fi
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
