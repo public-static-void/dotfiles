@@ -45,6 +45,12 @@ if [[ -d $HOME/.local/bin && -z $(echo $PATH | grep -o $HOME/.local/bin) ]]; the
     PATH="${PATH}:$HOME/.local/bin"
 fi
 
+# PyEnv.
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+eval "$(pyenv init --path)"
+eval "$(pyenv init -)"
+
 # Java path.
 JAVA_HOME="/usr/lib/jvm/default"
 if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
