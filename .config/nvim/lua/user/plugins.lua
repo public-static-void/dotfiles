@@ -269,6 +269,10 @@ return lazy.setup({
 		"leoluz/nvim-dap-go",
 		lazy = true,
 	},
+	{
+		"mfussenegger/nvim-dap-python",
+		lazy = true,
+	},
 
 	-- Telescope
 	{

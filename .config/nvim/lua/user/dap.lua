@@ -28,6 +28,11 @@ if not dap_go_status_ok then
 	return
 end
 
+local dap_python_status_ok, dap_python = pcall(require, "dap-python")
+if not dap_python_status_ok then
+	return
+end
+
 dap_go.setup({
 	-- Additional dap configurations can be added.
 	-- dap_configurations accepts a list of tables where each entry
@@ -72,7 +77,7 @@ dap_go.setup({
 
 local adapters = {
 	"codelldb",
-	"debugpy",
+	"dnetcs",
 	"delve",
 	"go-debug-adapter",
 	"java-debug-adapter",
@@ -91,7 +96,6 @@ dap_install.setup({
 	dap_install.config("go", {}),
 	dap_install.config("jsnode", {}),
 	dap_install.config("lua", {}),
-	dap_install.config("python", {}),
 })
 
 -- dapui.setup()
@@ -209,3 +213,6 @@ for _, language in ipairs(js_based_languages) do
 		},
 	}
 end
+
+local home = os.getenv("HOME")
+dap_python.setup(home .. "/.local/share/nvim/py3nvim/bin/python")
