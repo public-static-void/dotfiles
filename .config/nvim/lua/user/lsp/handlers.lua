@@ -75,22 +75,14 @@ M.on_attach = function(client)
 	if client.name == "html" then
 		client.server_capabilities.document_formatting = false
 	end
-	if client.name == "xml" then
+	if client.name == "htmx" then
 		client.server_capabilities.document_formatting = false
-	end
-	if client.name == "pylsp" then
-		client.server_capabilities.document_formatting = false
-	end
-	if client.name == "pyright" then
-		client.server_capabilities.completionProvider = false
 	end
 	if client.name == "marksman" then
 		client.server_capabilities.document_formatting = false
 	end
 	if client.name == "jdtls" then
 		client.server_capabilities.document_formatting = false
-		-- require("jdtls").setup_dap({ hotcodereplace = "auto" })
-		-- require("jdtls.dap").setup_dap_main_class_configs()
 	end
 
 	lsp_highlight_document(client)

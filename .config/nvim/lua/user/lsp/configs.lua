@@ -47,7 +47,6 @@ local servers = {
 	"omnisharp",
 	"perlnavigator",
 	"pylsp",
-	"pyright",
 	"rubocop",
 	"somesass_ls",
 	"sqls",

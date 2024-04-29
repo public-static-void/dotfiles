@@ -35,6 +35,9 @@ export KEYTIMEOUT=1
 # Keeps the entries in PATH unique (due to mirroring).
 typeset -aU path
 
+# direnv.
+eval "$(direnv hook zsh)"
+
 # Add custom scripts folder to PATH.
 if [[ -d $HOME/scripts && -z $(echo $PATH | grep -o $HOME/scripts) ]]; then
     PATH="${PATH}:$HOME/scripts"

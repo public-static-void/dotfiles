@@ -9,7 +9,6 @@ if not mason_null_ls_status_ok then
 end
 
 local servers = {
-	"autopep8",
 	"black",
 	"codespell",
 	"djlint",
@@ -17,8 +16,8 @@ local servers = {
 	"google_java_format",
 	"isort",
 	"markuplint",
+	"mypy",
 	"prettier",
-	"pylint",
 	"shfmt",
 	"stylelint",
 	"stylua",
@@ -57,10 +56,8 @@ null_ls.setup({
 		-- lua
 		formatting.stylua,
 		-- python
-		-- diagnostics.mypy,
-		diagnostics.pylint.with({ extra_args = { "--max-line-length=79" } }),
+		diagnostics.mypy,
 		diagnostics.vulture,
-		formatting.autopep8.with({ extra_args = { "--max_line_length=79" } }),
 		formatting.black.with({
 			extra_args = {
 				"--preview",
