@@ -191,7 +191,7 @@ indent_blankline.setup({
 					"object_type",
 					"operation_type",
 					"ParamDeclList",
-					-- "parenthesized_expression",
+					"parenthesized_expression",
 					"repeat_statement",
 					"return",
 					"return_statement",
