@@ -15,6 +15,7 @@ local servers = {
 	"gitlint",
 	"google_java_format",
 	"isort",
+	"ktlint",
 	"markuplint",
 	"mypy",
 	"prettier",
@@ -53,6 +54,9 @@ null_ls.setup({
 		formatting.google_java_format,
 		-- js
 		formatting.prettier,
+		-- kotlin
+		formatting.ktlint,
+		diagnostics.ktlint,
 		-- lua
 		formatting.stylua,
 		-- python
