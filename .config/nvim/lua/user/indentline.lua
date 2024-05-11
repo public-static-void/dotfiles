@@ -38,6 +38,7 @@ rainbow_setup.setup({
 	query = {
 		[""] = "rainbow-delimiters",
 		lua = "rainbow-blocks",
+		java = "rainbow-delimiters",
 		javascript = "rainbow-delimiters-react",
 		tsx = "rainbow-delimiters",
 		typescript = "rainbow-delimiters",
