@@ -27,9 +27,10 @@ exec_always --no-startup-id urxvtd -q -o -f &
 exec_always --no-startup-id nitrogen --restore &
 
 # Use wal to set wallpaper and extract colors from it.
-# exec_always --no-startup-id wal -i "$HOME/Bilder/walls/aesthetic2.jpg" -a 75 --backend haishoku
+# exec_always --no-startup-id wal -i "${HOME}/Bilder/walls/aesthetic2.jpg" -a 100 --backend colorz
+
 # Use wal just to load last color scheme.
-#exec_always --no-startup-id wal -Rq
+# exec_always --no-startup-id wal -Rq
 
 # Start dunst notification tool.
 exec --no-startup-id dunst

@@ -57,16 +57,6 @@ URxvt.pointerBlank: true
 ! Select the fonts to be used.
 ! This is a comma separated list of font names that are checked in order when trying to find glyphs for characters.
 ! The first font defines the cell size for characters; other fonts might be smaller, but not (in general) larger
-! URxvt.font:           xft:SauceCodePro Nerd Font Mono:style=Regular:pixelsize=18
-! URxvt.boldFont:       xft:SauceCodePro Nerd Font Mono:style=Bold:pixelsize=18
-! URxvt.italicFont:     xft:SauceCodePro Nerd Font Mono:style=Italic:pixelsize=18
-! URxvt.boldItalicFont: xft:SauceCodePro Nerd Font Mono:style=Bold Italic:pixelsize=18
-
-! URxvt.font:           xft:MesloLGSDZ Nerd Font Mono:style=Regular:pixelsize=18
-! URxvt.boldFont:       xft:MesloLGSDZ Nerd Font Mono:style=Bold:pixelsize=18
-! URxvt.italicFont:     xft:MesloLGSDZ Nerd Font Mono:style=Italic:pixelsize=18
-! URxvt.boldItalicFont: xft:MesloLGSDZ Nerd Font Mono:style=Bold Italic:pixelsize=18
-
 URxvt.font:           xft:MesloLGSDZ Nerd Font Mono:style=Regular:pixelsize=18     , xft:SauceCodePro Nerd Font Mono:style=Regular:pixelsize=18
 URxvt.boldFont:       xft:MesloLGSDZ Nerd Font Mono:style=Bold:pixelsize=18        , xft:SauceCodePro Nerd Font Mono:style=Bold:pixelsize=18
 URxvt.italicFont:     xft:MesloLGSDZ Nerd Font Mono:style=Italic:pixelsize=18      , xft:SauceCodePro Nerd Font Mono:style=Italic:pixelsize=18
@@ -75,47 +65,9 @@ URxvt.boldItalicFont: xft:MesloLGSDZ Nerd Font Mono:style=Bold Italic:pixelsize=
 ! COLOR SETTINGS !
 !----------------!
 
-! angr color theme.
-
 ! Use the specified colour as the windows background colour [default White].
 ! Make background black and transparent (amount specified by the number in the brackets).
-!*.background:   [75]#262626
-! Use the specified colour as the windows foreground colour [default Black].
-!*.foreground:       #E5E5E5
-! Specify cursor color.
-!URxvt.cursorColor:  #EEEEEE
-! Specify terminal colorscheme.
-! black.
-!*.color0:           #101010
-!*.color8:           #444444
-! red
-!*.color1:           #c5332e
-!*.color9:           #ff5f5f
-! green
-!*.color2:           #00875f
-!*.color10:          #afff87
-! yellow
-!*.color3:           #c67c48
-!*.color11:          #ffff5f
-! blue
-!*.color4:           #005f87
-!*.color12:          #87afdf
-! magenta
-!*.color5:           #8700af
-!*.color13:          #c98de6
-! cyan
-!*.color6:           #5e8d87
-!*.color14:          #87dfdf
-! white
-!*.color7:           #c0c0c0
-!*.color15:          #e4e4e4
-
-! codedark color theme.
-
-! Use the specified colour as the windows background colour [default White].
-! Make background black and transparent (amount specified by the number in the brackets).
-!*.background:   [75]#1e1e1e
-*.background:       #1e1e1e
+*.background:       [100]#1e1e1e
 ! Use the specified colour as the windows foreground colour [default Black].
 *.foreground:       #d4d4d4
 ! Specify cursor color.

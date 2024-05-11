@@ -338,10 +338,10 @@ return lazy.setup({
 		lazy = true,
 	},
 
-	-- {
-	-- 	"AlphaTechnolog/pywal.nvim",
-	-- 	name = "pywal",
-	-- },
+	{
+		"AlphaTechnolog/pywal.nvim",
+		name = "pywal",
+	},
 	{
 		"cameron-wags/rainbow_csv.nvim",
 		config = function()
