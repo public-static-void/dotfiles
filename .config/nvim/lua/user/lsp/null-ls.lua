@@ -22,7 +22,6 @@ local servers = {
 	"shfmt",
 	"stylelint",
 	"stylua",
-	"vint",
 	"vulture",
 	"zsh",
 }
@@ -73,8 +72,6 @@ null_ls.setup({
 		formatting.isort,
 		-- sh
 		formatting.shfmt,
-		-- vimscript
-		diagnostics.vint,
 		-- zsh
 		diagnostics.zsh,
 	},
