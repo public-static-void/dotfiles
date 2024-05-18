@@ -39,6 +39,9 @@ exec --no-startup-id dunst
 # Names of applications and keywords are replaced with icons from FontAwesome.
 exec_always --no-startup-id i3-workspace-names-daemon
 
+# Wifi applet.
+# exec_always --no-startup-id nm-applet
+
 ##############
 # WORKSPACES #
 ##############
