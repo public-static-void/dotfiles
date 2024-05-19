@@ -9,72 +9,6 @@
 " Turn off filetype detection for a second. Will be turned back on later on.
 filetype off
 
-" Use vim-plug to take care of plugin management.
-" Check for curl and vim-plug to be installed. Install vim-plug if its not.
-let vimplug_exists=expand('~/.vim/autoload/plug.vim')
-let curl_exists=expand('curl')
-if !filereadable(vimplug_exists)
-    if !executable(curl_exists)
-        echoerr 'You have to install curl or first install vim-plug yourself!'
-        execute 'q!'
-    endif
-    echo 'Installing Vim-Plug...'
-    echo ''
-    silent exec '!'curl_exists' -fLo ' . shellescape(vimplug_exists) . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-    let g:not_finish_vimplug = 'yes'
-    autocmd VimEnter * PlugInstall --sync | source $MYVIMRC | q
-endif
-
-" Auto install plugins on startup.
-autocmd VimEnter *
-    \  if len(filter(values(g:plugs), '!isdirectory(v:val.dir)'))
-    \|     PlugInstall --sync | source $MYVIMRC | q
-    \| endif
-
-call plug#begin(expand('~/.vim/plugged'))
-
-" Install plugins:
-Plug 'preservim/nerdtree'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'ryanoasis/vim-devicons'
-
-Plug 'kassio/neoterm'
-
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-
-Plug 'rrethy/vim-hexokinase', { 'do': 'make hexokinase' }
-
-Plug 'Yggdroot/indentLine'
-Plug 'sheerun/vim-polyglot'
-Plug 'fisadev/vim-isort'
-Plug 'tpope/vim-commentary'
-Plug 'luochen1990/rainbow'
-
-Plug 'dense-analysis/ale'
-
-Plug 'jiangmiao/auto-pairs'
-
-Plug 'python-rope/ropevim'
-
-Plug 'othree/html5.vim'
-Plug 'alvan/vim-closetag'
-Plug 'valloric/MatchTagAlways'
-
-Plug 'pangloss/vim-javascript'
-
-Plug 'mhinz/vim-startify'
-
-Plug 'zacanger/angr.vim'
-Plug 'tomasiser/vim-code-dark'
-
-" Initialize plugin system
-call plug#end()
-
 """"""""""""""""""""
 " GENERAL SETTINGS "
 """"""""""""""""""""
@@ -143,8 +77,9 @@ set nomodeline
 set noshowmode
 
 " Colors.
-" colorscheme angr
-colorscheme codedark
+" colorscheme koehler
+" colorscheme sorbet
+colorscheme slate
 
 " Highlight cursor line.
 set cursorline
@@ -199,11 +134,15 @@ set showmatch
 set showcmd
 
 " Disables automatic commenting on newline.
-autocmd FileType * setlocal formatoptions=cjoqt
+autocmd FileType * setlocal formatoptions=cjqt
+
+" Completion.
+set completeopt=longest,menuone,menu
+set omnifunc=syntaxcomplete#Complete
 
 " Enable Tab completion for the command line.
 set wildmenu
-set wildmode=longest:list,full
+set wildmode=longest:full,full
 " Ignore certain files.
 set wildignore+=*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
 
@@ -274,172 +213,14 @@ set signcolumn=yes
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
-""""""""""""""""""""""""""""
-" PLUGIN SPECIFIC SETTINGS "
-""""""""""""""""""""""""""""
-
-" vim-airline
-let g:airline_theme = 'kalisi'
-
-let g:airline_powerline_fonts = 1
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#ale#enabled = 1
-if !exists('g:airline_symbols')
-    let g:airline_symbols = {}
-endif
-
-" Airline unicode symbols.
-let g:airline_left_sep = ''
-let g:airline_left_alt_sep = ''
-let g:airline_right_sep = ''
-let g:airline_right_alt_sep = ''
-
-" Airline nerdfont symbols.
-let g:airline_symbols.space = ' '
-let g:airline_symbols.modified = '樂'
-let g:airline_symbols.whitespace = 'Ξ'
-let g:airline_symbols.branch = ''
-let g:airline_symbols.ellipsis= ''
-let g:airline_symbols.paste= ''
-let g:airline_symbols.maxlinenr = ''
-let g:airline_symbols.readonly = ''
-let g:airline_symbols.spell = '暈'
-let g:airline_symbols.linenr = ''
-let g:airline_symbols.dirty = ' '
-let g:airline_symbols.colnr = ''
-let g:airline_symbols.keymap = ''
-let g:airline_symbols.crypt = ''
-let g:airline_symbols.notexists = ' '
-
-" NERDTree settings:
-" Set size.
-let g:NERDTreeWinSize = 30
-" Show hidden files by default.
-let NERDTreeShowHidden = 1
-let g:NERDTreeDirArrowExpandable = '►'
-let g:NERDTreeDirArrowCollapsible = '▼'
-let NERDTreeShowLineNumbers = 0
-let NERDTreeShowHidden = 1
-let NERDTreeMinimalUI = 1
-
-" Set Ctrl+N to open NERDTree plugin.
-" Open NERDTree in the directory of the current file (or /home if no file is open)
-nmap <silent> <C-n> :call NERDTreeToggleInCurDir()<CR>
-function! NERDTreeToggleInCurDir()
-  " If NERDTree is open in the current buffer
-
-    if len(filter(range(1, bufnr('$')), '! empty(bufname(v:val)) &&         buflisted(v:val)')) != 1
-        exe ':NERDTreeToggle'
-    elseif (exists('t:NERDTreeBufName') && bufwinnr(t:NERDTreeBufName) != -1)
-        exe ':NERDTreeClose'
-    else
-        exe ':NERDTreeFind'
-    endif
-endfunction
-
-" Autostart NERDTree with vim.
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-
-" Variables to change custom git status symbols.
-let g:NERDTreeGitStatusIndicatorMapCustom = {
-            \ 'Modified'  :'',
-            \ 'Staged'    :'',
-            \ 'Untracked' :'',
-            \ 'Renamed'   :'',
-            \ 'Unmerged'  :'',
-            \ 'Deleted'   :'',
-            \ 'Dirty'     :'',
-            \ 'Ignored'   :'',
-            \ 'Clean'     :'',
-            \ 'Unknown'   :'?',
-            \ }
-" Predefined map used nerdfonts.
-let g:NERDTreeGitStatusUseNerdFonts = 1 " you should install nerdfonts by yourself. default: 0
-
-" Hide the boring brackets([ ]).
-let g:NERDTreeGitStatusConcealBrackets = 1 " default: 0
-
-" IndentLine settings.
-" Exclude filetypes from showing indentation.
-let g:indentLine_fileTypeExclude = ['help', 'diff', 'nerdtree', 'markdown']
-" Exclude buffertypes from showing indentation.
-let g:indentLine_bufTypeExclude = ['help', 'terminal', 'nofile']
-
-" Let plugin override cursor concealing settings except in vidual mode.
-let g:indentLine_setConceal = 1
-let g:indentLine_concealcursor = 'inc'
-
-" Show dot character to indicate spaces.
-let g:indentLine_leadingSpaceEnabled = 1
-let g:indentLine_leadingSpaceChar = '·'
-
-" Hexokinase settings.
-" Color Patterns to match for all filetypes.
-let g:Hexokinase_optInPatterns = [
-            \ 'full_hex',
-            \ 'triple_hex',
-            \ 'rgb',
-            \ 'rgba',
-            \ 'hsl',
-            \ 'hsla'
-            \ ]
-
-" Make sure neoterm starts in horizontal split.
-let g:neoterm_default_mod='belowright'
-
-" Gitgutter keymaps.
-nnoremap <silent><leader>k :GitGutterPreviewHunk<CR>
-nnoremap <silent><leader>j :GitGutterNextHunk<CR>
-nnoremap <silent><leader>h :GitGutterPrevHunk<CR>
-
-" Rainbow.
-let g:rainbow_active = 1
-
-" ALE.
-let g:ale_completion_enabled = 1
-
-nnoremap <silent><leader>f :ALEFix trim_whitespace<CR>:ALEFix remove_trailing_lines<CR>
-nnoremap <silent><leader>n :ALENext<CR>
-nnoremap <silent><leader>b :ALEPrevious<CR>
-nnoremap <silent><leader>v :lopen<CR>
-nnoremap <silent><TAB> :ALEHover<CR>
-nnoremap <silent>gd :ALEGoToDefinition<CR>
-nnoremap <silent>gi :ALEGoToImplementation<CR>
-nnoremap <silent>gr :ALEFindReferences<CR>
-nnoremap <silent>gs :ALEGoToTypeDefinition<CR>
-nnoremap <silent><leader>r :ALERename<CR>
-nnoremap <silent><leader>a :ALECodeAction<CR>
-nnoremap <silent><leader>m :ALEDetail<CR>
-
-" Startify.
-    let g:startify_custom_header = [
-\'                                .                        ',
-\'                               @88>                      ',
-\'             ...     ..        %8P      ..    .     :    ',
-\'          :~""888h.:^"888:      .     .888: x888  x888.  ',
-\'         8X   `8888X  8888>   .@88u  ~`8888~`888X`?888f` ',
-\'        X888n. 8888X  ?888>   "888E`   X888  888X ´888>  ',
-\'        `88888 8888X   ?**h.   888E    X888  888X |888>  ',
-\'          `*88 8888~ x88x.     888E    X888  888X |888>  ',
-\'         ..<"  88*`  88888X    888E    X888  888X l888>  ',
-\'            ..XC.    `*8888k   888&   "*88%""*88" `888!` ',
-\'          :888888H.    `%88>   R888"    `~    "    `"`   ',
-\'         <  `"888888:    X"     ""                       ',
-\'               %888888x.-`                               ',
-\'                 ""**""                                  ',]
-
-" Hexokinase.
-let g:Hexokinase_highlighters = [ 'backgroundfull' ]
-
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
 """""""""""""""""""""""""""
 
-" #Python.
+" Python.
 " Max textwidth until line break (python standard = 79).
 " Also show hint for max line width. And comply to PEP8.
-autocmd FileType python setlocal softtabstop=4 tabstop=4 shiftwidth=4 expandtab autoindent smartindent textwidth=79 colorcolumn=80
+autocmd FileType python setlocal softtabstop=4 tabstop=4 shiftwidth=4 expandtab smarttab autoindent smartindent colorcolumn=80
 
 " HTML.
 " Treat <li> and <p> tags like the block tags they are.
@@ -460,7 +241,7 @@ autocmd FileType json setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab au
 autocmd FileType jsonc setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
 
 " Java.
-autocmd FileType java setlocal softtabstop=4 tabstop=4 shiftwidth=4 expandtab autoindent smartindent
+autocmd FileType java setlocal softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent smartindent
 
 " Markdown.
 autocmd FileType markdown setlocal softtabstop=2 tabstop=2 shiftwidth=2 textwidth=79
@@ -605,10 +386,27 @@ nnoremap <silent><ESC>d :bp<CR>
 nnoremap <silent><ESC>f :bd<CR>
 
 " Terminal.
+let g:toggle_term = "<C-t>"
 
-" Toggle neoterm terminal.
-noremap  <silent><C-t> :Ttoggle <CR>
-tnoremap <silent><C-t> exit <CR>
+let s:term_buf_nr = -1
+function! g:ToggleTerminal() abort
+    if s:term_buf_nr == -1
+        execute "botright terminal"
+        let s:term_buf_nr = bufnr("$")
+    else
+        try
+            execute "bdelete! " . s:term_buf_nr
+        catch
+            let s:term_buf_nr = -1
+            call <SID>ToggleTerminal()
+            return
+        endtry
+        let s:term_buf_nr = -1
+    endif
+endfunction
+
+execute "nnoremap <silent>".g:toggle_term ." :call ToggleTerminal()<CR>"
+execute "tnoremap <silent>".g:toggle_term ." <C-w>:call ToggleTerminal()<CR>"
 
 " Move between terminal and other splits.
 tnoremap <C-h> <C-w>h
@@ -616,21 +414,19 @@ tnoremap <C-j> <C-w>j
 tnoremap <C-k> <C-w>k
 tnoremap <C-l> <C-w>l
 
-tnoremap <C-left>  <C-w>h
-tnoremap <C-down>  <C-w>j
-tnoremap <C-up>    <C-w>k
-tnoremap <C-right> <C-w>l
+tnoremap <C-Left>  <C-w>h
+tnoremap <C-Down>  <C-w>j
+tnoremap <C-Up>    <C-w>k
+tnoremap <C-Right> <C-w>l
 
 " Other.
 
-" Place date and time string at current cursor position
+" Place date and time string at current cursor position.
 nnoremap <silent><leader>d i<C-R>=strftime('%c')<CR><ESC>
-" Replace selection with date and time string
+" Replace selection with date and time string.
 vnoremap <silent><leader>d c<C-R>=strftime('%c')<CR><ESC>
 
-" Completion
-imap <C-@> <C-n>
-inoremap <silent><expr> <TAB> pumvisible()? "\<C-n>" : "<TAB>"
-inoremap <silent><expr> <S-TAB> pumvisible()? "\<C-p>" : "<S-TAB>"
-" Make <Enter> key select the highlighted menu item when the popup menu is visible."
-inoremap <silent><expr> <CR> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+" Completion.
+inoremap <silent> <C-@> <C-x><C-o>
+inoremap <silent> <TAB> <C-n>
+inoremap <silent> <S-TAB> <C-p>
