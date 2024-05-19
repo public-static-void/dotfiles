@@ -81,6 +81,9 @@ else
     export EDITOR="nvim"
 fi
 
+# Use neovim to view manpages.
+export MANPAGER="nvim +Man!"
+
 # Export the PATH-variable.
 export PATH
 
