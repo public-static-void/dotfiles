@@ -74,6 +74,12 @@ fi
 # Perl.
 eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
 
+# Go.
+GO_HOME="$(go env GOBIN):$(go env GOPATH)/bin"
+if [[ -d $GO_HOME/bin && -z $(echo $PATH | grep -o $GO_HOME/bin) ]]; then
+    PATH="${PATH}:$GO_HOME/bin"
+fi
+
 # Enable colors for ls.
 LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS
 
