@@ -27,8 +27,8 @@ return {
 			workspace = {
 				checkThirdParty = false,
 				library = {
-					[vim.fn.expand("$VIMRUNTIME/lua")] = true,
-					[vim.fn.stdpath("config") .. "/lua"] = true,
+					vim.fn.expand("$VIMRUNTIME/lua"),
+					vim.fn.expand("$XDG_CONFIG_HOME") .. "/nvim/lua",
 					"./lua",
 				},
 			},

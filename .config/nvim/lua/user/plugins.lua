@@ -79,7 +79,7 @@ return lazy.setup({
 		"lewis6991/impatient.nvim",
 		lazy = true,
 	},
-	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {}, version = "3.5", lazy = true },
+	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {}, lazy = true },
 	{
 		"goolord/alpha-nvim",
 		lazy = true,
