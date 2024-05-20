@@ -53,31 +53,41 @@ fi
 
 # PyEnv.
 PYENV_ROOT="$HOME/.pyenv"
-if [[ -d $PYENV_ROOT/bin && -z $(echo $PATH | grep -o $PYENV_ROOT/bin) ]]; then
-    PATH="${PATH}:$PYENV_ROOT/bin"
+if [[ -d $PYENV_ROOT && -z $(echo $PATH | grep -o $PYENV_ROOT) ]]; then
+    PATH="${PATH}:$PYENV_ROOT"
 fi
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
 # Java path.
 JAVA_HOME="/usr/lib/jvm/default"
-if [[ -d $JAVA_HOME/bin && -z $(echo $PATH | grep -o $JAVA_HOME/bin) ]]; then
-    PATH="${PATH}:$JAVA_HOME/bin"
+if [[ -d $JAVA_HOME && -z $(echo $PATH | grep -o $JAVA_HOME) ]]; then
+    PATH="${PATH}:$JAVA_HOME"
 fi
 
 # Ruby path.
-GEM_HOME="$(ruby -e 'puts Gem.user_dir')"
-if [[ -d $GEM_HOME/bin && -z $(echo $PATH | grep -o $GEM_HOME/bin) ]]; then
-    PATH="${PATH}:$GEM_HOME/bin"
+GEM_HOME="$(gem env user_gemhome)"
+if [[ -d $GEM_HOME && -z $(echo $PATH | grep -o $GEM_HOME) ]]; then
+    PATH="${PATH}:$GEM_HOME"
 fi
 
-# Perl.
+GEM_BIN="$GEM_HOME/bin"
+if [[ -d $GEM_BIN && -z $(echo $PATH | grep -o $GEM_BIN) ]]; then
+    PATH="${PATH}:$GEM_BIN"
+fi
+
+# Perl path.
 eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
 
-# Go.
-GO_HOME="$(go env GOBIN):$(go env GOPATH)/bin"
-if [[ -d $GO_HOME/bin && -z $(echo $PATH | grep -o $GO_HOME/bin) ]]; then
-    PATH="${PATH}:$GO_HOME/bin"
+# Go path.
+GOPATH="$(go env GOPATH)"
+if [[ -d $GOPATH && -z $(echo $PATH | grep -o $GOPATH) ]]; then
+    PATH="${PATH}:$GOPATH"
+fi
+
+GOBIN="$GOPATH/bin"
+if [[ -d $GOBIN && -z $(echo $PATH | grep -o $GOBIN) ]]; then
+    PATH="${PATH}:$GOBIN"
 fi
 
 # Enable colors for ls.
