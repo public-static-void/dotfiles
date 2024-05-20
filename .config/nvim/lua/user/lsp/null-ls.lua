@@ -20,6 +20,7 @@ local servers = {
 	"mypy",
 	"prettier",
 	"shfmt",
+	"sql_formatter",
 	"stylelint",
 	"stylua",
 	"vulture",
@@ -72,6 +73,8 @@ null_ls.setup({
 		formatting.isort,
 		-- sh
 		formatting.shfmt,
+		-- sql
+		formatting.sql_formatter,
 		-- zsh
 		diagnostics.zsh,
 	},
