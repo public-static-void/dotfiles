@@ -33,7 +33,7 @@ rainbow_setup.setup({
 		[""] = rainbow.strategy["global"],
 		vim = rainbow.strategy["local"],
 		commonlisp = rainbow.strategy["local"],
-		java = rainbow.strategy["local"],
+		java = rainbow.strategy["global"],
 	},
 	query = {
 		[""] = "rainbow-delimiters",
