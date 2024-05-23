@@ -19,8 +19,8 @@ return {
 	},
 	settings = {
 		ltex = {
-			language = "de-DE",
-			-- language = "en-US",
+			-- language = "de-DE",
+			language = "en-US",
 		},
 	},
 }

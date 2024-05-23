@@ -23,7 +23,6 @@ local servers = {
 	"sql_formatter",
 	"stylelint",
 	"stylua",
-	"vulture",
 	"zsh",
 }
 
@@ -61,7 +60,6 @@ null_ls.setup({
 		formatting.stylua,
 		-- python
 		diagnostics.mypy,
-		diagnostics.vulture,
 		formatting.black.with({
 			extra_args = {
 				"--preview",

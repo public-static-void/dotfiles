@@ -1,3 +1,6 @@
+-- Improve startup time.
+vim.loader.enable()
+
 local options = {
 
 	-- Set encoding to UTF-8.

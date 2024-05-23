@@ -33,61 +33,32 @@ return lazy.setup({
 		lazy = true,
 	},
 	{
-		-- Useful lua functions used by lots of plugins
-		"nvim-lua/plenary.nvim",
-		lazy = true,
-	},
-	{
 		-- Autopairs, integrates with both cmp and treesitter
 		"windwp/nvim-autopairs",
-		lazy = true,
+		event = "InsertEnter",
+		config = true,
 	},
 	{
-		-- Easily comment stuff
-		"numToStr/Comment.nvim",
+		"nvim-tree/nvim-tree.lua",
 		lazy = true,
 	},
+	{ "akinsho/bufferline.nvim", version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
 	{
-		"kyazdani42/nvim-web-devicons",
-		lazy = true,
-	},
-	{
-		"kyazdani42/nvim-tree.lua",
-		lazy = true,
-	},
-	{
-		"akinsho/bufferline.nvim",
-		lazy = true,
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
 	{
 		"moll/vim-bbye",
-		lazy = false,
 	},
-	{
-		"nvim-lualine/lualine.nvim",
-		lazy = true,
-	},
-	{
-		"akinsho/toggleterm.nvim",
-		lazy = true,
-	},
+	{ "akinsho/toggleterm.nvim", version = "*", config = true },
 	{
 		"ahmedkhalf/project.nvim",
-		lazy = true,
-	},
-	{
-		"lewis6991/impatient.nvim",
 		lazy = true,
 	},
 	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {}, lazy = true },
 	{
 		"goolord/alpha-nvim",
-		lazy = true,
-	},
-	{
-		-- This is needed to fix lsp doc highlight
-		"antoinemadec/FixCursorHold.nvim",
-		lazy = false,
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
 
 	-- Colorschemes
@@ -140,16 +111,11 @@ return lazy.setup({
 		lazy = true,
 	},
 	{
-		-- for formatters and linters
-		"jose-elias-alvarez/null-ls.nvim",
-		lazy = true,
-	},
-	{
 		"jay-babu/mason-null-ls.nvim",
 		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"williamboman/mason.nvim",
-			"jose-elias-alvarez/null-ls.nvim",
+			"nvimtools/none-ls.nvim",
 		},
 	},
 	{
@@ -161,10 +127,10 @@ return lazy.setup({
 		"nvim-java/nvim-java",
 		dependencies = {
 			"nvim-java/lua-async-await",
+			"nvim-java/nvim-java-refactor",
 			"nvim-java/nvim-java-core",
 			"nvim-java/nvim-java-test",
 			"nvim-java/nvim-java-dap",
-			"nvim-java/nvim-java-refactor",
 			"MunifTanjim/nui.nvim",
 			"neovim/nvim-lspconfig",
 			"mfussenegger/nvim-dap",
@@ -275,7 +241,8 @@ return lazy.setup({
 	-- Telescope
 	{
 		"nvim-telescope/telescope.nvim",
-		lazy = true,
+		tag = "0.1.6",
+		dependencies = { "nvim-lua/plenary.nvim" },
 	},
 
 	-- Treesitter
@@ -288,7 +255,6 @@ return lazy.setup({
 	},
 	{
 		"JoosepAlviste/nvim-ts-context-commentstring",
-		lazy = false,
 	},
 	{
 		"windwp/nvim-ts-autotag",
@@ -369,7 +335,6 @@ return lazy.setup({
 				-- Configuration here, or leave empty to use defaults
 			})
 		end,
-		lazy = true,
 	},
 	{
 		"miversen33/sunglasses.nvim",

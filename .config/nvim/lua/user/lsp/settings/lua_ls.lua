@@ -5,7 +5,7 @@ if not lspconfig_status_ok then
 end
 
 return {
-	root_dir = lspconfig.util.root_pattern(".git", ".luarc.json"),
+	root_dir = lspconfig.util.root_pattern(".git", ".luarc.json", "init.lua"),
 	settings = {
 		Lua = {
 			format = {
