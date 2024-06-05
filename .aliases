@@ -113,6 +113,9 @@ alias hoi3bi10="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi10/; WINEPREFIX=~/.wi
 # HoI3 Black Ice 11.
 alias hoi3bi11="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi11/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
 
+# HoI3 Black Ice 12.
+alias hoi3bi12="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi12/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
+
 # Europa Universalis 3.
 alias eu3="cd $HOME/.wine64/drive_c/GOG\ Games/Europa\ Universalis\ III/; wine-64 wine Launch\ Europa\ Universalis\ III\ Complete.lnk"
 
@@ -172,3 +175,6 @@ alias cc3="cd $HOME/.wine32/drive_c/GOG\ Games/Close\ Combat\ 3; wine-32 wine ex
 
 # PalWorld.
 alias palworld="cd $HOME/.wine64/drive_c/Games/Palworld; wine-64 wine Palworld.exe"
+
+# Distand Worlds Universe.
+alias dwu="cd $HOME/.winedwu/drive_c/GOG\ Games/Distant\ Worlds\ Universe; WINEARCH=win32 WINEPREFIX=$HOME/.winedwu WINEDEBUG=-all wine DistantWorlds.exe"
