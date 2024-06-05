@@ -21,7 +21,6 @@ end
 local servers = {
 	"angularls",
 	"ansiblels",
-	"autotools_ls",
 	"bashls",
 	"clangd",
 	"clojure_lsp",
