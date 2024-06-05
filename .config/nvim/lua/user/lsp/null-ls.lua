@@ -23,7 +23,6 @@ local servers = {
 	"sql_formatter",
 	"stylelint",
 	"stylua",
-	"zsh",
 }
 
 mason_null_ls.setup({
@@ -73,7 +72,5 @@ null_ls.setup({
 		formatting.shfmt,
 		-- sql
 		formatting.sql_formatter,
-		-- zsh
-		diagnostics.zsh,
 	},
 })
