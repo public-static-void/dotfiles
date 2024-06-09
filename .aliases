@@ -6,6 +6,9 @@ alias rm="rm -i"
 # Make managing dotfiles with git easier.
 alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
+# Pull custom gitignore from api. Accepts a language/framework as argument. Add `>> .gitignore` to actually write output to file.
+function gi() { curl -sLw "\n" https://www.toptal.com/developers/gitignore/api/$@ ;}
+
 # Use lsd instead of ls.
 # Print directories first.
 alias "ls"="lsd -h --group-dirs first"
