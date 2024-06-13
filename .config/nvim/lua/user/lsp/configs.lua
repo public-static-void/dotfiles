@@ -45,6 +45,7 @@ local servers = {
 	"marksman",
 	"omnisharp",
 	"perlnavigator",
+	"prismals",
 	"pylsp",
 	"rubocop",
 	"somesass_ls",
