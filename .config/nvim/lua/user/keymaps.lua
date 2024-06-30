@@ -219,9 +219,9 @@ keymap("t", "<C-Right>", [[<C-\><C-n><C-W>l]], opts)
 -- Other --
 
 -- Place date and time string at current cursor position
-keymap("n", "<leader>d", "i<C-R>=strftime('%c')<CR><ESC>", comm_opts)
+keymap("n", "<leader>d", "i<C-R>=strftime('%a %b %d %H:%M:%S %Y %z')<CR><ESC>", comm_opts)
 -- Replace selection with date and time string
-keymap("v", "<leader>d", "c<C-R>=strftime('%c')<CR><ESC>", comm_opts)
+keymap("v", "<leader>d", "c<C-R>=strftime('%a %b %d %H:%M:%S %Y %z')<CR><ESC>", comm_opts)
 
 -- Shade
 -- keymap("", "<leader>h", ":lua require('shade').toggle()<CR>", comm_opts)
