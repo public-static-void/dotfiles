@@ -3,3 +3,5 @@
 	name = Vadim Titov
 [core]
 	editor = nvim
+[init]
+	defaultBranch = main
