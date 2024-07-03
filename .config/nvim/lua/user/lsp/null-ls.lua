@@ -19,6 +19,7 @@ local servers = {
 	"markuplint",
 	"mypy",
 	"prettier",
+	"shellcheck",
 	"shfmt",
 	"sql_formatter",
 	"stylelint",
