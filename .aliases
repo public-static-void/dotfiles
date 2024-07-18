@@ -181,3 +181,7 @@ alias palworld="cd $HOME/.wine64/drive_c/Games/Palworld; wine-64 wine Palworld.e
 
 # Distand Worlds Universe.
 alias dwu="cd $HOME/.winedwu/drive_c/GOG\ Games/Distant\ Worlds\ Universe; WINEARCH=win32 WINEPREFIX=$HOME/.winedwu WINEDEBUG=-all wine DistantWorlds.exe"
+
+# Songs of Syx.
+alias sos="cd $HOME/.wine64/drive_c/GOG\ Games/Songs\ of\ Syx; wine-64 wine SongsofSyx.exe"
+
