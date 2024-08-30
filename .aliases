@@ -38,6 +38,33 @@ initpoetry() {
   poetry init -n
 }
 
+# Create a new Python project with Poetry and direnv.
+initpyproj() {
+  # Check if an argument is provided
+  if [ "$#" -gt 0 ]; then
+    DIR_NAME="$1"
+  else
+    # Prompt the user for a directory name
+    echo "Please enter a directory name: "
+    read DIR_NAME
+  fi
+  # Trim whitespace from the directory name
+  DIR_NAME=$(echo "$DIR_NAME" | xargs)
+  # Create the directory
+  if ! mkdir "$DIR_NAME"; then
+    # Handle mkdir errors
+    if [ "$?" -eq 1 ]; then
+      echo "Error: Directory '$DIR_NAME' already exists."
+    else
+      echo "Error creating directory '$DIR_NAME'."
+    fi
+    return 1
+  fi
+  echo "Directory '$DIR_NAME' created successfully."
+  pyenvrc
+  initpoetry
+}
+
 # Use lsd instead of ls.
 # Print directories first.
 alias "ls"="lsd -h --group-dirs first"
