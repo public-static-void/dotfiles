@@ -9,6 +9,21 @@ alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 # Pull custom gitignore from api. Accepts a language/framework as argument. Add `>> .gitignore` to actually write output to file.
 function gi() { curl -sLw "\n" https://www.toptal.com/developers/gitignore/api/$@ ;}
 
+# Write python path to .envrc.
+pyenvrc() {
+  local version
+  version=$(python --version | awk -F'[ .]' '{print $2"."$3}')
+  local pythonpath="\$PYTHONPATH:\$PWD/venv/lib/python$version/site-packages/"
+  # Check if .envrc exists
+  if [ -f .envrc ]; then
+    sed -i.bak "/^export PYTHONPATH=/c\export PYTHONPATH=$pythonpath" .envrc
+    echo "PYTHONPATH updated in existing .envrc file."
+  else
+    echo "export PYTHONPATH=$pythonpath" >> .envrc
+    echo ".envrc created with PYTHONPATH: $pythonpath"
+  fi
+}
+
 # Use lsd instead of ls.
 # Print directories first.
 alias "ls"="lsd -h --group-dirs first"
