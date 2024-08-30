@@ -22,8 +22,10 @@ pyenvrc() {
     echo "export PYTHONPATH=$pythonpath" >> .envrc
     echo ".envrc created with PYTHONPATH: $pythonpath"
   fi
+  direnv allow
 }
 
+# Initialize Poetry for an existing Python project.
 initpoetry() {
   # Check if virtual environment is already activated
   if [ -z "$VIRTUAL_ENV" ]; then
@@ -61,8 +63,19 @@ initpyproj() {
     return 1
   fi
   echo "Directory '$DIR_NAME' created successfully."
+  # Initialize Poetry
+  poetry config virtualenvs.in-project true
+  poetry new $DIR_NAME
+  cd $DIR_NAME
+  # Initialize direnv
   pyenvrc
-  initpoetry
+  # Check if virtual environment is already activated
+  if [ -z "$VIRTUAL_ENV" ]; then
+    # Create the virtual environment
+    python -m venv venv
+    source venv/bin/activate
+  fi
+  python -m pip install pip --upgrade
 }
 
 # Use lsd instead of ls.
