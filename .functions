@@ -38,12 +38,13 @@ create_venv() {
 
 # Initialize Poetry for an existing Python project.
 init_poetry() {
-  create_venv
-  python -m pip install pip --upgrade
-  pip install -U pip setuptools
-  pip install poetry
-  poetry config virtualenvs.in-project true
+  # Use Python version provided by pyenv
+  poetry config virtualenvs.prefer-active-python true
+  # Don't create a virtual environment
+  poetry config virtualenvs.in-project false
+  source .venv/bin/activate
   poetry init -n
+  python -m pip install pip --upgrade
 }
 
 # Create a new Python project with Poetry and direnv.
@@ -70,11 +71,20 @@ init_pyproj() {
   fi
   echo "Directory '$DIR_NAME' created successfully."
   # Initialize Poetry
+  # Use Python version provided by pyenv
+  poetry config virtualenvs.prefer-active-python true
+  # Create a virtual environment .venv
   poetry config virtualenvs.in-project true
   poetry new $DIR_NAME
   cd $DIR_NAME
   # Initialize direnv
   set_pythonpath
-  create_venv
+  # Set up venv
+  poetry install --no-root
+  source .venv/bin/activate
   python -m pip install pip --upgrade
+  # Initialize git
+  gi python > .gitignore
+  gi direnv >> .gitignore
+  git init
 }
