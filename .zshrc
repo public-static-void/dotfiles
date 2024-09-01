@@ -280,6 +280,12 @@ bindkey -a "^[[8~" end-of-line
 
 source $HOME/.aliases
 
+#############
+# FUNCTIONS #
+#############
+
+source $HOME/.functions
+
 ###########
 # PLUGINS #
 ###########

@@ -33,18 +33,18 @@ HISTSIZE= HISTFILESIZE=
 
 # If id command returns zero, you got root access.
 if [ $(id -u) -eq 0 ]; then # you are root, set red colour prompt.
-    PS1="\\[$(tput setaf 1)\\]\\u@\\h:\\w #\\[$(tput sgr0)\\]"
+	PS1="\\[$(tput setaf 1)\\]\\u@\\h:\\w #\\[$(tput sgr0)\\]"
 else # normal.
-    PS1="[\\u@\\h:\\w] $"
+	PS1="[\\u@\\h:\\w] $"
 fi
 
 # Powerline.
 export TERM="rxvt-unicode-256color"
 if [ -f $(which powerline-daemon) ]; then
-    powerline-daemon -q
-    POWERLINE_BASH_CONTINUATION=1
-    POWERLINE_BASH_SELECT=1
-    . /usr/lib/python3.11/site-packages/powerline/bindings/bash/powerline.sh
+	powerline-daemon -q
+	POWERLINE_BASH_CONTINUATION=1
+	POWERLINE_BASH_SELECT=1
+	. /usr/lib/python3.11/site-packages/powerline/bindings/bash/powerline.sh
 fi
 
 #########
@@ -78,5 +78,13 @@ neofetch --ascii_colors 14 23
 ###########
 
 if [ -f "$HOME/.aliases" ]; then
-    . "$HOME/.aliases"
+	. "$HOME/.aliases"
+fi
+
+#############
+# FUNCTIONS #
+#############
+
+if [ -f "$HOME/.functions" ]; then
+	. "$HOME/.functions"
 fi

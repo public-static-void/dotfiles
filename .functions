@@ -1,0 +1,80 @@
+# Pull custom gitignore from api. Accepts a language/framework as argument. Add `>> .gitignore` to actually write output to file.
+function gi() { curl -sLw "\n" https://www.toptal.com/developers/gitignore/api/$@ ;}
+
+# Put python path to .envrc for mypy and pylint.
+set_pythonpath() {
+  local version
+  version=$(python --version | awk -F'[ .]' '{print $2"."$3}')
+  local pythonpath="\$PYTHONPATH:\$PWD/.venv/lib/python$version/site-packages/"
+  # Check if .envrc exists
+  if [ -f .envrc ]; then
+    sed -i.bak "/^export PYTHONPATH=/c\export PYTHONPATH=$pythonpath" .envrc
+    echo "PYTHONPATH updated in existing .envrc file."
+  else
+    echo "export PYTHONPATH=$pythonpath" >> .envrc
+    echo ".envrc created with PYTHONPATH: $pythonpath"
+  fi
+  direnv allow
+}
+
+# Create and activate a Python virtual environment.
+create_venv() {
+  # Check if virtual environment is already activated
+  if [ -z "$VIRTUAL_ENV" ]; then
+    # Create the virtual environment
+    python -m venv .venv
+    if [ $? -eq 0 ]; then
+      source .venv/bin/activate
+      echo "Virtual environment created and activated."
+    else
+      echo "Error: Failed to create the virtual environment."
+      return 1
+    fi
+  else
+    echo "Error: A virtual environment is already activated in '$VIRTUAL_ENV'."
+    return 1
+  fi
+}
+
+# Initialize Poetry for an existing Python project.
+init_poetry() {
+  create_venv
+  python -m pip install pip --upgrade
+  pip install -U pip setuptools
+  pip install poetry
+  poetry config virtualenvs.in-project true
+  poetry init -n
+}
+
+# Create a new Python project with Poetry and direnv.
+init_pyproj() {
+  # Check if an argument is provided
+  if [ "$#" -gt 0 ]; then
+    DIR_NAME="$1"
+  else
+    # Prompt the user for a directory name
+    echo "Please enter a directory name: "
+    read DIR_NAME
+  fi
+  # Trim whitespace from the directory name
+  DIR_NAME=$(echo "$DIR_NAME" | xargs)
+  # Create the directory
+  if ! mkdir "$DIR_NAME"; then
+    # Handle mkdir errors
+    if [ "$?" -eq 1 ]; then
+      echo "Error: Directory '$DIR_NAME' already exists."
+    else
+      echo "Error creating directory '$DIR_NAME'."
+    fi
+    return 1
+  fi
+  echo "Directory '$DIR_NAME' created successfully."
+  # Initialize Poetry
+  poetry config virtualenvs.in-project true
+  poetry new $DIR_NAME
+  cd $DIR_NAME
+  # Initialize direnv
+  set_pythonpath
+  create_venv
+  python -m pip install pip --upgrade
+}
