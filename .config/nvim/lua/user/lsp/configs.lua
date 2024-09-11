@@ -53,7 +53,7 @@ local servers = {
 	"svelte",
 	"taplo",
 	"terraformls",
-	"tsserver",
+	"ts_ls",
 	"typos_lsp",
 	"vimls",
 	"vuels",
