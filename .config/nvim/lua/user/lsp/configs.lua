@@ -51,6 +51,7 @@ local servers = {
 	"somesass_ls",
 	"sqls",
 	"svelte",
+	"tailwindcss",
 	"taplo",
 	"terraformls",
 	"ts_ls",
