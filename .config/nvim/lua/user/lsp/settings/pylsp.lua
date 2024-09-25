@@ -11,7 +11,7 @@ return {
 				flake8 = {
 					enabled = true,
 					maxLineLength = 79,
-					ignore = { "E203", "E266" },
+					ignore = { "E203", "E266", "W503", "W504" },
 					exclude = { ".git", "__pycache__", ".venv", "old", "build", "dist" },
 				},
 				jedi_completion = {
