@@ -165,6 +165,9 @@ keymap("n", "<leader>k", ":Gitsigns preview_hunk<cr>", opts)
 -- Nvimtree --
 keymap("n", "<C-n>", ":NvimTreeToggle<cr>", opts)
 
+-- Aerial --
+keymap("n", "<C-m>", "<cmd>AerialToggle!<CR>", opts)
+
 -- Debugging --
 keymap("n", "<leader>p", ":DapToggleBreakpoint<CR>", opts)
 keymap("n", "<leader>c", ":DapContinue<CR>", opts)

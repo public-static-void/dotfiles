@@ -55,6 +55,15 @@ return lazy.setup({
 		"ahmedkhalf/project.nvim",
 		lazy = true,
 	},
+	{
+		"stevearc/aerial.nvim",
+		opts = {},
+		-- Optional dependencies
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
+	},
 	{ "lukas-reineke/indent-blankline.nvim", main = "ibl", opts = {}, lazy = true },
 	{
 		"goolord/alpha-nvim",
