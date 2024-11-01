@@ -200,6 +200,8 @@ return lazy.setup({
 	},
 	-- Copilot
 	{
+		-- "aliaksandr-trush/codeium.nvim",
+		-- branch = "update_server_version",
 		"Exafunction/codeium.nvim",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
