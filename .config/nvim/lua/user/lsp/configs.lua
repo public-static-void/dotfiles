@@ -55,6 +55,7 @@ local servers = {
 	"taplo",
 	"terraformls",
 	"ts_ls",
+	"twiggy_language_server",
 	"typos_lsp",
 	"vimls",
 	"vuels",
