@@ -10,6 +10,7 @@ end
 
 local servers = {
 	"black",
+	"blade_formatter",
 	"codespell",
 	"djlint",
 	"gitlint",
@@ -56,6 +57,8 @@ null_ls.setup({
 		-- kotlin
 		formatting.ktlint,
 		diagnostics.ktlint,
+		-- laravel
+		formatting.blade_formatter,
 		-- lua
 		formatting.stylua,
 		-- python

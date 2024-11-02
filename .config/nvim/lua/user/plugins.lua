@@ -277,6 +277,11 @@ return lazy.setup({
 		event = { "BufReadPost", "BufNewFile", "BufWritePre", "VeryLazy" },
 		lazy = true,
 	},
+	{
+		"jwalton512/vim-blade",
+		ft = { "blade" },
+		lazy = true,
+	},
 
 	-- Git
 	{

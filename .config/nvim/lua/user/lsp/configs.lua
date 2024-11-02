@@ -50,6 +50,7 @@ local servers = {
 	"rubocop",
 	"somesass_ls",
 	"sqls",
+	"stimulus_ls",
 	"svelte",
 	"tailwindcss",
 	"taplo",
