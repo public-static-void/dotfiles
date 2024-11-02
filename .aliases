@@ -90,7 +90,8 @@ alias baldur2="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Baldur\ s\ Gate\
 alias fallout2="cd $HOME/.wine64/drive_c/GOG\ Games/Fallout\ 2/; wine-64 WINEDLLOVERRIDES="ddraw.dll=n,b ddraw.ini=n,b" wine fallout2.exe"
 
 # Dwarf fortress.
-alias dwarfnew="$HOME/Games/LinuxDwarfPack-0.47.05-r7/startlnp.sh"
+alias dwarfpack="$HOME/Games/LinuxDwarfPack-0.47.05-r7/startlnp.sh"
+alias dwarfhack="$HOME/.local/share/dwarffortress/dfhack"
 
 # Sims2.
 alias sims2="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/The\ Sims\ 2\ Ultimate\ Collection/The\ Sims\ 2\ Mansion\ and\ Garden\ Stuff/TSBin;wine-64 wine Sims2EP9.exe"
