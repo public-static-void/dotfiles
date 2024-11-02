@@ -15,6 +15,9 @@ end
 
 require("luasnip/loaders/from_vscode").lazy_load()
 
+-- use html snippets in blade/laravel
+luasnip.filetype_extend("blade", { "html" })
+
 -- leave the active snippet when leaving insert
 vim.api.nvim_create_autocmd("ModeChanged", {
 	pattern = "*",
