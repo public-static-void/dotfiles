@@ -148,7 +148,7 @@ alias wow3="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/WoTLK; wine-64 wine
 alias arcadia="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Chronicles\ of\ Arcadia; wine-64 wine Launcher.exe"
 
 # Diablo 2.
-alias diablo2="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Diablo\ II/Mod\ PlugY; wine-64 wine PlugY.exe"
+alias diablo2="cd $HOME/.wine64/drive_c/Games/Diablo\ II\ Complete\ Edition/Mod\ PlugY; wine-64 wine PlugY.exe"
 
 # Ksp.
 alias ksp="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Kerbal\ Space\ Program\ Breaking\ Ground; wine-64 wine Launcher.exe"
