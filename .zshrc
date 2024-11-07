@@ -90,6 +90,12 @@ if [[ -d $GOBIN && -z $(echo $PATH | grep -o $GOBIN) ]]; then
     PATH="${PATH}:$GOBIN"
 fi
 
+# Composer path.
+COMPOSER_HOME="$HOME/.config/composer/vendor/bin"
+if [[ -d $COMPOSER_HOME && -z $(echo $PATH | grep -o $COMPOSER_HOME) ]]; then
+    PATH="${PATH}:$COMPOSER_HOME"
+fi
+
 # Enable colors for ls.
 LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS
 
