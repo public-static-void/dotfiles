@@ -1,90 +1,88 @@
-# Pull custom gitignore from api. Accepts a language/framework as argument. Add `>> .gitignore` to actually write output to file.
-function gi() { curl -sLw "\n" https://www.toptal.com/developers/gitignore/api/$@ ;}
+# Pull custom gitignore from API. Accepts a language/framework as argument.
+# Add `>> .gitignore` to actually write output to file.
+function gi() {
+    curl -sL "https://www.toptal.com/developers/gitignore/api/$@"
+}
 
-# Put python path to .envrc for mypy and pylint.
+# Set PYTHONPATH in .envrc for mypy and pylint.
 set_pythonpath() {
-  local version
-  version=$(python --version | awk -F'[ .]' '{print $2"."$3}')
-  local pythonpath="\$PYTHONPATH:\$PWD/.venv/lib/python$version/site-packages/"
-  # Check if .envrc exists
-  if [ -f .envrc ]; then
-    sed -i.bak "/^export PYTHONPATH=/c\export PYTHONPATH=$pythonpath" .envrc
-    echo "PYTHONPATH updated in existing .envrc file."
-  else
-    echo "export PYTHONPATH=$pythonpath" >> .envrc
-    echo ".envrc created with PYTHONPATH: $pythonpath"
-  fi
-  direnv allow
+    local version
+    version=$(python --version | awk -F'[ .]' '{print $2"."$3}')
+    local pythonpath="\$PYTHONPATH:\$PWD/.venv/lib/python$version/site-packages/"
+
+    # Check if .envrc exists
+    if [ -f .envrc ]; then
+        sed -i.bak "/^export PYTHONPATH=/c\export PYTHONPATH=$pythonpath" .envrc
+        echo "PYTHONPATH updated in existing .envrc file."
+    else
+        echo "export PYTHONPATH=$pythonpath" >> .envrc
+        echo ".envrc created with PYTHONPATH: $pythonpath"
+    fi
+
+    direnv allow
 }
 
 # Create and activate a Python virtual environment.
 create_venv() {
-  # Check if virtual environment is already activated
-  if [ -z "$VIRTUAL_ENV" ]; then
-    # Create the virtual environment
-    python -m venv .venv
-    if [ $? -eq 0 ]; then
-      source .venv/bin/activate
-      echo "Virtual environment created and activated."
+    # Check if virtual environment is already activated
+    if [ -z "$VIRTUAL_ENV" ]; then
+        python -m venv .venv && source .venv/bin/activate && echo "Virtual environment created and activated." || {
+            echo "Error: Failed to create the virtual environment."
+            return 1
+        }
     else
-      echo "Error: Failed to create the virtual environment."
-      return 1
+        echo "Error: A virtual environment is already activated in '$VIRTUAL_ENV'."
+        return 1
     fi
-  else
-    echo "Error: A virtual environment is already activated in '$VIRTUAL_ENV'."
-    return 1
-  fi
 }
 
 # Initialize Poetry for an existing Python project.
 init_poetry() {
-  # Use Python version provided by pyenv
-  poetry config virtualenvs.prefer-active-python true
-  # Don't create a virtual environment
-  poetry config virtualenvs.in-project false
-  source .venv/bin/activate
-  poetry init -n
-  python -m pip install pip --upgrade
+    # Use Python version provided by pyenv
+    poetry config virtualenvs.prefer-active-python true
+    poetry config virtualenvs.in-project false
+
+    source .venv/bin/activate
+    poetry init -n
+    python -m pip install --upgrade pip
 }
 
 # Create a new Python project with Poetry and direnv.
 init_pyproj() {
-  # Check if an argument is provided
-  if [ "$#" -gt 0 ]; then
-    DIR_NAME="$1"
-  else
-    # Prompt the user for a directory name
-    echo "Please enter a directory name: "
-    read DIR_NAME
-  fi
-  # Trim whitespace from the directory name
-  DIR_NAME=$(echo "$DIR_NAME" | xargs)
-  # Create the directory
-  if ! mkdir "$DIR_NAME"; then
-    # Handle mkdir errors
-    if [ "$?" -eq 1 ]; then
-      echo "Error: Directory '$DIR_NAME' already exists."
+    # Check if an argument is provided; prompt if not.
+    DIR_NAME="${1:-$(read -p 'Please enter a directory name: ' dir && echo "$dir")}"
+
+    # Trim whitespace from the directory name.
+    DIR_NAME=$(echo "$DIR_NAME" | xargs)
+
+    # Create the directory and handle errors.
+    if mkdir "$DIR_NAME"; then
+        echo "Directory '$DIR_NAME' created successfully."
     else
-      echo "Error creating directory '$DIR_NAME'."
+        echo "Error: Directory '$DIR_NAME' already exists or could not be created."
+        return 1
     fi
-    return 1
-  fi
-  echo "Directory '$DIR_NAME' created successfully."
-  # Initialize Poetry
-  # Use Python version provided by pyenv
-  poetry config virtualenvs.prefer-active-python true
-  # Create a virtual environment .venv
-  poetry config virtualenvs.in-project true
-  poetry new $DIR_NAME
-  cd $DIR_NAME
-  # Initialize direnv
-  set_pythonpath
-  # Set up venv
-  poetry install --no-root
-  source .venv/bin/activate
-  python -m pip install pip --upgrade
-  # Initialize git
-  gi python > .gitignore
-  gi direnv >> .gitignore
-  git init
+
+    # Initialize Poetry settings for the new project.
+    poetry config virtualenvs.prefer-active-python true
+    poetry config virtualenvs.in-project true
+
+    # Create a new Poetry project and navigate into it.
+    poetry new "$DIR_NAME"
+    cd "$DIR_NAME" || return
+
+    # Set up Python path and install dependencies.
+    set_pythonpath
+    poetry install --no-root
+
+    # Activate the virtual environment.
+    source .venv/bin/activate
+
+    # Upgrade pip to the latest version.
+    python -m pip install --upgrade pip
+
+    # Initialize git with custom gitignore files.
+    gi python > .gitignore
+    gi direnv >> .gitignore
+    git init
 }

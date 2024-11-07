@@ -35,6 +35,12 @@ export KEYTIMEOUT=1
 # ENVIRONMENT VARIABLES #
 #########################
 
+# Function to add directories to PATH if they exist and are not already included.
+add_to_path() {
+    local dir="$1"
+    [[ -d $dir && ":$PATH:" != *":$dir:"* ]] && PATH="${PATH}:$dir"
+}
+
 # Keeps the entries in PATH unique (due to mirroring).
 typeset -aU path
 
@@ -42,69 +48,43 @@ typeset -aU path
 eval "$(direnv hook zsh)"
 
 # Add custom scripts folder to PATH.
-if [[ -d $HOME/scripts && -z $(echo $PATH | grep -o $HOME/scripts) ]]; then
-    PATH="${PATH}:$HOME/scripts"
-fi
+add_to_path "$HOME/scripts"
 
 # Add custom bin folder to PATH.
-if [[ -d $HOME/.local/bin && -z $(echo $PATH | grep -o $HOME/.local/bin) ]]; then
-    PATH="${PATH}:$HOME/.local/bin"
-fi
+add_to_path "$HOME/.local/bin"
 
 # PyEnv.
 PYENV_ROOT="$HOME/.pyenv"
-if [[ -d $PYENV_ROOT && -z $(echo $PATH | grep -o $PYENV_ROOT) ]]; then
-    PATH="${PATH}:$PYENV_ROOT"
-fi
+add_to_path "$PYENV_ROOT"
 eval "$(pyenv init --path)"
 eval "$(pyenv init -)"
 
 # Java path.
 JAVA_HOME="/usr/lib/jvm/default"
-if [[ -d $JAVA_HOME && -z $(echo $PATH | grep -o $JAVA_HOME) ]]; then
-    PATH="${PATH}:$JAVA_HOME"
-fi
+add_to_path "$JAVA_HOME"
 
 # Ruby path.
 GEM_HOME="$(gem env user_gemhome)"
-if [[ -d $GEM_HOME && -z $(echo $PATH | grep -o $GEM_HOME) ]]; then
-    PATH="${PATH}:$GEM_HOME"
-fi
-
-GEM_BIN="$GEM_HOME/bin"
-if [[ -d $GEM_BIN && -z $(echo $PATH | grep -o $GEM_BIN) ]]; then
-    PATH="${PATH}:$GEM_BIN"
-fi
+add_to_path "$GEM_HOME"
+add_to_path "$GEM_HOME/bin"
 
 # Perl path.
 eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
 
 # Go path.
 GOPATH="$(go env GOPATH)"
-if [[ -d $GOPATH && -z $(echo $PATH | grep -o $GOPATH) ]]; then
-    PATH="${PATH}:$GOPATH"
-fi
-
-GOBIN="$GOPATH/bin"
-if [[ -d $GOBIN && -z $(echo $PATH | grep -o $GOBIN) ]]; then
-    PATH="${PATH}:$GOBIN"
-fi
+add_to_path "$GOPATH"
+add_to_path "$GOPATH/bin"
 
 # Composer path.
 COMPOSER_HOME="$HOME/.config/composer/vendor/bin"
-if [[ -d $COMPOSER_HOME && -z $(echo $PATH | grep -o $COMPOSER_HOME) ]]; then
-    PATH="${PATH}:$COMPOSER_HOME"
-fi
+add_to_path "$COMPOSER_HOME"
 
 # Enable colors for ls.
 LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS
 
 # Preferred editor for local and remote sessions.
-if [[ -n $SSH_CONNECTION ]]; then
-    export EDITOR="vim"
-else
-    export EDITOR="nvim"
-fi
+export EDITOR="${SSH_CONNECTION:+vim}" || nvim
 
 # Use neovim to view manpages.
 export MANPAGER="nvim +Man!"
@@ -122,9 +102,7 @@ fastfetch --logo-color-2 "22"
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-    source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+[[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]] && source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
 
 # Enable colors.
 autoload -U colors && colors
@@ -136,65 +114,62 @@ autoload -Uz compinit && compinit
 #######################
 # COMPLETION SETTINGS #
 #######################
-#
-# Include hidden files.
-_comp_options+=(globdots)
 
-# Automatically highlight first element of completion menu.
+# Include hidden files and set completion options.
+_comp_options+=(globdots)
 setopt MENU_COMPLETE
-# Complete from both ends of a word.
 setopt COMPLETE_IN_WORD
-# Prevents aliases from being internally substituted before completion.
+
+# Prevent aliases from being internally substituted before completion.
 #setopt COMPLETE_ALIASES
 
-# _complete    -> completing
-# _expand      -> expand variables
-# _prefix      -> ignore everything behind cursor
-# _approximate -> fuzzy completion
-# _ignore      -> ignore some matches (i.e. directories when doing cd)
-
-# Define completers.
+# Define completers and enable menu selection.
 zstyle ':completion:*' completer _extensions _complete _approximate
-
-# Allow to select in a menu.
 zstyle ':completion:*' menu select
 
-# one wrong character every X characters is corrected.
-# X = 5 is a reasonable default.
+# Configure approximate completion settings.
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX + $#SUFFIX) / 5 )) )'
 
 # Autocomplete options for cd instead of directory stack.
 zstyle ':completion:*' complete-options true
-
 zstyle ':completion:*' file-sort modification
 
-# Format output.
+# Format output for various completion messages.
 zstyle ':completion:*:*:*:*:corrections' format '%F{yellow}!- %d (errors: %e) -!%f'
 zstyle ':completion:*:*:*:*:descriptions' format '%F{blue}-- %D %d --%f'
 zstyle ':completion:*:*:*:*:messages' format ' %F{purple} -- %d --%f'
 zstyle ':completion:*:*:*:*:warnings' format ' %F{red}-- no matches found --%f'
 
-# Colors for files and directory.
+# Colors for files and directories.
 zstyle ':completion:*:*:*:*:default' list-colors ${(s.:.)LS_COLORS}
 
-# Only display some tags for the command cd.
+# Tag order for cd command completion.
 zstyle ':completion:*:*:cd:*' tag-order local-directories directory-stack path-directories
 
-# Required for completion to be in good groups (named after the tags).
+# Grouping completions by type.
 zstyle ':completion:*' group-name ''
 zstyle ':completion:*:*:-command-:*:*' group-order aliases builtins functions commands
 
-# Case insensitive matching.
+# Case insensitive matching and prefix handling.
 zstyle ':completion:*' matcher-list '' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-
 zstyle ':completion:*' keep-prefix true
 
-# Also enable autocompletion in sudo mode.
+# Enable autocompletion in sudo mode.
 zstyle ":completion::complete:*" gain-privileges 1
 
 # Enable command and folder completion when line is empty.
-blanktab() { [[ $#BUFFER == 0 ]] && CURSOR=3 zle list-choices || zle expand-or-complete }
-zle -N blanktab && bindkey "^I" blanktab
+blanktab() {
+    if [[ $#BUFFER == 0 ]]; then
+        CURSOR=3
+        zle list-choices
+    else
+        zle expand-or-complete
+    fi
+}
+
+# Register the blanktab function and bind it to the Tab key.
+zle -N blanktab
+bindkey "^I" blanktab
 
 ###################
 # PROMPT SETTINGS #
@@ -203,36 +178,50 @@ zle -N blanktab && bindkey "^I" blanktab
 # Git integration.
 autoload -Uz vcs_info
 precmd_vcs_info() { vcs_info }
-precmd_functions+=( precmd_vcd_info )
+precmd_functions+=( precmd_vcs_info )
+
+# Enable prompt substitution and set the prompt format.
 setopt prompt_subst
 PROMPT='%F{red}%n@%m:%F{cyan}%2~%f${vcs_info_msg_0_}%# '
+
+# Configure vcs_info for Git status display.
 zstyle ':vcs_info:*' check-for-changes true
 zstyle ':vcs_info:*' unstagedstr ' *'
 zstyle ':vcs_info:*' stagedstr ' +'
 zstyle ':vcs_info:git:*' formats '(%b%u%c)'
 zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
 
-# Change cursor shape for different vi modes.
-function zle-keymap-select {
-    if [[ ${KEYMAP} == vicmd ]] ||
-    [[ $1 = "block" ]]; then
-        echo -ne "\e[1 q"
-    elif [[ ${KEYMAP} == main ]] ||
-    [[ ${KEYMAP} == viins ]] ||
-    [[ ${KEYMAP} = "" ]] ||
-    [[ $1 = "beam" ]]; then
-        echo -ne "\e[5 q"
-    fi
-}
-
-zle -N zle-keymap-select
-zle-line-init() {
-    zle -K viins # initiate `vi insert` as keymap (can be removed if `bindkey -V` has been set elsewhere)
+# Function to set the beam shape cursor.
+set_beam_cursor() {
     echo -ne "\e[5 q"
 }
+
+# Change cursor shape based on vi modes.
+zle-keymap-select() {
+    case ${KEYMAP} in
+        vicmd)
+            # Block cursor for command mode
+            echo -ne "\e[1 q" ;;
+        main|viins|"")
+            # Beam cursor for insert and main modes
+            set_beam_cursor ;;
+    esac
+}
+
+# Initialize keymap and set cursor shape on line initialization.
+zle-line-init() {
+    # Set vi insert mode as keymap.
+    zle -K viins
+    set_beam_cursor
+}
+
+# Register ZLE functions.
+zle -N zle-keymap-select
 zle -N zle-line-init
-echo -ne "\e[5 q" # Use beam shape cursor on startup.
-preexec() { echo -ne "\e[5 q" ;} # Use beam shape cursor for each new prompt.
+
+# Set beam shape cursor on startup and for each new prompt.
+set_beam_cursor
+preexec() { set_beam_cursor; }
 
 ###############
 # KEYBINDINGS #
@@ -247,50 +236,55 @@ bindkey -M menuselect "j" vi-down-line-or-history
 bindkey -M menuselect "k" vi-up-line-or-history
 bindkey -M menuselect "l" vi-forward-char
 
+# Use vim mode for backward delete.
 bindkey -v "^?" backward-delete-char
 
-bindkey -M menuselect '^xi' vi-insert  # Insert
-bindkey -M menuselect '^xu' undo       # Undo
+# Insert in completion menu.
+bindkey -M menuselect '^xi' vi-insert
+# Undo in completion menu.
+bindkey -M menuselect '^xu' undo
 
-# Fix broken keys.
-# Insert.
+# Fix broken keys for insert mode.
+
+# Yank (Insert).
 bindkey "^[[2~" yank
-# Delete.
+# Delete (Insert).
 bindkey "^[[3~" delete-char
-# PageUp.
+# Page Up (Insert).
 bindkey "^[[5~" up-line-or-history
-# PageDown.
+# Page Down (Insert).
 bindkey "^[[6~" down-line-or-history
-# Pos1.
+# Home (Insert).
 bindkey "^[[7~" beginning-of-line
-# End.
+# End (Insert).
 bindkey "^[[8~" end-of-line
 
-# Same for command mode.
-# Insert.
+# Fix broken keys for command mode.
+
+# Yank (Command).
 bindkey -a "^[[2~" yank
-# Delete.
+# Delete (Command).
 bindkey -a "^[[3~" delete-char
-# PageUp.
+# Page Up (Command).
 bindkey -a "^[[5~" up-line-or-history
-# PageDown.
+# Page Down (Command).
 bindkey -a "^[[6~" down-line-or-history
-# Pos1.
+# Home (Command).
 bindkey -a "^[[7~" beginning-of-line
-# End.
+# End (Command).
 bindkey -a "^[[8~" end-of-line
 
 ###########
 # ALIASES #
 ###########
 
-source $HOME/.aliases
+[[ -f $HOME/.aliases ]] && source $HOME/.aliases
 
 #############
 # FUNCTIONS #
 #############
 
-source $HOME/.functions
+[[ -f $HOME/.functions ]] && source $HOME/.functions
 
 ###########
 # PLUGINS #
@@ -299,17 +293,16 @@ source $HOME/.functions
 # Load plugins (should be last).
 
 # Load zsh-syntax-highlighting.
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+[[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 # Also load autosuggestions.
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
+[[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 
 # Load Angular CLI autocompletion.
 source <(ng completion script)
 
 # Load Powerlevel10k prompt theme.
-source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme 2>/dev/null
+[[ -f /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme ]] && source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-

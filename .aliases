@@ -1,25 +1,18 @@
-# Confirm before overwriting something
+# Confirm before overwriting something.
 alias cp="cp -i"
 alias mv="mv -i"
 alias rm="rm -i"
 
-# Make managing dotfiles with git easier.
+# Manage dotfiles with git.
 alias dotfiles="/usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME"
 
-# Use lsd instead of ls.
-# Print directories first.
-alias "ls"="lsd -h --group-dirs first"
+# Use lsd instead of ls with specific options.
+alias ls="lsd -h --group-dirs first"
+alias la="lsd -hA --group-dirs first"
+alias ll="lsd -hlA --group-dirs first"
 
-# Show hidden files.
-alias "la"="lsd -hA --group-dirs first"
-
-# Show hidden files and detailed information.
-alias "ll"="lsd -hlA --group-dirs first"
-
-# Make pacman colorful.
+# Make pacman and trizen colorful.
 alias pacman="sudo pacman --color=auto"
-
-# Make trizen colorful.
 alias trizen="trizen --color=auto"
 
 # Make grep highlight matches.
@@ -28,158 +21,150 @@ alias grep="grep --color=auto"
 # Remove orphan packages.
 alias remorph="pacman -Qtdq | pacman -Rns -"
 
-# Xrandr.
+# Xrandr settings for different resolutions.
 alias xr1920x1080="xrandr --output HDMI-0 --mode 1920x1080"
-
 alias xr1280x960="xrandr --output HDMI-0 --mode 1280x960"
-
 alias xr1024x768="xrandr --output HDMI-0 --mode 1024x768"
-
 alias xr800x600="xrandr --output HDMI-0 --mode 800x600"
-
 alias xr640x480="xrandr --output HDMI-0 --mode 640x480"
 
-# Webcam software 1.
+# Webcam software aliases.
 alias webcam1="qv4l2"
-
-# Webcam software 2.
 alias webcam2="guvcview"
 
-# Renew.
-# alias renew="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/; java -p dist:dist/libs -m de.renew.loader gui"
+# Renew project commands.
+renew_command() {
+    cd "$1" || return
+    java -p dist:dist/libs -m de.renew.loader gui
+}
 
-# Renew MAKS (preliminary).
-alias renewmaks="cd $HOME/UNI/MASTER/3-WiSe2223/MAKS/renew2.6dev-maks-newUI-lin64/renew2.6dev/; java -jar loader.jar gui"
-
-# Renew Mulan.
-alias renewmulan="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Mulan/workspace/Renew/; java -p dist:dist/libs -m de.renew.loader gui"
-
-# Renew Settler.
-alias renewsettler="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Settler/workspace/Renew/; java -p dist:dist/libs -m de.renew.loader gui"
-
-# Renew WebChat.
+alias renewmaks="renew_command $HOME/UNI/MASTER/3-WiSe2223/MAKS/renew2.6dev-maks-newUI-lin64/renew2.6dev/"
+alias renewmulan="renew_command $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Mulan/workspace/Renew/"
+alias renewsettler="renew_command $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Settler/workspace/Renew/"
 alias renewwebchat="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Mulan/workspace/lehre-ss22-mvs-uebungen/WebChat; bash testing/start.sh"
-
-# Renew WebChat.
 alias renewwebchatdc="cd $HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022Mulan/workspace/lehre-ss22-mvs-uebungen/WebChatDC; bash testing/start.sh"
 
+# Stub commands.
 alias makestub="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/Core/bin/unix/makestub"
-
 alias compilestub="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/Core/bin/unix/compilestub"
-
 alias jcompile="$HOME/UNI/MASTER/2-SoSe22/MVS/MVS2022/workspace/Renew/Core/bin/unix/jcompile"
 
-# 64bit wine prefix.
-alias wine-64="WINEPREFIX=$HOME/.wine64 WINEDEBUG=-all"
+# Set Wine prefixes
+set_wine_prefix() {
+    local prefix="$1"
+    export WINEPREFIX="$HOME/.wine$prefix"
+    export WINEDEBUG="-all"
+}
 
-# 32bit wine prefix.
-alias wine-32="WINEPREFIX=$HOME/.wine32 WINEDEBUG=-all"
+# Change directory to Wine games directory
+cd_wine_games() {
+    local prefix="$1"
+    cd "$HOME/.wine$prefix/drive_c/Program Files (x86)" || return
+}
 
-# Path to wine games dir.
-alias winegames="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)"
-alias winegames64="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)"
-alias winegames32="cd $HOME/.wine32/drive_c/Program\ Files"
+# Launch Windows software using Wine.
+launch_wine() {
+    local game_dir="$1"
+    local game_executable="$2"
+    cd "$game_dir" || return
+    wine "$game_executable"
+}
 
-# Reason 4.
-alias reason4="sudo mount $HOME/ISOS/Propellerheads.Reason.v4.0.HYBRID.DVDR-AiRISO/Reason4ISO/Reason\ 4.iso /mnt/disk -o loop; cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Propellerhead/Reason/; wine-64 wine Reason.exe"
+# Aliases for Wine prefixes
+alias wine-64="set_wine_prefix 64"
+alias wine-32="set_wine_prefix 32"
 
-# Baldurs Gate 2.
-alias baldur2="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Baldur\ s\ Gate\ II\ Enhanced\ Edition\ v2\ 5; wine-64 wine Baldur.exe"
+# Aliases for changing to Wine games directories
+alias winegames="cd_wine_games ''"
+alias winegames64="cd_wine_games 64"
+alias winegames32="cd_wine_games 32"
 
-# Fallout 2.
-alias fallout2="cd $HOME/.wine64/drive_c/GOG\ Games/Fallout\ 2/; wine-64 WINEDLLOVERRIDES="ddraw.dll=n,b ddraw.ini=n,b" wine fallout2.exe"
+# Launch commands using the launch_wine function.
+alias reason4="sudo mount $HOME/ISOS/Propellerheads.Reason.v4.0.HYBRID.DVDR-AiRISO/Reason4ISO/Reason\ 4.iso /mnt/disk; launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/Propellerhead/Reason/' Reason.exe"
 
-# Dwarf fortress.
+alias baldur2="launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/Baldur s Gate II Enhanced Edition v2 5' Baldur.exe"
+
+alias fallout2='launch_wine "$HOME/.wine64/drive_c/GOG Games/Fallout 2/" fallout2.exe'
+
+# Dwarf Fortress commands.
 alias dwarfpack="$HOME/Games/LinuxDwarfPack-0.47.05-r7/startlnp.sh"
 alias dwarfhack="$HOME/.local/share/dwarffortress/dfhack"
 
-# Sims2.
-alias sims2="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/The\ Sims\ 2\ Ultimate\ Collection/The\ Sims\ 2\ Mansion\ and\ Garden\ Stuff/TSBin;wine-64 wine Sims2EP9.exe"
+# Sims 2 command.
+alias sims2="launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/The Sims 2 Ultimate Collection/The Sims 2 Mansion and Garden Stuff/TSBin' Sims2EP9.exe"
 
-# Civil War Generals 2.
-alias cwg2="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/SIERRA/CWG2;sudo mount -o loop CivilWarGeneral2.ISO /mnt/disk; wine-64 wine Cwg2.exe"
+# Civil War Generals 2 command.
+alias cwg2="sudo mount -o loop CivilWarGeneral2.ISO /mnt/disk; launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/SIERRA/CWG2' Cwg2.exe"
 
-# HoI2 ModernDayScenario.
-alias hoi2mds="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Modern\ Day\ Scenario\ 2; wine-64 wine HoI2.exe"
+# HoI2 Modern Day Scenario command.
+alias hoi2mds="launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/Modern Day Scenario 2' HoI2.exe"
 
-# HoI3 Black Ice 7.
-alias hoi3bi7="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi7/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
+# HoI3 Black Ice commands.
+for i in {7..12}; do
+    alias "hoi3bi$i"="launch_wine '\$HOME/.winehoi/drive_c/GOG Games/hoi3bi$i/' launcher.exe"
+done
 
-# HoI3 Black Ice 9.
-alias hoi3bi9="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi9/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
+# Europa Universalis 3 command.
+alias eu3="launch_wine '$HOME/.wine64/drive_c/GOG Games/Europa Universalis III/' Launch\ Europa\ Universalis\ III\ Complete.lnk"
 
-# HoI3 Black Ice 10.
-alias hoi3bi10="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi10/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
+# Victoria 2 command.
+alias vic2="launch_wine '$HOME/.wine64/drive_c/GOG Games/Victoria II/' Launch\ Victoria\ II\ -\ Civil\ War\ Edition.lnk"
 
-# HoI3 Black Ice 11.
-alias hoi3bi11="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi11/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
+# Project Zomboid command.
+alias pjz="launch_wine '$HOME/.wine64/drive_c/GOG Games/Project Zomboid/' ProjectZomboid64.exe"
 
-# HoI3 Black Ice 12.
-alias hoi3bi12="cd $HOME/.winehoi/drive_c/GOG\ Games/hoi3bi12/; WINEPREFIX=~/.winehoi WINEDEBUG=-all wine launcher.exe"
+# Medieval Total War command.
+alias metw="launch_wine '$HOME/.wine/drive_c/Program Files (x86)/The Creative Assembly/Medieval - Total War - Gold Edition' Medieval_TW.exe"
 
-# Europa Universalis 3.
-alias eu3="cd $HOME/.wine64/drive_c/GOG\ Games/Europa\ Universalis\ III/; wine-64 wine Launch\ Europa\ Universalis\ III\ Complete.lnk"
+# Medieval Dynasty command.
+alias medy="launch_wine '$HOME/.wine/drive_c/Program Files (x86)/Medieval.Dynasty.v0.3.1.4' Medieval_Dynasty.exe"
 
-# Victoria 2.
-alias vic2="cd $HOME/.wine64/drive_c/GOG\ Games/Victoria\ II/; wine-64 wine Launch\ Victoria\ II\ -\ Civil\ War\ Edition.lnk"
+# Neverwinter command.
+alias nwo="launch_wine '$HOME/.local/share/Steam/steamapps/common/Cryptic Studios' Neverwinter.exe"
 
-# Project Zomboid.
-alias pjz="cd $HOME/.wine64/drive_c/GOG\ Games/Project\ Zomboid/; wine-64 wine ProjectZomboid64.exe"
+# World of Warcraft commands.
+alias wow1="launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/WoW' WoW.exe"
+alias wow2="launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/TBC' WoW.exe"
+alias wow3="launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/WoTLK' WoW.exe"
 
-# Medieval Total War.
-alias metw="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/The\ Creative\ Assembly/Medieval\ -\ Total\ War\ -\ Gold\ Edition; wine-64 wine Medieval_TW.exe"
+# Arcadia RoM command.
+alias arcadia="launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/Chronicles of Arcadia' Launcher.exe"
 
-# Medieval Dynasty.
-alias medy="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Medieval.Dynasty.v0.3.1.4/Medieval.Dynasty.v0.3.1.4/Medieval.Dynasty.v0.3.1.4; wine-64 wine Medieval_Dynasty.exe"
+# Diablo 2 command.
+alias diablo2="launch_wine '$HOME/.wine64/drive_c/Games/Diablo II Complete Edition/Mod PlugY' PlugY.exe"
 
-# Neverwinter.
-alias nwo="cd $HOME/.local/share/Steam/steamapps/common/Cryptic\ Studios; wine-64 wine Neverwinter.exe"
+# Kerbal Space Program command.
+alias ksp="launch_wine '$HOME/.wine/drive_c/Program Files (x86)/Kerbal Space Program Breaking Ground' Launcher.exe"
 
-# Vanilla WoW.
-alias wow1="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/WoW; wine-64 wine WoW.exe"
+# Subsistence command.
+alias subsis="launch_wine '$HOME/.wine/drive_c/Program Files (x86)/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Binaries/Win64' UDK.exe"
 
-# TBC WoW.
-alias wow2="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/TBC; wine-64 wine WoW.exe"
+# The Forest command.
+alias forest="launch_wine '$HOME/.wine64/drive_c/Games/The Forest' TheForest.exe"
 
-# WoTLK WoW.
-alias wow3="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/WoTLK; wine-64 wine WoW.exe"
+# Revolution Under Siege command.
+alias revo="launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/Revolution Under Siege Gold Edition' RUS.exe"
 
-# Arcadia RoM.
-alias arcadia="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Chronicles\ of\ Arcadia; wine-64 wine Launcher.exe"
+# Call of Duty Modern Warfare 3 command.
+alias mw3="launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/Call of Duty Modern Warfare 3' iw5sp.exe"
 
-# Diablo 2.
-alias diablo2="cd $HOME/.wine64/drive_c/Games/Diablo\ II\ Complete\ Edition/Mod\ PlugY; wine-64 wine PlugY.exe"
+# Factorio command.
+alias factorio="launch_wine '$HOME/.wine64/drive_c/GOG Games/Factorio' Launch\ Factorio.lnk"
 
-# Ksp.
-alias ksp="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Kerbal\ Space\ Program\ Breaking\ Ground; wine-64 wine Launcher.exe"
+# Shadow Empire command.
+alias shemp="launch_wine '$HOME/.wine64/drive_c/GOG Games/Shadow Empire' ShadowEmpire.exe"
 
-# Subsistence.
-alias subsis="cd $HOME/.wine/drive_c/Program\ Files\ \(x86\)/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Binaries/Win64; wine-64 wine UDK.exe"
+# Close Combat 3 command with specific settings for wine-32.
+alias cc3='cd "$HOME/.wine32"/drive_c/GOG Games/Close Combat 3; wine-32 wine explorer /desktop=cc3,800x600 CC3.exe'
 
-# The Forest.
-alias forest="cd $HOME/.wine64/drive_c/Games/The\ Forest; wine-64 wine TheForest.exe"
+# PalWorld command.
+alias palworld="launch_wine '$HOME/.wine64/drive_c/Games/Palworld' Palworld.exe"
 
-# Revolution under Siege.
-alias revo="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Revolution\ Under\ Siege\ Gold\ Edition; wine-64 wine RUS.exe"
+# Distant Worlds Universe command with specific settings for wine.
+dwu() {
+    cd "$HOME/.winedwu"/drive_c/GOG Games/Distant Worlds Universe || return
+    WINEARCH=win32 WINEPREFIX="$HOME/.winedwu" WINEDEBUG=-all wine DistantWorlds.exe
+}
 
-# Call of Duty Modern Warfare 3.
-alias mw3="cd $HOME/.wine64/drive_c/Program\ Files\ \(x86\)/Call\ of\ Duty\ \ Modern\ Warfare\ 3; wine-64 wine iw5sp.exe"
-
-# Factorio.
-alias factorio="cd $HOME/.wine64/drive_c/GOG\ Games/Factorio; wine-64 wine Launch\ Factorio.lnk"
-
-# Shadow Empire.
-alias shemp="cd $HOME/.wine64/drive_c/GOG\ Games/Shadow\ Empire; wine-64 wine ShadowEmpire.exe"
-
-# Close Combat 3.
-alias cc3="cd $HOME/.wine32/drive_c/GOG\ Games/Close\ Combat\ 3; wine-32 wine explorer /desktop=cc3,800x600 CC3.exe"
-
-# PalWorld.
-alias palworld="cd $HOME/.wine64/drive_c/Games/Palworld; wine-64 wine Palworld.exe"
-
-# Distand Worlds Universe.
-alias dwu="cd $HOME/.winedwu/drive_c/GOG\ Games/Distant\ Worlds\ Universe; WINEARCH=win32 WINEPREFIX=$HOME/.winedwu WINEDEBUG=-all wine DistantWorlds.exe"
-
-# Songs of Syx.
-alias sos="cd $HOME/.wine64/drive_c/GOG\ Games/Songs\ of\ Syx; wine-64 wine SongsofSyx.exe"
-
+# Songs of Syx command.
+alias sos="launch_wine '$HOME/.wine64/drive_c/GOG Games/Songs of Syx' SongsofSyx.exe"
