@@ -58,7 +58,7 @@ local servers = {
 	"terraformls",
 	"ts_ls",
 	"twiggy_language_server",
-	"typos_lsp",
+	-- "typos_lsp",
 	"vimls",
 	"vuels",
 	"yamlls",
