@@ -1,35 +1,37 @@
-local dap_status_ok, dap = pcall(require, "dap")
-if not dap_status_ok then
+local utils = require("user.utils")
+
+local dap = utils.safe_require("dap")
+if not dap then
 	return
 end
 
-local dap_ui_status_ok, dapui = pcall(require, "dapui")
-if not dap_ui_status_ok then
+local dapui = utils.safe_require("dapui")
+if not dapui then
 	return
 end
 
-local dap_install_status_ok, dap_install = pcall(require, "dap-install")
-if not dap_install_status_ok then
+local dap_install = utils.safe_require("dap-install")
+if not dap_install then
 	return
 end
 
-local mason_dap_status_ok, mason_dap = pcall(require, "mason-nvim-dap")
-if not mason_dap_status_ok then
+local mason_dap = utils.safe_require("mason-nvim-dap")
+if not mason_dap then
 	return
 end
 
-local dap_js_status_ok, dap_js = pcall(require, "dap-vscode-js")
-if not dap_js_status_ok then
+local dap_js = utils.safe_require("dap-vscode-js")
+if not dap_js then
 	return
 end
 
-local dap_go_status_ok, dap_go = pcall(require, "dap-go")
-if not dap_go_status_ok then
+local dap_go = utils.safe_require("dap-go")
+if not dap_go then
 	return
 end
 
-local dap_python_status_ok, dap_python = pcall(require, "dap-python")
-if not dap_python_status_ok then
+local dap_python = utils.safe_require("dap-python")
+if not dap_python then
 	return
 end
 

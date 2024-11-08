@@ -1,5 +1,7 @@
-local status_ok, _ = pcall(require, "lspconfig")
-if not status_ok then
+local utils = require("user.utils")
+
+local lspconfig = pcall(require, "lspconfig")
+if not lspconfig then
 	return
 end
 

@@ -1,14 +1,32 @@
-local colorscheme = "vscode"
--- local colorscheme = "darkplus"
--- local colorscheme = "codedark"
--- local colorscheme = "angr"
--- local colorscheme = "spacedark"
--- local colorscheme = "base16-da-one-gray"
--- local colorscheme = "base16-ia-dark"
--- local colorscheme = "pywal"
+local function set_colorscheme(scheme)
+	local status_ok, _ = pcall(vim.cmd, "colorscheme " .. scheme)
+	if not status_ok then
+		vim.notify("Colorscheme '" .. scheme .. "' not found!", vim.log.levels.ERROR)
+		return false
+	end
+	return true
+end
 
-local status_ok, _ = pcall(vim.cmd, "colorscheme " .. colorscheme)
-if not status_ok then
-	vim.notify("colorscheme " .. colorscheme .. " not found!")
-	return
+-- List of available colorschemes
+local colorschemes = {
+	"vscode",
+	"darkplus",
+	"codedark",
+	"angr",
+	"spacedark",
+	"base16-da-one-gray",
+	"base16-ia-dark",
+	"pywal",
+}
+
+-- Try setting the desired colorscheme
+local desired_colorscheme = colorschemes[1] -- Change index to select different schemes
+
+if not set_colorscheme(desired_colorscheme) then
+	-- Optionally try a fallback scheme if the desired one fails
+	for _, scheme in ipairs(colorschemes) do
+		if set_colorscheme(scheme) then
+			break -- Exit loop if a valid scheme is found
+		end
+	end
 end

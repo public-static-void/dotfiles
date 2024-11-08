@@ -127,23 +127,19 @@ local options = {
 	signcolumn = "yes",
 }
 
--- Set up backups directory.
-vim.cmd([[
-  if !isdirectory($HOME."/.local/share/nvim/undodir")
-    call mkdir($HOME."/.local/share/nvim/undodir", "p", 0700)
-  endif
-]])
-
--- Set up swap directory.
-vim.cmd([[
-  if !isdirectory($HOME."/.local/share/nvim/swap")
-    call mkdir($HOME."/.local/share/nvim/swap", "p", 0700)
-  endif
-]])
-
+-- Apply the options to Neovim.
 for k, v in pairs(options) do
 	vim.opt[k] = v
 end
+
+-- Create necessary directories for undo and swap files if they don't exist.
+local function create_dir_if_not_exists(dir)
+	if not vim.fn.isdirectory(dir) then
+		vim.fn.mkdir(dir, "p", 0700)
+	end
+end
+create_dir_if_not_exists(vim.fn.expand("$HOME") .. "/.local/share/nvim/undodir")
+create_dir_if_not_exists(vim.fn.expand("$HOME") .. "/.local/share/nvim/swap")
 
 -- Ignore certain folders/filetypes in the wildmenu.
 vim.opt.wildignore:append(

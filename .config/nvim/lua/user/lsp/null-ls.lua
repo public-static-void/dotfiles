@@ -1,10 +1,12 @@
-local null_ls_status_ok, null_ls = pcall(require, "null-ls")
-if not null_ls_status_ok then
+local utils = require("user.utils")
+
+local null_ls = utils.safe_require("null-ls")
+if not null_ls then
 	return
 end
 
-local mason_null_ls_status_ok, mason_null_ls = pcall(require, "mason-null-ls")
-if not mason_null_ls_status_ok then
+local mason_null_ls = utils.safe_require("mason-null-ls")
+if not mason_null_ls then
 	return
 end
 
@@ -31,39 +33,31 @@ mason_null_ls.setup({
 	ensure_installed = servers,
 })
 
--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
-local formatting = null_ls.builtins.formatting
--- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
-local diagnostics = null_ls.builtins.diagnostics
-
+-- Setup Null-LS with formatting and diagnostics sources
 null_ls.setup({
 	debug = false,
 	sources = {
-		-- css
-		diagnostics.stylelint,
-		-- git commit
-		diagnostics.gitlint,
-		-- general
-		diagnostics.codespell,
-		-- html, xml
-		diagnostics.markuplint,
-		-- htmldjango
-		diagnostics.djlint,
-		formatting.djlint,
-		-- java
-		formatting.google_java_format,
-		-- js
-		formatting.prettier,
-		-- kotlin
-		formatting.ktlint,
-		diagnostics.ktlint,
-		-- laravel
-		formatting.blade_formatter,
-		-- lua
-		formatting.stylua,
-		-- python
-		diagnostics.mypy,
-		formatting.black.with({
+		-- Diagnostics
+		-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/diagnostics
+		null_ls.builtins.diagnostics.stylelint,
+		null_ls.builtins.diagnostics.gitlint,
+		null_ls.builtins.diagnostics.codespell,
+		null_ls.builtins.diagnostics.markuplint,
+		null_ls.builtins.diagnostics.djlint,
+		null_ls.builtins.diagnostics.mypy,
+
+		-- Formatting
+		-- https://github.com/jose-elias-alvarez/null-ls.nvim/tree/main/lua/null-ls/builtins/formatting
+		null_ls.builtins.formatting.djlint,
+		null_ls.builtins.formatting.google_java_format,
+		null_ls.builtins.formatting.prettier,
+		null_ls.builtins.formatting.ktlint,
+		null_ls.builtins.formatting.blade_formatter,
+		null_ls.builtins.formatting.stylua,
+		null_ls.builtins.formatting.isort,
+		null_ls.builtins.formatting.shfmt,
+		null_ls.builtins.formatting.sql_formatter,
+		null_ls.builtins.formatting.black.with({
 			extra_args = {
 				"--preview",
 				"--line-length=79",
@@ -71,10 +65,5 @@ null_ls.setup({
 				"--enable-unstable-feature=multiline_string_handling",
 			},
 		}),
-		formatting.isort,
-		-- sh
-		formatting.shfmt,
-		-- sql
-		formatting.sql_formatter,
 	},
 })

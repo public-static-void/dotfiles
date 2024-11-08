@@ -1,20 +1,22 @@
-local java_status_ok, java = pcall(require, "java")
-if not java_status_ok then
+local utils = require("user.utils")
+
+local java = utils.safe_require("java")
+if not java then
 	return
 end
 
-local status_ok, lsp_installer = pcall(require, "mason")
-if not status_ok then
+local lsp_installer = utils.safe_require("mason")
+if not lsp_installer then
 	return
 end
 
-local config_status_ok, lsp_config = pcall(require, "mason-lspconfig")
-if not config_status_ok then
+local lsp_config = utils.safe_require("mason-lspconfig")
+if not lsp_config then
 	return
 end
 
-local lspconfig_status_ok, lspconfig = pcall(require, "lspconfig")
-if not lspconfig_status_ok then
+local lspconfig = utils.safe_require("lspconfig")
+if not lspconfig then
 	return
 end
 
@@ -65,22 +67,38 @@ local servers = {
 	"zls",
 }
 
+-- Setup Java language server
 java.setup({})
 
+-- Setup Mason
 lsp_installer.setup({})
 
+-- Ensure specified language servers are installed
 lsp_config.setup({
 	ensure_installed = servers,
 })
 
-for _, server in pairs(servers) do
-	local opts = {
-		on_attach = require("user.lsp.handlers").on_attach,
-		capabilities = require("user.lsp.handlers").capabilities,
-	}
+-- Common options for all LSP servers
+local common_opts = {
+	on_attach = require("user.lsp.handlers").on_attach,
+	capabilities = require("user.lsp.handlers").capabilities,
+}
+
+-- Setup each server with custom options if available
+for _, server in ipairs(servers) do
+	local opts = vim.tbl_deep_extend("force", {}, common_opts)
+
 	local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.settings." .. server)
 	if has_custom_opts then
 		opts = vim.tbl_deep_extend("force", opts, server_custom_opts)
 	end
-	lspconfig[server].setup(opts)
+
+	-- Safely setup the server with options
+	local setup_status_ok, setup_error = pcall(function()
+		lspconfig[server].setup(opts)
+	end)
+
+	if not setup_status_ok then
+		vim.notify(string.format("Failed to setup %s: %s", server, setup_error), vim.log.levels.ERROR)
+	end
 end

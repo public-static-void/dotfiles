@@ -1,5 +1,7 @@
-local status_ok, illuminate = pcall(require, "illuminate")
-if not status_ok then
+local utils = require("user.utils")
+
+local illuminate = utils.safe_require("illuminate")
+if not illuminate then
 	return
 end
 

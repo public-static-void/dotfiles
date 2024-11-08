@@ -1,9 +1,15 @@
-local status_ok, alpha = pcall(require, "alpha")
-if not status_ok then
+local utils = require("user.utils")
+
+local alpha = utils.safe_require("alpha")
+if not alpha then
 	return
 end
 
-local dashboard = require("alpha.themes.dashboard")
+local dashboard = utils.safe_require("alpha.themes.dashboard")
+if not dashboard then
+	return
+end
+
 dashboard.section.header.val = {
 	[[      .-.                                          ]],
 	[[        ;  :          .;.       .-..-.             ]],

@@ -1,20 +1,22 @@
-local status_ok, indent_blankline = pcall(require, "ibl")
-if not status_ok then
+local utils = require("user.utils")
+
+local indent_blankline = utils.safe_require("ibl")
+if not indent_blankline then
 	return
 end
 
-local hooks_status_ok, hooks = pcall(require, "ibl.hooks")
-if not hooks_status_ok then
+local hooks = utils.safe_require("ibl.hooks")
+if not hooks then
 	return
 end
 
-local rainbow_status_ok, rainbow = pcall(require, "rainbow-delimiters")
-if not rainbow_status_ok then
+local rainbow = utils.safe_require("rainbow-delimiters")
+if not rainbow then
 	return
 end
 
-local rainbow_setup_status_ok, rainbow_setup = pcall(require, "rainbow-delimiters.setup")
-if not rainbow_setup_status_ok then
+local rainbow_setup = utils.safe_require("rainbow-delimiters.setup")
+if not rainbow_setup then
 	return
 end
 

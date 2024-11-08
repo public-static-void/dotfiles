@@ -19,21 +19,20 @@ vim.g.maplocalleader = ","
 
 -- Commands --
 
-vim.cmd("cabbrev Q q")
-vim.cmd("cabbrev W w")
-
-vim.cmd("cabbrev WQ wq")
-vim.cmd("cabbrev Wq wq")
-vim.cmd("cabbrev wQ wq")
-
-vim.cmd("cabbrev qw wq")
-vim.cmd("cabbrev qW wq")
-vim.cmd("cabbrev Qw wq")
-vim.cmd("cabbrev QW wq")
-
-vim.cmd("cabbrev qA qa")
-vim.cmd("cabbrev QA qa")
-vim.cmd("cabbrev Qa qa")
+vim.cmd([[
+  cabbrev Q q
+  cabbrev W w
+  cabbrev WQ wq
+  cabbrev Wq wq
+  cabbrev wQ wq
+  cabbrev qw wq
+  cabbrev qW wq
+  cabbrev Qw wq
+  cabbrev QW wq
+  cabbrev qA qa
+  cabbrev QA qa
+  cabbrev Qa qa
+]])
 
 -- Ex Mode is annoying. Use this for formatting instead.
 keymap("n", "Q", "<Nop>", opts)

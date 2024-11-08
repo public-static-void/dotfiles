@@ -1,6 +1,8 @@
+local utils = require("user.utils")
+
 -- Setup nvim-cmp.
-local status_ok, npairs = pcall(require, "nvim-autopairs")
-if not status_ok then
+local npairs = utils.safe_require("nvim-autopairs")
+if not npairs then
 	return
 end
 
@@ -25,9 +27,14 @@ npairs.setup({
 	},
 })
 
-local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-local cmp_status_ok, cmp = pcall(require, "cmp")
-if not cmp_status_ok then
+local cmp_autopairs = utils.safe_require("nvim-autopairs.completion.cmp")
+if not cmp_autopairs then
 	return
 end
+
+local cmp = utils.safe_require("cmp")
+if not cmp then
+	return
+end
+
 cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done({ map_char = { tex = "" } }))

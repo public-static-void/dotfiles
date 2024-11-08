@@ -1,5 +1,7 @@
-local status_ok, aerial = pcall(require, "aerial")
-if not status_ok then
+local utils = require("user.utils")
+
+local aerial = utils.safe_require("aerial")
+if not aerial then
 	return
 end
 

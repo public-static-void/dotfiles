@@ -1,5 +1,7 @@
-local status_ok, neogen = pcall(require, "neogen")
-if not status_ok then
+local utils = require("user.utils")
+
+local neogen = utils.safe_require("neogen")
+if not neogen then
 	return
 end
 

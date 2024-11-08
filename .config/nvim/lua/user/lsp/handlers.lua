@@ -1,3 +1,5 @@
+local utils = require("user.utils")
+
 local M = {}
 
 -- TODO: backfill this to template
@@ -49,67 +51,51 @@ end
 
 local function lsp_highlight_document(client)
 	-- Set autocommands conditional on server_capabilities
-	local status_ok, illuminate = pcall(require, "illuminate")
-	if not status_ok then
+	local illuminate = utils.safe_require("illuminate")
+	if not illuminate then
 		return
 	end
 	illuminate.on_attach(client)
-	-- end
+end
+
+-- Disable formatting capabilities for specific servers
+local function disable_formatting(client)
+	local format_disabled_servers = {
+		"jsonls",
+		"ts_ls",
+		"lua_ls",
+		"cssls",
+		"html",
+		"htmx",
+		"marksman",
+		"jdtls",
+		"kotlin_language_server",
+		"sqls",
+	}
+
+	for _, server in ipairs(format_disabled_servers) do
+		if client.name == server then
+			client.server_capabilities.documentFormattingProvider = false
+			client.server_capabilities.documentRangeFormattingProvider = false
+			if client.name == "jdtls" then
+				require("jdtls").setup_dap({ hotcodereplace = "auto" })
+				require("jdtls.dap").setup_dap_main_class_configs()
+			end
+			break -- Exit loop once the server is found and processed
+		end
+	end
 end
 
 M.on_attach = function(client)
-	-- vim.notify(client.name .. " starting...")
-	-- TODO: refactor this into a method that checks if string in list
-	if client.name == "jsonls" then
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-	end
-	if client.name == "ts_ls" then
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-	end
-	if client.name == "lua_ls" then
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-	end
-	if client.name == "cssls" then
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-	end
-	if client.name == "html" then
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-	end
-	if client.name == "htmx" then
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-	end
-	if client.name == "marksman" then
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-	end
-	if client.name == "jdtls" then
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-		require("jdtls").setup_dap({ hotcodereplace = "auto" })
-		require("jdtls.dap").setup_dap_main_class_configs()
-	end
-	if client.name == "kotlin_language_server" then
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-	end
-	if client.name == "sqls" then
-		client.server_capabilities.documentFormattingProvider = false
-		client.server_capabilities.documentRangeFormattingProvider = false
-	end
-
+	disable_formatting(client)
 	lsp_highlight_document(client)
 end
 
+-- Create capabilities with cmp_nvim_lsp integration
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 
-local status_ok, cmp_nvim_lsp = pcall(require, "cmp_nvim_lsp")
-if not status_ok then
+local cmp_nvim_lsp = utils.safe_require("cmp_nvim_lsp")
+if not cmp_nvim_lsp then
 	return
 end
 

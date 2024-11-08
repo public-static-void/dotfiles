@@ -1,3 +1,5 @@
+local utils = require("user.utils")
+
 -- Automatically install lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -12,8 +14,8 @@ if not vim.loop.fs_stat(lazypath) then
 end
 vim.opt.rtp:prepend(lazypath)
 
-local status_ok, lazy = pcall(require, "lazy")
-if not status_ok then
+local lazy = utils.safe_require("lazy")
+if not lazy then
 	return
 end
 
@@ -40,11 +42,13 @@ return lazy.setup({
 	},
 	{
 		"nvim-tree/nvim-tree.lua",
+		cmd = "NvimTreeToggle",
 		lazy = true,
 	},
 	{ "akinsho/bufferline.nvim", version = "*", dependencies = "nvim-tree/nvim-web-devicons" },
 	{
 		"nvim-lualine/lualine.nvim",
+		event = "VimEnter",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
 	{
@@ -217,6 +221,7 @@ return lazy.setup({
 	-- debugger
 	{
 		"mfussenegger/nvim-dap",
+		cmd = { "DapContinue", "DapToggleBreakpoint" },
 		lazy = true,
 	},
 	{
@@ -261,7 +266,7 @@ return lazy.setup({
 		"nvim-treesitter/nvim-treesitter",
 		-- build = ":TSUpdateSync",
 		build = ":TSUpdate",
-		event = "BufReadPost",
+		event = { "BufReadPost", "BufNewFile" },
 		lazy = true,
 	},
 	{

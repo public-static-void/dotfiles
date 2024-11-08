@@ -1,5 +1,7 @@
-local status_ok, configs = pcall(require, "nvim-ts-autotag")
-if not status_ok then
+local utils = require("user.utils")
+
+local configs = utils.safe_require("nvim-ts-autotag")
+if not configs then
 	return
 end
 
