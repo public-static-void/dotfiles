@@ -155,4 +155,4 @@ dwu() {
 # Songs of Syx.
 alias sos="wine-64 launch_wine '$HOME/.wine64/drive_c/GOG Games/Songs of Syx' SongsofSyx.exe"
 
-alias ptcgl="wine-64 launch_wine '$HOME/.wine64/drive_c/Program\ Files\ \(x86\)/PokemonTCG/Pokémon\ Trading\ Card\ Game\ Live' Pokemon\ TCG\ Live.exe"
+alias ptcgl="wine-64 launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/PokemonTCG/Pokémon Trading Card Game Live' Pokemon\ TCG\ Live.exe"
