@@ -60,7 +60,7 @@ launch_wine() {
 # Aliases for Wine prefixes.
 alias wine-64="WINEPREFIX=$HOME/.wine64 WINEDEBUG=-all"
 alias wine-32="WINEPREFIX=$HOME/.wine32 WINEDEBUG=-all"
-alias wine-hoist="WINEPREFIX=$HOME/.winehoi WINEDEBUG=-all"
+alias wine-hoi="WINEPREFIX=$HOME/.winehoi WINEDEBUG=-all"
 alias wine-dwu="WINEPREFIX=$HOME/.winedwu WINEDEBUG=-all"
 
 # Reason 4.
