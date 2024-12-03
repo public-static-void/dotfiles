@@ -80,6 +80,9 @@ add_to_path "$GOPATH/bin"
 COMPOSER_HOME="$HOME/.config/composer/vendor/bin"
 add_to_path "$COMPOSER_HOME"
 
+# Load NVM.
+source /usr/share/nvm/init-nvm.sh
+
 # Enable colors for ls.
 LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS
 
