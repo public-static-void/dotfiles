@@ -87,7 +87,7 @@ alias hoi2mds="wine-64 launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/Mo
 
 # HoI3 Black Ice.
 for i in {7..12}; do
-    alias "hoi3bi$i"="wine-hoi launch_wine '\$HOME/.winehoi/drive_c/GOG Games/hoi3bi$i/' launcher.exe"
+    alias "hoi3bi$i"="wine-hoi launch_wine '$HOME/.winehoi/drive_c/GOG Games/hoi3bi$i/' launcher.exe"
 done
 
 # Europa Universalis 3.
