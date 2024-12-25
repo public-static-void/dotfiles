@@ -310,7 +310,7 @@ return lazy.setup({
 		lazy = true,
 	},
 	{
-		"NvChad/nvim-colorizer.lua",
+		"brenoprata10/nvim-highlight-colors",
 		lazy = true,
 	},
 	{
