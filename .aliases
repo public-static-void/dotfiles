@@ -160,3 +160,12 @@ alias ptcgl="wine-64 launch_wine '$HOME/.wine64/drive_c/Program Files (x86)/Poke
 
 # ToEE.
 alias toee="wine-64 launch_wine '$HOME/.wine64/drive_c/GOG Games/Temple of Elemental Evil' Launch\ Temple\ of\ Elemental\ Evil.lnk"
+
+# Icewind Dale 2.
+alias iwd1="wine-64 launch_wine '$HOME/.wine64/drive_c/GOG Games/Icewind Dale Enhanced Edition' Launch\ Icewind\ Dale\ -\ Enhanced\ Edition.lnk"
+
+# Icewind Dale 2.
+alias iwd2="wine-64 launch_wine '$HOME/.wine64/drive_c/GOG Games/Icewind Dale 2' Launch\ Icewind\ Dale\ 2.lnk"
+
+# Planescape Torment.
+alias pst="wine-64 launch_wine '$HOME/.wine64/drive_c/GOG Games/Planescape Torment - Enhanced Edition/' Launch\ Planescape\ -\ Torment\ Enhanced\ Edition.lnk"
