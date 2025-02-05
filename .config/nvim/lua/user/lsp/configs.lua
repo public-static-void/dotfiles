@@ -42,7 +42,7 @@ local servers = {
 	"jsonls",
 	"kotlin_language_server",
 	"lemminx",
-	"ltex",
+	-- "ltex",
 	"lua_ls",
 	"marksman",
 	"omnisharp",
