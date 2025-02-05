@@ -200,6 +200,8 @@ return lazy.setup({
 			"f3fora/cmp-spell",
 			-- nvim-cmp source for nvim-dap REPL and nvim-dap-ui buffers
 			"rcarriga/cmp-dap",
+			-- llm cmp
+			"tzachar/cmp-ai",
 		},
 	},
 	-- Copilot
@@ -216,6 +218,15 @@ return lazy.setup({
 				enable_chat = true,
 			})
 		end,
+	},
+	{
+		"David-Kunz/gen.nvim",
+		lazy = false,
+	},
+	{
+		"tzachar/cmp-ai",
+		dependencies = "nvim-lua/plenary.nvim",
+		lazy = false,
 	},
 
 	-- debugger

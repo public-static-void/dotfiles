@@ -68,6 +68,7 @@ local kind_icons = {
 	Operator = "",
 	TypeParameter = "",
 	Codeium = "",
+	Ollama = "",
 }
 -- find more here: https://www.nerdfonts.com/cheat-sheet
 
@@ -137,6 +138,7 @@ cmp.setup({
 			vim_item.kind = string.format("%s", kind_icons[vim_item.kind])
 			-- vim_item.kind = string.format('%s %s', kind_icons[vim_item.kind], vim_item.kind) -- This concatenates the icons with the name of the item kind
 			vim_item.menu = ({
+				cmp_ai = "[Ollama]",
 				codeium = "[Codeium]",
 				nvim_lsp = "[LSP]",
 				nvim_lua = "[NVIM_LUA]",
@@ -149,6 +151,7 @@ cmp.setup({
 		end,
 	},
 	sources = {
+		{ name = "cmp_ai" },
 		{ name = "codeium" },
 		{ name = "nvim_lsp" },
 		{ name = "nvim_lua" },
