@@ -169,3 +169,6 @@ alias iwd2="wine-64 launch_wine '$HOME/.wine64/drive_c/GOG Games/Icewind Dale 2'
 
 # Planescape Torment.
 alias pst="wine-64 launch_wine '$HOME/.wine64/drive_c/GOG Games/Planescape Torment - Enhanced Edition/' Launch\ Planescape\ -\ Torment\ Enhanced\ Edition.lnk"
+
+# RevoWinter.
+alias rwo="wine-64 launch_wine '$HOME/.wine64/drive_c/Games/RevoWinter' Run\ \(English\).exe"
