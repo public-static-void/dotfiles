@@ -150,16 +150,23 @@ cmp.setup({
 			return vim_item
 		end,
 	},
-	sources = {
-		{ name = "cmp_ai" },
-		{ name = "codeium" },
-		{ name = "nvim_lsp" },
-		{ name = "nvim_lua" },
-		{ name = "luasnip" },
-		{ name = "buffer" },
-		{ name = "path" },
-		{ name = "spell" },
-	},
+	sources = (function()
+		local default_sources = {
+			{ name = "codeium" },
+			{ name = "nvim_lsp" },
+			{ name = "nvim_lua" },
+			{ name = "luasnip" },
+			{ name = "buffer" },
+			{ name = "path" },
+			{ name = "spell" },
+		}
+
+		if utils.is_ollama_available() then
+			table.insert(default_sources, 1, { name = "cmp_ai" })
+		end
+
+		return default_sources
+	end)(),
 	confirm_opts = {
 		behavior = cmp.ConfirmBehavior.Replace,
 		select = false,
