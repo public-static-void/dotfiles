@@ -114,13 +114,13 @@ update_count = len(updates)
 #
 
 if update_count == 0:
-    info = ' ' + str(update_count)
+    info = '󰇚 ' + str(update_count)
     print(message.format(args.base_color, info))
 elif update_count < 30:
-    info = ' ' + str(update_count)
+    info = '󰇚 ' + str(update_count)
     print(message.format(args.updates_available_color, info))
 else:
-    info = ' ' + str(update_count)
+    info = '󰇚 ' + str(update_count)
     print(message.format("#FF0000", info))
 
 #
