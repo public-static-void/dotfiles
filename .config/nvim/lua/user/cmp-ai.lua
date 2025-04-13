@@ -5,35 +5,50 @@ if not cmp_ai then
 	return
 end
 
+-- Shared prompt template generator
+local function generate_prompt(template, lines_before, lines_after)
+	local file_type = vim.bo.filetype
+	return string.format(template, file_type, lines_before, lines_after)
+end
+
+-- Shared options for models
+local default_options = {
+	num_predict = 2048,
+	temperature = 0.7,
+	top_p = 0.95,
+	repeat_penalty = 1.1,
+	timeout = 30000,
+	stream = true,
+}
+
+-- Stop sequences for different models
+local stop_sequences = {
+	default = { "<|endoftext|>" },
+	code_completion = { "[Your code here]", "<|endoftext|>" },
+	fim_prefix = { "<|fim_prefix|>", "<|fim_suffix|>", "<|fim_middle|>", "<|file_separator|>" },
+}
+
+-- Model-specific configurations
 local model_configs = {
-	["codegemma:2b"] = {
+	["codellama:34b-code"] = {
 		prompt = function(lines_before, lines_after)
-			local file_type = vim.bo.filetype
-			return string.format(
+			return generate_prompt(
 				[[
 I am an expert %s programmer. Complete the following code, focusing on best practices, efficiency, and readability:
 
 <|fim_prefix|>%s<|fim_suffix|>%s<|fim_middle|>
 ]],
-				file_type,
 				lines_before,
 				lines_after
 			)
 		end,
-		options = {
-			num_predict = 1024,
-			temperature = 0.8,
-			top_p = 0.95,
-			repeat_penalty = 1,
-			timeout = 30000,
-			stop = { "<|fim_prefix|>", "<|fim_suffix|>", "<|fim_middle|>", "<|file_separator|>" },
-			stream = true,
-		},
+		options = vim.tbl_extend("keep", default_options, {
+			stop = stop_sequences.fim_prefix,
+		}),
 	},
-	["codellama:7b-code"] = {
+	["codellama:13b-code"] = {
 		prompt = function(lines_before, lines_after)
-			local file_type = vim.bo.filetype
-			return string.format(
+			return generate_prompt(
 				[[
 As an expert %s programmer, complete the following code with a focus on best practices, efficiency, and readability:
 
@@ -43,50 +58,148 @@ As an expert %s programmer, complete the following code with a focus on best pra
 
 Provide a completion that seamlessly integrates with the existing code.
 ]],
-				file_type,
 				lines_before,
 				lines_after
 			)
 		end,
-		options = {
-			num_predict = 2048,
-			temperature = 0.7,
-			top_p = 0.95,
-			repeat_penalty = 1.1,
-			timeout = 30000,
-			stop = { "[Your code here]", "<|endoftext|>" },
-			stream = true,
-		},
+		options = vim.tbl_extend("keep", default_options, {
+			temperature = 0.75,
+			top_p = 0.9,
+			stop = stop_sequences.code_completion,
+		}),
 	},
-	["qwen2.5-coder:7b-base-q6_K"] = {
+	["codellama:34b"] = {
 		prompt = function(lines_before, lines_after)
-			local file_type = vim.bo.filetype
-			return string.format(
+			return generate_prompt(
 				[[
-You are an expert %s programmer. Complete the following code, emphasizing best practices, efficiency, and clear, maintainable code:
+You are an expert %s programmer. Complete the following code:
 
-START_CODE
 %s
-[COMPLETION]
 %s
-END_CODE
-
-Provide a completion that logically continues the existing code and adheres to %s coding standards.
 ]],
-				file_type,
 				lines_before,
-				lines_after,
-				file_type
+				lines_after
 			)
 		end,
-		options = {
-			num_predict = 256,
-			temperature = 0.2,
-			top_p = 0.95,
-			timeout = 30000,
-			stop = { "END_CODE" },
-			stream = true,
-		},
+		options = vim.tbl_extend("keep", default_options, {
+			temperature = 0.6,
+			repeat_penalty = 1.2,
+			stop = stop_sequences.default,
+		}),
+	},
+	["codellama:13b"] = {
+		prompt = function(lines_before, lines_after)
+			return generate_prompt(
+				[[
+As an expert %s programmer, complete the following code:
+
+%s
+%s
+]],
+				lines_before,
+				lines_after
+			)
+		end,
+		options = vim.tbl_extend("keep", default_options, {
+			temperature = 0.65,
+			stop = stop_sequences.default,
+		}),
+	},
+	["codellama:7b-code"] = {
+		prompt = function(lines_before, lines_after)
+			return generate_prompt(
+				[[
+As an expert %s programmer, complete the following code with a focus on best practices, efficiency, and readability:
+
+%s
+[Your code here]
+%s
+
+Provide a completion that seamlessly integrates with the existing code.
+]],
+				lines_before,
+				lines_after
+			)
+		end,
+		options = vim.tbl_extend("keep", default_options, {
+			stop = stop_sequences.code_completion,
+		}),
+	},
+	["llama3:latest"] = {
+		prompt = function(lines_before, lines_after)
+			return generate_prompt(
+				[[
+You are an expert %s programmer. Complete the following code:
+
+%s
+%s
+]],
+				lines_before,
+				lines_after
+			)
+		end,
+		options = vim.tbl_extend("keep", default_options, {
+			temperature = 0.5,
+			repeat_penalty = 1.2,
+			stop = stop_sequences.default,
+		}),
+	},
+	["llama3:8b"] = {
+		prompt = function(lines_before, lines_after)
+			return generate_prompt(
+				[[
+You are an expert %s programmer. Complete the following code:
+
+%s
+%s
+]],
+				lines_before,
+				lines_after
+			)
+		end,
+		options = vim.tbl_extend("keep", default_options, {
+			temperature = 0.6,
+			repeat_penalty = 1.2,
+			stop = stop_sequences.default,
+		}),
+	},
+	["deepseek-coder:6.7b-base"] = {
+		prompt = function(lines_before, lines_after)
+			return generate_prompt(
+				[[
+You are an expert %s programmer. Complete the following code:
+
+%s
+%s
+]],
+				lines_before,
+				lines_after
+			)
+		end,
+		options = vim.tbl_extend("keep", default_options, {
+			temperature = 0.65,
+			repeat_penalty = 1.2,
+			stop = stop_sequences.default,
+		}),
+	},
+	["codellama:latest"] = {
+		prompt = function(lines_before, lines_after)
+			return generate_prompt(
+				[[
+You are an expert %s programmer. Complete the following code:
+
+%s
+%s
+]],
+				lines_before,
+				lines_after
+			)
+		end,
+		options = vim.tbl_extend("keep", default_options, {
+			temperature = 0.5,
+			repeat_penalty = 1.2,
+			stop = stop_sequences.default,
+		}),
 	},
 }
 
@@ -99,11 +212,7 @@ local function setup_cmp_ai(model)
 		notify_callback = function(msg)
 			vim.notify(msg, vim.log.levels.DEBUG)
 		end,
-		ignored_file_types = {
-			-- default is not to ignore
-			-- uncomment to ignore in lua:
-			-- lua = true
-		},
+		ignored_file_types = {},
 		provider_options = {
 			model = model,
 			auto_unload = true,

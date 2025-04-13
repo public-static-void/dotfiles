@@ -131,32 +131,9 @@ return lazy.setup({
 			"nvimtools/none-ls.nvim",
 		},
 	},
-	{
-		"mfussenegger/nvim-jdtls",
-		lazy = true,
-	},
 	-- java lsp
 	{
 		"nvim-java/nvim-java",
-		dependencies = {
-			"nvim-java/lua-async-await",
-			"nvim-java/nvim-java-refactor",
-			"nvim-java/nvim-java-core",
-			"nvim-java/nvim-java-test",
-			"nvim-java/nvim-java-dap",
-			"MunifTanjim/nui.nvim",
-			"neovim/nvim-lspconfig",
-			"mfussenegger/nvim-dap",
-			{
-				"williamboman/mason.nvim",
-				opts = {
-					registries = {
-						"github:nvim-java/mason-registry",
-						"github:mason-org/mason-registry",
-					},
-				},
-			},
-		},
 	},
 	-- Rust
 	{
@@ -165,104 +142,82 @@ return lazy.setup({
 		lazy = false, -- This plugin is already lazy
 	},
 
-	-- snippets
+	-- Snippet engine
 	{
-		-- snippet engine
 		"L3MON4D3/LuaSnip",
-		-- follow latest release.
-		version = "v2.*", -- Replace <CurrentMajor> by the latest released major (first number of latest release)
-		-- install jsregexp (optional!).
+		version = "v2.*",
 		build = "make install_jsregexp",
-		lazy = true,
-		dependencies = {
-			-- a bunch of snippets to use
-			"rafamadriz/friendly-snippets",
-		},
+		dependencies = { "rafamadriz/friendly-snippets" },
+		config = function()
+			require("luasnip.loaders.from_vscode").lazy_load()
+			require("luasnip").filetype_extend("blade", { "html" })
+		end,
+		event = "VeryLazy",
 	},
 
-	-- completion
+	-- Core completion
 	{
-		-- The completion plugin
 		"hrsh7th/nvim-cmp",
-		lazy = true,
 		event = { "InsertEnter", "CmdlineEnter" },
 		dependencies = {
-			-- buffer completions
 			"hrsh7th/cmp-buffer",
-			-- path completions
 			"hrsh7th/cmp-path",
-			-- cmdline completions
 			"hrsh7th/cmp-cmdline",
-			-- snippet completions
 			"saadparwaiz1/cmp_luasnip",
 			"hrsh7th/cmp-nvim-lsp",
 			"hrsh7th/cmp-nvim-lua",
 			"f3fora/cmp-spell",
-			-- nvim-cmp source for nvim-dap REPL and nvim-dap-ui buffers
-			"rcarriga/cmp-dap",
-			-- llm cmp
-			"tzachar/cmp-ai",
+			{
+				"rcarriga/cmp-dap",
+				ft = { "dap-repl", "dapui_watches", "dapui_hover" },
+			},
 		},
 	},
-	-- Copilot
+
+	-- AI
 	{
-		-- "aliaksandr-trush/codeium.nvim",
-		-- branch = "update_server_version",
+		"David-Kunz/gen.nvim",
+		lazy = false,
+	},
+	-- {
+	-- 	"tzachar/cmp-ai",
+	-- 	dependencies = "nvim-lua/plenary.nvim",
+	-- 	lazy = false,
+	-- },
+
+	-- Codeium
+	{
 		"Exafunction/codeium.nvim",
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 			"hrsh7th/nvim-cmp",
 		},
 		config = function()
-			require("codeium").setup({
-				enable_chat = true,
-			})
+			vim.schedule(function()
+				require("codeium").setup({
+					enable_chat = true,
+					enable_cmp = true,
+					config_path = vim.fn.stdpath("data") .. "/codeium/config.json",
+				})
+			end)
 		end,
-	},
-	{
-		"David-Kunz/gen.nvim",
-		lazy = false,
-	},
-	{
-		"tzachar/cmp-ai",
-		dependencies = "nvim-lua/plenary.nvim",
-		lazy = false,
+		event = "VeryLazy",
 	},
 
-	-- debugger
+	-- Debugging
 	{
 		"mfussenegger/nvim-dap",
-		cmd = { "DapContinue", "DapToggleBreakpoint" },
-		lazy = true,
-	},
-	{
-		"rcarriga/nvim-dap-ui",
-		dependencies = { "mfussenegger/nvim-dap", "nvim-neotest/nvim-nio" },
-	},
-	{
-		"ravenxrz/DAPInstall.nvim",
-		lazy = true,
-	},
-	{
-		"jay-babu/mason-nvim-dap.nvim",
-		lazy = true,
-	},
-	{
-		"mxsdev/nvim-dap-vscode-js",
-		lazy = true,
-	},
-	{
-		"microsoft/vscode-js-debug",
-		version = "1.x",
-		build = "npm install --legacy-peer-deps && npx gulp vsDebugServerBundle && mv dist out && git restore .",
-	},
-	{
-		"leoluz/nvim-dap-go",
-		lazy = true,
-	},
-	{
-		"mfussenegger/nvim-dap-python",
-		lazy = true,
+		event = "VeryLazy",
+		dependencies = {
+			"rcarriga/nvim-dap-ui",
+			"nvim-neotest/nvim-nio",
+			"jay-babu/mason-nvim-dap.nvim",
+			"theHamsta/nvim-dap-virtual-text",
+			"leoluz/nvim-dap-go",
+			"mfussenegger/nvim-dap-python",
+			"jbyuki/one-small-step-for-vimkind",
+			"simrat39/rust-tools.nvim",
+		},
 	},
 
 	-- Telescope
@@ -363,9 +318,7 @@ return lazy.setup({
 		version = "*", -- Use for stability; omit to use `main` branch for the latest features
 		event = "VeryLazy",
 		config = function()
-			require("nvim-surround").setup({
-				-- Configuration here, or leave empty to use defaults
-			})
+			require("nvim-surround").setup({})
 		end,
 	},
 	{

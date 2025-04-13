@@ -1,6 +1,6 @@
 local utils = require("user.utils")
 
-local lspconfig = pcall(require, "lspconfig")
+local lspconfig = utils.safe_require("lspconfig")
 if not lspconfig then
 	return
 end

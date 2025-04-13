@@ -21,6 +21,8 @@ local servers = {
 	"ktlint",
 	"markuplint",
 	"mypy",
+  "pint",
+  -- "php-cs-fixer",
 	"prettier",
 	"shellcheck",
 	"shfmt",
@@ -31,6 +33,7 @@ local servers = {
 
 mason_null_ls.setup({
 	ensure_installed = servers,
+  -- automatically_install = true,
 })
 
 -- Setup Null-LS with formatting and diagnostics sources
@@ -53,6 +56,7 @@ null_ls.setup({
 		null_ls.builtins.formatting.prettier,
 		null_ls.builtins.formatting.ktlint,
 		null_ls.builtins.formatting.blade_formatter,
+		null_ls.builtins.formatting.pint,
 		null_ls.builtins.formatting.stylua,
 		null_ls.builtins.formatting.isort,
 		null_ls.builtins.formatting.shfmt,

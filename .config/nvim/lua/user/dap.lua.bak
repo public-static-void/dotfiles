@@ -89,6 +89,7 @@ local adapters = {
 
 mason_dap.setup({
 	ensure_installed = adapters,
+	automatic_installation = true,
 })
 
 dap_install.setup({

@@ -1,22 +1,23 @@
 local utils = require("user.utils")
 
+-- Initialize Java setup first
 local java = utils.safe_require("java")
-if not java then
-	return
+if java then
+	java.setup({})
 end
 
-local lsp_installer = utils.safe_require("mason")
-if not lsp_installer then
+-- Ensure Mason is available
+local mason_ok, mason = pcall(require, "mason")
+if not mason_ok then
+	vim.notify("mason.nvim not available", vim.log.levels.WARN)
 	return
 end
+mason.setup({})
 
-local lsp_config = utils.safe_require("mason-lspconfig")
-if not lsp_config then
-	return
-end
-
-local lspconfig = utils.safe_require("lspconfig")
-if not lspconfig then
+-- Setup mason-lspconfig
+local mason_lsp_ok, mason_lsp = pcall(require, "mason-lspconfig")
+if not mason_lsp_ok then
+	vim.notify("mason-lspconfig.nvim not available", vim.log.levels.WARN)
 	return
 end
 
@@ -42,7 +43,7 @@ local servers = {
 	"jsonls",
 	"kotlin_language_server",
 	"lemminx",
-	-- "ltex",
+	"ltex",
 	"lua_ls",
 	"marksman",
 	"omnisharp",
@@ -67,38 +68,39 @@ local servers = {
 	"zls",
 }
 
--- Setup Java language server
-java.setup({})
-
--- Setup Mason
-lsp_installer.setup({})
-
--- Ensure specified language servers are installed
-lsp_config.setup({
+-- Setup mason-lspconfig
+mason_lsp.setup({
 	ensure_installed = servers,
 })
 
--- Common options for all LSP servers
+-- Get common options safely
+local handlers_ok, handlers = pcall(require, "user.lsp.handlers")
+if not handlers_ok then
+	vim.notify("Failed to load LSP handlers", vim.log.levels.ERROR)
+	return
+end
+
 local common_opts = {
-	on_attach = require("user.lsp.handlers").on_attach,
-	capabilities = require("user.lsp.handlers").capabilities,
+	on_attach = handlers.on_attach,
+	capabilities = handlers.capabilities,
 }
 
--- Setup each server with custom options if available
+-- Setup each server with proper error handling
 for _, server in ipairs(servers) do
-	local opts = vim.tbl_deep_extend("force", {}, common_opts)
+	local server_opts = vim.deepcopy(common_opts) -- Start with fresh copy
 
-	local has_custom_opts, server_custom_opts = pcall(require, "user.lsp.settings." .. server)
-	if has_custom_opts then
-		opts = vim.tbl_deep_extend("force", opts, server_custom_opts)
+	-- Try to load custom settings
+	local custom_opts_ok, custom_opts = pcall(require, "user.lsp.settings." .. server)
+	if custom_opts_ok and type(custom_opts) == "table" then
+		server_opts = vim.tbl_deep_extend("force", server_opts, custom_opts)
 	end
 
-	-- Safely setup the server with options
-	local setup_status_ok, setup_error = pcall(function()
-		lspconfig[server].setup(opts)
-	end)
-
-	if not setup_status_ok then
-		vim.notify(string.format("Failed to setup %s: %s", server, setup_error), vim.log.levels.ERROR)
+	-- Safely setup server
+	local lspconfig_ok, lspconfig = pcall(require, "lspconfig")
+	if lspconfig_ok and lspconfig[server] then
+		local status_ok, err = pcall(lspconfig[server].setup, server_opts)
+		if not status_ok then
+			vim.notify(string.format("Failed to setup %s: %s", server, err), vim.log.levels.ERROR)
+		end
 	end
 end
