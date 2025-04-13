@@ -35,65 +35,69 @@ export KEYTIMEOUT=1
 # ENVIRONMENT VARIABLES #
 #########################
 
-# Function to add directories to PATH if they exist and are not already included.
-add_to_path() {
-    local dir="$1"
-    [[ -d $dir && ":$PATH:" != *":$dir:"* ]] && PATH="${PATH}:$dir"
-}
+# Initialize PATH array with unique entries
+typeset -U PATH path
+path=()
 
-# Keeps the entries in PATH unique (due to mirroring).
-typeset -aU path
+# Core system paths (essential utilities first)
+path=(
+    /usr/bin
+    /bin
+    /usr/local/bin
+    /usr/sbin
+    /sbin
+    ${path}
+)
 
-# direnv.
-eval "$(direnv hook zsh)"
+# Load NVM early but after system paths
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 2>/dev/null
 
-# Add custom scripts folder to PATH.
-add_to_path "$HOME/scripts"
+# Node.js paths (only if NVM loaded successfully)
+if command -v nvm &>/dev/null; then
+    path=(
+        "$NVM_DIR/versions/node/$(nvm version default)/bin"
+        ${path}
+    )
+fi
 
-# Add custom bin folder to PATH.
-add_to_path "$HOME/.local/bin"
+# Other tool paths
+path=(
+    "$HOME/.pyenv/bin"
+    "$HOME/perl5/bin"
+    "$HOME/.local/bin"
+    "$HOME/scripts"
+    "$HOME/.cargo/bin"
+    "$HOME/go/bin"
+    "$HOME/.config/composer/vendor/bin"
+    "$HOME/.gem/ruby/*/bin"(N)
+    ${path}
+)
 
-# PyEnv.
-PYENV_ROOT="$HOME/.pyenv"
-add_to_path "$PYENV_ROOT"
-eval "$(pyenv init --path)"
-eval "$(pyenv init -)"
+# Angular CLI (only if npm is available)
+if command -v npm &>/dev/null; then
+    path+=("$(npm root -g)/@angular/cli/bin")
+fi
 
-# Java path.
-JAVA_HOME="/usr/lib/jvm/default"
-add_to_path "$JAVA_HOME"
+# Perl (local::lib)
+eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)" 2>/dev/null
 
-# Ruby path.
-GEM_HOME="$(gem env user_gemhome)"
-add_to_path "$GEM_HOME"
-add_to_path "$GEM_HOME/bin"
+# pyenv
+export PYENV_ROOT="$HOME/.pyenv"
+command -v pyenv &>/dev/null && eval "$(pyenv init --path)"
+command -v pyenv &>/dev/null && eval "$(pyenv init -)"
 
-# Perl path.
-eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib)"
+# direnv
+command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
 
-# Go path.
-GOPATH="$(go env GOPATH)"
-add_to_path "$GOPATH"
-add_to_path "$GOPATH/bin"
+# Java
+[ -d "/usr/lib/jvm/default" ] && export JAVA_HOME="/usr/lib/jvm/default"
 
-# Composer path.
-COMPOSER_HOME="$HOME/.config/composer/vendor/bin"
-add_to_path "$COMPOSER_HOME"
-
-# Load NVM.
-source /usr/share/nvm/init-nvm.sh
-
-# Enable colors for ls.
-LS_COLORS=$LS_COLORS:'di=0;36:'; export LS_COLORS
-
-# Preferred editor for local and remote sessions.
-export EDITOR="${SSH_CONNECTION:+vim}" || nvim
-
-# Use neovim to view manpages.
-export MANPAGER="nvim +Man!"
-
-# Export the PATH-variable.
+# Exports
 export PATH
+export EDITOR="${SSH_CONNECTION:+vim}" || nvim
+export MANPAGER="nvim +Man!"
+export LS_COLORS="${LS_COLORS}:di=0;36:"
 
 #############
 # AUTOSTART #
@@ -296,16 +300,30 @@ bindkey -a "^[[8~" end-of-line
 # Load plugins (should be last).
 
 # Load zsh-syntax-highlighting.
-[[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]] && source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+if [[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+elif [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
+    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+fi
 
-# Also load autosuggestions.
-[[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]] && source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+# Load zsh-autosuggestions.
+if [[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+elif [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
+    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+fi
 
-# Load Angular CLI autocompletion.
-source <(ng completion script)
+# Angular CLI completion (only if installed).
+if command -v ng &>/dev/null; then
+    source <(ng completion script)
+fi
 
 # Load Powerlevel10k prompt theme.
-[[ -f /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme ]] && source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+if [[ -f /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme ]]; then
+    source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+elif [[ -f ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ]]; then
+    source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
