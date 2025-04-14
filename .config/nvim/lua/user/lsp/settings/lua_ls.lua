@@ -1,48 +1,46 @@
--- lua/user/lsp/settings/lua_ls.lua
-local lspconfig = require('lspconfig')
+-- lua/user/lsp_settings/lua_ls.lua
 
--- 1. Force Neovim config as the ONLY workspace
-local config_path = vim.fn.stdpath('config')
-local runtime_path = vim.env.VIMRUNTIME
+local config_path = vim.fn.stdpath("config") -- Neovim config path (~/.config/nvim)
+local runtime_path = vim.api.nvim_get_runtime_file("", true) -- Neovim runtime files
 
--- 2. Completely disable workspace scanning
-local function get_root_dir()
-  return config_path -- Always force config directory
-end
+return {
+	settings = {
+		Lua = {
+			runtime = {
+				version = "LuaJIT", -- Neovim uses LuaJIT
+				path = vim.split(package.path, ";"), -- Include standard Lua paths
+			},
+			diagnostics = {
+				globals = { "vim" }, -- Recognize `vim` as a global variable
+			},
+			workspace = {
+				library = {
+					runtime_path, -- Include Neovim runtime files
+					config_path .. "/lua", -- Include your Neovim configuration directory
+				},
+				checkThirdParty = false, -- Disable third-party library scanning for speed
+			},
+			telemetry = {
+				enable = false, -- Disable telemetry for privacy and performance
+			},
+		},
+	},
 
--- 3. Minimal required settings
-lspconfig.lua_ls.setup({
-  root_dir = get_root_dir,
-  single_file_support = false, -- CRITICAL for config files
+	on_init = function(client)
+		local workspace_folders = client.workspace_folders or {}
+		local root_dir = workspace_folders[1] and workspace_folders[1].name or config_path
 
-  settings = {
-    Lua = {
-      runtime = {
-        version = 'LuaJIT',
-        path = {
-          config_path..'/lua/?.lua',
-          config_path..'/lua/?/init.lua',
-          runtime_path..'/lua/?.lua',
-          runtime_path..'/lua/?/init.lua',
-        }
-      },
-      workspace = {
-        library = {
-          runtime_path..'/lua', -- Neovim runtime
-          config_path..'/lua'   -- Your config
-        },
-        -- Prevent all automatic scanning
-        checkThirdParty = false,
-        ignoreSubmodules = true,
-        ignoreDir = { '/', '~', vim.env.HOME, '*' }, -- Block everything else
-        maxPreload = 30000,
-        preloadFileSize = 500
-      },
-      diagnostics = {
-        disable = { 'missing-fields' }, -- Reduce noise
-        globals = { 'vim' }
-      },
-      telemetry = { enable = false }
-    }
-  }
-})
+		-- Add support for resolving folders with an init.lua file
+		client.config.settings.Lua.runtime.path[#client.config.settings.Lua.runtime.path + 1] = "?.lua"
+		client.config.settings.Lua.runtime.path[#client.config.settings.Lua.runtime.path + 1] = "?/init.lua"
+
+		-- Ensure the library includes runtime files and config directory
+		client.config.settings.Lua.workspace.library =
+			vim.tbl_extend("force", client.config.settings.Lua.workspace.library or {}, {
+				runtime_path,
+				config_path .. "/lua",
+			})
+
+		client.notify("workspace/didChangeConfiguration")
+	end,
+}
