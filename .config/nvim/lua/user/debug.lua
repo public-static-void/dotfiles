@@ -47,6 +47,7 @@ local adapters = {
 	"delve",
 	"php-debug-adapter",
 	"js-debug-adapter",
+	"local-lua-debugger-vscode",
 }
 
 -- Auto-install missing adapters on startup using the adapter list
@@ -308,6 +309,33 @@ for _, language in ipairs(js_based_languages) do
 		},
 	}
 end
+
+-- Lua
+dap.adapters["local-lua"] = {
+	type = "executable",
+	command = "node",
+	args = {
+		vim.fn.stdpath("data") .. "/mason/packages/local-lua-debugger-vscode/extension/extension/debugAdapter.js",
+	},
+	enrich_config = function(config, on_config)
+		config.extensionPath = vim.fn.stdpath("data") .. "/mason/packages/local-lua-debugger-vscode/extension"
+		on_config(config)
+	end,
+}
+dap.configurations.lua = {
+	{
+		type = "local-lua",
+		request = "launch",
+		name = "Launch current file",
+		program = {
+			lua = "luajit",
+			file = "${file}",
+		},
+		cwd = "${workspaceFolder}",
+		runtimeExecutable = "luajit",
+		args = {},
+	},
+}
 
 -- Dap UI
 

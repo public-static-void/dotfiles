@@ -215,7 +215,6 @@ return lazy.setup({
 			"theHamsta/nvim-dap-virtual-text",
 			"leoluz/nvim-dap-go",
 			"mfussenegger/nvim-dap-python",
-			"jbyuki/one-small-step-for-vimkind",
 			"simrat39/rust-tools.nvim",
 		},
 	},
