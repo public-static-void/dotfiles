@@ -321,8 +321,8 @@ fi
 # Load Powerlevel10k prompt theme.
 if [[ -f /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme ]]; then
     source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
-elif [[ -f ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme ]]; then
-    source ~/.oh-my-zsh/custom/themes/powerlevel10k/powerlevel10k.zsh-theme
+elif [[ -f ~/.powerlevel10k/powerlevel10k.zsh-theme ]]; then
+    source ~/.powerlevel10k/powerlevel10k.zsh-theme
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
