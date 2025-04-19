@@ -14,7 +14,7 @@ Features:
 Environment Variables:
 DEFAULT_COLOR       : Fallback color (default: #D4CFC9)
 ACTIVE_COLOR        : Active key color (default: #9FE8C2)
-INACTIVE_COLOR      : Inactive key color (default: #455054)
+INACTIVE_COLOR      : Inactive key color (default: #1e1e1e)
 ACTIVE_ICON_CAPS    : CapsLock active icon (default: 󰘲)
 INACTIVE_ICON_CAPS  : CapsLock inactive icon (default: )
 ACTIVE_ICON_NUM     : NumLock active icon (default: 󰌆)
@@ -28,12 +28,12 @@ Output Format:
 set -euo pipefail
 
 DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
-ACTIVE_COLOR="${ACTIVE_COLOR:-#9FE8C2}"
-INACTIVE_COLOR="${INACTIVE_COLOR:-#455054}"
-ACTIVE_ICON_CAPS="󰘲"
-INACTIVE_ICON_CAPS=""
-ACTIVE_ICON_NUM="󰌆"
-INACTIVE_ICON_NUM="󰍁"
+ACTIVE_COLOR="${OK_COLOR:-#9FE8C2}"
+INACTIVE_COLOR="${INACTIVE_COLOR:-#1e1e1e}"
+ACTIVE_ICON_CAPS="󰧇"
+INACTIVE_ICON_CAPS="󰦿"
+ACTIVE_ICON_NUM="󰧇"
+INACTIVE_ICON_NUM="󰦿"
 
 : '
 get_state key_type

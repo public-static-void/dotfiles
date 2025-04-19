@@ -6,11 +6,11 @@
 # GLOBAL PROPERTIES #
 #####################
 
-DEFAULT_COLOR=#D4CFC9
-OK_COLOR=#9FE8C2
-MID_COLOR=#FFFEB3
-WARNING_COLOR=#D45769
-CRITICAL_COLOR=#FB2E01
+DEFAULT_COLOR=#d4d4d4
+OK_COLOR=#b5cea8
+MID_COLOR=#dcdcaa
+WARNING_COLOR=#ce9178
+CRITICAL_COLOR=#f14c4c
 command=~/.config/i3blocks/scripts/$BLOCK_NAME/$BLOCK_NAME
 markup=pango
 separator_block_width=15
@@ -23,13 +23,13 @@ separator=false
 # BLOCKLETS #
 #############
 
+[separator]
+
 [temperature]
 interval=10
 
 [load]
 interval=30
-
-[separator]
 
 [memory]
 interval=30

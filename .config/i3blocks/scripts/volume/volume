@@ -24,7 +24,7 @@ Environment variables:
   MID_COLOR       - Volume 50-75% (default: #FFFEB3)
   WARNING_COLOR   - Volume 75-90% (default: #D45769)
   CRITICAL_COLOR  - Volume ≥90% (default: #FB2E01)
-  MUTED_COLOR     - Muted color (default: #455054)
+  MUTED_COLOR     - Muted color (default: #1e1e1e)
 '
 
 set -euo pipefail
@@ -34,7 +34,7 @@ OK_COLOR="${OK_COLOR:-#9FE8C2}"
 MID_COLOR="${MID_COLOR:-#FFFEB3}"
 WARNING_COLOR="${WARNING_COLOR:-#D45769}"
 CRITICAL_COLOR="${CRITICAL_COLOR:-#FB2E01}"
-MUTED_COLOR="${MUTED_COLOR:-#455054}"
+MUTED_COLOR="${MUTED_COLOR:-#1e1e1e}"
 
 AUDIO_HIGH_SYMBOL="󰕾"
 AUDIO_MED_SYMBOL="󰖀"

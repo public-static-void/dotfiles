@@ -204,7 +204,7 @@ bindsym $mod+Shift+t exec --no-startup-id telegram-desktop
 bindsym $mod+Shift+a exec --no-startup-id urxvt -e nvim ~/.config/i3/config
 
 # Open i3blocks config.
-bindsym $mod+Shift+y exec --no-startup-id urxvt -e nvim ~/.i3blocks.conf
+bindsym $mod+Shift+y exec --no-startup-id urxvt -e nvim ~/.config/i3blocks/config
 
 # Open Xdefaults.
 bindsym $mod+Shift+x exec --no-startup-id urxvt -e nvim ~/.Xdefaults
