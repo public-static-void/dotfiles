@@ -1,0 +1,99 @@
+#!/usr/bin/env bash
+
+: '
+=====================================================
+i3blocks CPU Temperature Block
+Monitors CPU temperature from multiple hardware sources.
+
+Features:
+- Multi-source temperature detection (hwmon/thermal/sensors)
+- Fail-safe fallback hierarchy
+- Color-coded temperature thresholds
+- Cross-platform compatibility
+
+Environment Variables:
+DEFAULT_COLOR    : Icon color (default: #D4CFC9)
+OK_COLOR         : <50°C (default: #9FE8C2)
+MID_COLOR        : 50-69°C (default: #FFFEB3)
+WARNING_COLOR    : 70-79°C (default: #D45769)
+CRITICAL_COLOR   : ≥80°C (default: #FB2E01)
+HIGH_TEMP        : Critical threshold (default: 80)
+
+Output Format:
+<icon> <temperature>°C (color-coded)
+=====================================================
+'
+
+set -euo pipefail
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+OK_COLOR="${OK_COLOR:-#9FE8C2}"
+MID_COLOR="${MID_COLOR:-#FFFEB3}"
+WARNING_COLOR="${WARNING_COLOR:-#D45769}"
+CRITICAL_COLOR="${CRITICAL_COLOR:-#FB2E01}"
+HIGH_TEMP="${HIGH_TEMP:-80}"
+
+: '
+get_temp
+Retrieves CPU temperature from multiple sources:
+1. Hardware monitoring interfaces (hwmon)
+2. Thermal zone interfaces
+3. sensors command fallback
+Returns:
+  Temperature in Celsius (integer)
+  0 if no valid temperature found
+'
+get_temp() {
+	# Ordered temperature source hierarchy
+	temp_sources=(
+		"/sys/devices/platform/coretemp.0/hwmon/hwmon*/temp*_input"
+		"/sys/class/hwmon/hwmon*/temp*_input"
+		"/sys/class/thermal/thermal_zone*/temp"
+	)
+
+	# Try hardware monitoring interfaces first
+	for source in "${temp_sources[@]}"; do
+		for file in $source; do
+			[[ -f "$file" ]] && {
+				temp=$(($(<"$file") / 1000))
+				[[ "$temp" -gt 0 ]] && echo "$temp" && return
+			}
+		done
+	done
+
+	# Fallback to sensors command if hardware interfaces fail
+	sensors 2>/dev/null | awk '
+    /Package|Tdie|Composite/ {
+        gsub(/[^0-9]/,"",$2)
+        if($2 > 0) print $2
+        exit
+    }' || echo "0"
+}
+
+: '
+main
+Main execution function:
+1. Retrieves CPU temperature
+2. Determines color based on thresholds
+3. Generates formatted output
+'
+main() {
+	# Get temperature from first available source
+	temp=$(get_temp)
+
+	# Color selection based on temperature thresholds
+	if ((temp >= HIGH_TEMP)); then
+		color="$CRITICAL_COLOR"
+	elif ((temp >= 70)); then
+		color="$WARNING_COLOR"
+	elif ((temp >= 50)); then
+		color="$MID_COLOR"
+	else
+		color="$OK_COLOR"
+	fi
+
+	# Generate i3blocks compatible output
+	echo -e "<span color='$DEFAULT_COLOR'></span> <span color='$color'>${temp}°C</span>"
+}
+
+main

@@ -1,0 +1,41 @@
+#!/usr/bin/env bash
+
+: '
+=====================================================
+i3blocks Clock Block
+Displays current time in 24-hour format with leading space.
+
+Features:
+- 24-hour format with leading space (replaces zero)
+- Icon color preservation
+- Simple time-only output
+- Locale-independent formatting
+
+Environment Variables:
+DEFAULT_COLOR : Icon/text color (default: #D4CFC9)
+TIME_ICON     : Display icon (default: )
+
+Output Format:
+<icon> HH:MM:SS (with leading space for single-digit hours)
+=====================================================
+'
+
+set -euo pipefail
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+TIME_ICON=""
+
+: '
+main
+Main execution function:
+- Generates 24-hour time string with leading space
+- Formats output with icon and color
+- Maintains locale-independent time formatting
+'
+main() {
+	# Generate time string with leading space instead of zero
+	formatted_time=$(date '+%k:%M:%S')
+	echo "<span color='$DEFAULT_COLOR'>$TIME_ICON $formatted_time</span>"
+}
+
+main

@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+: '
+=====================================================
+i3blocks Key Status Block
+Displays CapsLock/NumLock status with visual indicators.
+
+Features:
+- Dual state support (CapsLock/NumLock)
+- Customizable colors and icons
+- Immediate visual feedback for key states
+- X11-based status detection
+
+Environment Variables:
+DEFAULT_COLOR       : Fallback color (default: #D4CFC9)
+ACTIVE_COLOR        : Active key color (default: #9FE8C2)
+INACTIVE_COLOR      : Inactive key color (default: #455054)
+ACTIVE_ICON_CAPS    : CapsLock active icon (default: 󰘲)
+INACTIVE_ICON_CAPS  : CapsLock inactive icon (default: )
+ACTIVE_ICON_NUM     : NumLock active icon (default: 󰌆)
+INACTIVE_ICON_NUM   : NumLock inactive icon (default: 󰍁)
+
+Output Format:
+<icon> <label> (color-coded based on state)
+=====================================================
+'
+
+set -euo pipefail
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+ACTIVE_COLOR="${ACTIVE_COLOR:-#9FE8C2}"
+INACTIVE_COLOR="${INACTIVE_COLOR:-#455054}"
+ACTIVE_ICON_CAPS="󰘲"
+INACTIVE_ICON_CAPS=""
+ACTIVE_ICON_NUM="󰌆"
+INACTIVE_ICON_NUM="󰍁"
+
+: '
+get_state key_type
+Queries X server for lock key states
+Parameters:
+  key_type - CAPS or NUM to specify which key to check
+Returns:
+  "active" or "inactive" string based on current state
+'
+get_state() {
+	# Query X server for lock key states using efficient single call
+	xset q | awk -v target="$1" '
+    /Caps Lock:/   { caps=$4 }
+    /Num Lock:/    { num=$8 }
+    END {
+        if (target == "CAPS") print (caps == "on" ? "active" : "inactive")
+        if (target == "NUM")  print (num == "on" ? "active" : "inactive")
+    }'
+}
+
+: '
+display_state state
+Generates formatted output based on key state
+Parameters:
+  state - "active" or "inactive" string
+Uses environment variables:
+  BLOCK_LABEL - specifies which key is being displayed
+Returns:
+  Formatted HTML span element with icon and label
+'
+display_state() {
+	# Select appropriate color and icon based on state
+	case "$1" in
+	active)
+		color="$ACTIVE_COLOR"
+		icon="$([[ "$BLOCK_LABEL" == "CAPS" ]] && echo "$ACTIVE_ICON_CAPS" || echo "$ACTIVE_ICON_NUM")"
+		;;
+	inactive)
+		color="$INACTIVE_COLOR"
+		icon="$([[ "$BLOCK_LABEL" == "CAPS" ]] && echo "$INACTIVE_ICON_CAPS" || echo "$INACTIVE_ICON_NUM")"
+		;;
+	esac
+	echo "<span color='$color'>$icon $BLOCK_LABEL</span>"
+}
+
+: '
+Main execution flow:
+1. Get current key state from X server
+2. Generate formatted output based on state
+Note: Requires BLOCK_LABEL environment variable to be set
+'
+state=$(get_state "$BLOCK_LABEL")
+display_state "$state"

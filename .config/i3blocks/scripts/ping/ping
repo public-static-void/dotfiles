@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+
+: '
+=====================================================
+i3blocks Ping Monitoring Block
+Measures latency to Cloudflare DNS (1.1.1.1) with timeout.
+
+Features:
+- Single-packet ICMP measurement
+- Offline detection with critical status
+- Color-coded latency thresholds
+- Timeout-protected execution
+
+Environment Variables:
+DEFAULT_COLOR    : Icon color (default: #D4CFC9)
+OK_COLOR         : <150ms (default: #9FE8C2)
+MID_COLOR        : 150-299ms (default: #FFFEB3)
+CRITICAL_COLOR   : ≥300ms/offline (default: #FB2E01)
+PING_TARGET      : Ping target (default: 1.1.1.1)
+TIMEOUT          : Response timeout (default: 2)
+PING_ICON        : Status icon (default: 󰌘)
+
+Output Format:
+<icon> <latency> (color-coded)
+=====================================================
+'
+
+set -euo pipefail
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+OK_COLOR="${OK_COLOR:-#9FE8C2}"
+MID_COLOR="${MID_COLOR:-#FFFEB3}"
+CRITICAL_COLOR="${CRITICAL_COLOR:-#FB2E01}"
+PING_TARGET="${PING_TARGET:-1.1.1.1}"
+TIMEOUT="${TIMEOUT:-2}"
+PING_ICON="󰌘"
+
+: '
+get_latency
+Performs single-packet ping measurement.
+Returns latency in milliseconds as integer.
+Returns empty string on failure.
+'
+get_latency() {
+	# Use ping with timeout and parse output for time=XXX.ms
+	LC_ALL=C ping -c1 -W"$TIMEOUT" "$PING_TARGET" 2>/dev/null | awk '
+    /time=/ {
+        match($0, /time=([0-9]+\.?[0-9]*)/, arr)
+        if (arr[1] != "") {
+            printf "%.0f\n", arr[1]
+            exit
+        }
+    }'
+}
+
+: '
+main
+Main execution function:
+- Gets latency
+- Applies thresholds and colors
+- Prints formatted output or OFFLINE on failure
+'
+main() {
+	latency=$(get_latency || true)
+
+	# If latency is empty or zero, treat as offline
+	if [[ -z "$latency" ]] || [[ "$latency" == "0" ]]; then
+		latency=999
+	fi
+
+	# Determine color based on latency
+	if ((latency >= 300)); then
+		color="$CRITICAL_COLOR"
+	elif ((latency >= 150)); then
+		color="$MID_COLOR"
+	else
+		color="$OK_COLOR"
+	fi
+
+	# Prepare output text
+	if ((latency >= 999)); then
+		text="OFFLINE"
+		color="$CRITICAL_COLOR"
+	else
+		text="${latency}ms"
+	fi
+
+	echo "<span color='$DEFAULT_COLOR'>$PING_ICON</span> <span color='$color'>$text</span>"
+}
+
+main

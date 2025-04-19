@@ -1,0 +1,79 @@
+#!/usr/bin/env bash
+
+: '
+=====================================================
+i3blocks CPU Load Block
+Displays 1-minute load average relative to CPU core count.
+
+Features:
+- Real-time load/core ratio calculation
+- Color-coded percentage display
+- Multi-thread awareness via nproc
+- /proc/loadavg based monitoring
+
+Environment Variables:
+DEFAULT_COLOR    : Icon color (default: #D4CFC9)
+OK_COLOR         : <50% load (default: #9FE8C2)
+MID_COLOR        : 50-75% load (default: #FFFEB3)
+WARNING_COLOR    : 75-100% load (default: #D45769)
+CRITICAL_COLOR   : >100% load (default: #FB2E01)
+LOAD_ICON        : Display icon (default: )
+
+Output Format:
+<icon> <load>/<cores>c (<percentage>%) (color-coded)
+=====================================================
+'
+
+set -euo pipefail
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+OK_COLOR="${OK_COLOR:-#9FE8C2}"
+MID_COLOR="${MID_COLOR:-#FFFEB3}"
+WARNING_COLOR="${WARNING_COLOR:-#D45769}"
+CRITICAL_COLOR="${CRITICAL_COLOR:-#FB2E01}"
+LOAD_ICON=""
+
+: '
+get_load
+Reads 1-minute load average from /proc/loadavg
+Returns:
+  Load average value as floating point number
+'
+get_load() {
+	# Read 1-minute load average from /proc/loadavg
+	read -r load1 _ </proc/loadavg
+	echo "$load1"
+}
+
+: '
+main
+Main execution function:
+1. Gets CPU core count
+2. Retrieves current load average
+3. Calculates load ratio and percentage
+4. Determines color based on thresholds
+5. Generates formatted i3blocks output
+'
+main() {
+	# Calculate load ratio and percentage
+	cores=$(nproc)
+	load1=$(get_load)
+	ratio=$(awk "BEGIN {printf \"%.2f\", $load1/$cores}")
+	percent=$(awk "BEGIN {printf \"%.0f\", $ratio*100}")
+
+	# Determine color based on load percentage thresholds
+	if (($(echo "$ratio >= 1" | bc -l))); then
+		color="$CRITICAL_COLOR"
+	elif (($(echo "$ratio >= 0.75" | bc -l))); then
+		color="$WARNING_COLOR"
+	elif (($(echo "$ratio >= 0.5" | bc -l))); then
+		color="$MID_COLOR"
+	else
+		color="$OK_COLOR"
+	fi
+
+	# Generate i3blocks compatible output
+	echo -e "<span color='$DEFAULT_COLOR'>$LOAD_ICON</span> <span color='$color'>${load1}/${cores}c (${percent}%)</span>"
+}
+
+main

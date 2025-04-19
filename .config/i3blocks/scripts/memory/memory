@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+
+: '
+=====================================================
+i3blocks Memory Usage Block
+Displays used/total RAM and utilization percentage.
+
+Features:
+- Dual data source support (/proc/meminfo and free)
+- Color-coded thresholds for quick status assessment
+- Automatic fallback to alternative detection methods
+- Human-readable GB formatting
+
+Environment Variables:
+DEFAULT_COLOR    : Icon color (default: #D4CFC9)
+OK_COLOR         : <70% usage (default: #9FE8C2)
+MID_COLOR        : 70-89% usage (default: #FFFEB3)
+CRITICAL_COLOR   : ≥90% usage (default: #FB2E01)
+WARNING_PERCENT  : Critical threshold (default: 90)
+MEMORY_ICON      : Display icon (default: )
+
+Output Format:
+<icon> <used>/<total> (<percentage>%) (color-coded)
+=====================================================
+'
+
+set -euo pipefail
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+OK_COLOR="${OK_COLOR:-#9FE8C2}"
+MID_COLOR="${MID_COLOR:-#FFFEB3}"
+CRITICAL_COLOR="${CRITICAL_COLOR:-#FB2E01}"
+WARNING_PERCENT=90
+MEMORY_ICON=""
+
+: '
+get_memory
+Retrieves memory usage statistics using multiple methods:
+1. Primary method: /proc/meminfo (most accurate)
+2. Fallback method: free command output
+Returns formatted string "used/total percentage%"
+Format example: "3.2G/15.6G 21%"
+'
+get_memory() {
+	# Primary method: Use /proc/meminfo if available
+	if [[ -f /proc/meminfo ]]; then
+		awk '
+        /^MemTotal:/     { total=$2 }
+        /^MemAvailable:/ { avail=$2 }
+        END {
+            if (total == 0) exit 1
+            used=total-avail
+            printf "%.1fG/%.1fG %.0f%%\n",
+                used/1024/1024,
+                total/1024/1024,
+                (used/total)*100
+        }' /proc/meminfo
+	else
+		# Fallback method: Use free command output
+		free -b | awk '
+        /^Mem:/ {
+            if ($2 == 0) exit 1
+            printf "%.1fG/%.1fG %.0f%%\n",
+                $3/1024/1024/1024,
+                $2/1024/1024/1024,
+                ($3/$2)*100
+        }'
+	fi || echo "0G/0G 0%"
+}
+
+: '
+main
+Main execution function:
+1. Retrieves memory usage data
+2. Extracts usage values
+3. Determines color based on thresholds
+4. Generates i3blocks formatted output
+'
+main() {
+	memory_output=$(get_memory)
+	usage=$(echo "$memory_output" | awk '{print $1}')
+	percent=$(echo "$memory_output" | awk '{print $2}' | tr -d '%')
+
+	# Color selection based on percentage thresholds
+	if ((percent >= WARNING_PERCENT)); then
+		color="$CRITICAL_COLOR"
+	elif ((percent >= 70)); then
+		color="$MID_COLOR"
+	else
+		color="$OK_COLOR"
+	fi
+
+	# Generate i3blocks compatible output
+	echo "<span color='$DEFAULT_COLOR'>$MEMORY_ICON</span> <span color='$color'>$usage ($percent%)</span>"
+}
+
+main

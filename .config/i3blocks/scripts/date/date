@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+: '
+=====================================================
+i3blocks Date Block
+Displays current date in "Day, DD Mon YYYY" format.
+
+Features:
+- Color inherited from global configuration
+- Icon retains default color
+- Error-resistant execution (pipefail, strict mode)
+
+Environment Variables:
+DEFAULT_COLOR  : Text color (default: #D4CFC9)
+DATE_ICON      : Date icon (default: )
+
+Format:
+<icon> <formatted_date> (both elements colored)
+=====================================================
+'
+
+set -euo pipefail
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+DATE_ICON=""
+
+: '
+main
+Main execution function:
+- Formats current date
+- Outputs styled date with icon
+- Preserves color consistency with other blocks
+'
+main() {
+	formatted_date=$(date '+%a, %d %b %Y')
+	echo "<span color='$DEFAULT_COLOR'>$DATE_ICON $formatted_date</span>"
+}
+
+main

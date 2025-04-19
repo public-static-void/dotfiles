@@ -1,0 +1,186 @@
+#!/usr/bin/env bash
+
+: '
+i3blocks System Update Checker
+Monitors package updates for various Linux distributions and displays
+color-coded update counts for i3blocks/i3bar.
+
+Supported distributions:
+  - Arch Linux / Manjaro (official repos + AUR via common helpers)
+  - Debian / Ubuntu (APT)
+  - Fedora / Rocky (DNF)
+
+Color scale:
+  Green   (0 updates)        #9FE8C2
+  Yellow  (moderate updates) #FFFEB3
+  Orange  (significant)      #D45769
+  Red     (critical)         #FB2E01
+
+Environment variables:
+  DEFAULT_COLOR    Base icon color (default: #D4CFC9)
+  OK_COLOR         Color for zero updates (default: #9FE8C2)
+  MID_COLOR        Color for moderate updates (default: #FFFEB3)
+  WARNING_COLOR    Color for significant updates (default: #D45769)
+  CRITICAL_COLOR   Color for critical update counts (default: #FB2E01)
+'
+
+set -euo pipefail
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+OK_COLOR="${OK_COLOR:-#9FE8C2}"
+MID_COLOR="${MID_COLOR:-#FFFEB3}"
+WARNING_COLOR="${WARNING_COLOR:-#D45769}"
+CRITICAL_COLOR="${CRITICAL_COLOR:-#FB2E01}"
+
+ARCH_AUR_HELPERS=("trizen" "paru" "yay" "pikaur" "pacaur") # Order by preference
+
+ARCH_ICON="󰣇"
+DEB_ICON=""
+ROCKY_ICON=""
+AUR_ICON=""
+UNKNOWN_ICON=""
+
+: '
+detect_distro
+Detects the Linux distribution by sourcing /etc/os-release.
+Returns the distribution ID string (e.g., arch, ubuntu).
+If detection fails, returns "unknown".
+'
+detect_distro() {
+	source /etc/os-release 2>/dev/null || echo "unknown"
+	echo "${ID:-unknown}"
+}
+
+: '
+find_aur_helper
+Finds the first available AUR helper from a predefined list.
+Verifies both presence and functionality of the helper.
+Returns the helper path or empty string if none found.
+'
+find_aur_helper() {
+	for helper in "${ARCH_AUR_HELPERS[@]}"; do
+		# Get absolute path bypassing shell aliases
+		helper_path=$(type -P "$helper" 2>/dev/null)
+		if [[ -n "$helper_path" ]]; then
+			if "$helper_path" --version &>/dev/null; then
+				echo "$helper_path"
+				return
+			fi
+		fi
+	done
+	echo ""
+}
+
+: '
+check_arch
+Checks for Arch Linux updates.
+Outputs two numbers separated by space:
+  1) official repository update count
+  2) AUR update count (if helper available)
+'
+check_arch() {
+	if [[ -f /var/lib/pacman/db.lck ]]; then
+		echo "0 0"
+		return
+	fi
+
+	# Check official updates safely
+	official=$(checkupdates 2>/dev/null | wc -l | tr -d '[:space:]')
+	official=${official:-0}
+
+	# AUR check with proper output handling
+	aur=0
+	if helper=$(find_aur_helper); then
+		aur_output=$("$helper" -Qua --quiet --color=never 2>/dev/null)
+		aur=$(grep -c '^' <<<"$aur_output" || echo 0)
+	fi
+
+	# Return space-separated counts
+	echo "$official $aur"
+}
+
+: '
+get_color count [mode]
+Returns an HTML color code based on update count.
+Parameters:
+  count - number of updates
+  mode  - optional; if "aur", applies AUR-specific thresholds
+'
+get_color() {
+	local count=$1
+	local aur=${2:-false}
+
+	if [[ "$aur" == "aur" ]]; then
+		if ((count == 0)); then
+			echo "$OK_COLOR"
+		elif ((count <= 5)); then
+			echo "$MID_COLOR"
+		elif ((count <= 10)); then
+			echo "$WARNING_COLOR"
+		else
+			echo "$CRITICAL_COLOR"
+		fi
+	else
+		if ((count == 0)); then
+			echo "$OK_COLOR"
+		elif ((count <= 10)); then
+			echo "$MID_COLOR"
+		elif ((count <= 50)); then
+			echo "$WARNING_COLOR"
+		else
+			echo "$CRITICAL_COLOR"
+		fi
+	fi
+}
+
+: '
+main
+Main program logic:
+- Detect distribution
+- Check updates accordingly
+- Select colors based on thresholds
+- Print formatted output for i3blocks
+'
+main() {
+	DISTRO=$(detect_distro)
+
+	case "$DISTRO" in
+	arch | manjaro)
+		counts=$(check_arch)
+		official=$(echo "$counts" | awk '{print $1}')
+		aur=$(echo "$counts" | awk '{print $2}')
+
+		# Force numeric conversion and handle empty values
+		official=$((official + 0))
+		aur=$((aur + 0))
+
+		official_color=$(get_color "$official")
+		aur_color=$(get_color "$aur" "aur")
+		output="<span color='$DEFAULT_COLOR'>$ARCH_ICON</span>"
+		output+=" <span color='$official_color'>$official</span>"
+		output+=" <span color='$DEFAULT_COLOR'>$AUR_ICON</span> <span color='$aur_color'>$aur</span>"
+		;;
+
+	debian | ubuntu)
+		updates=$(apt list --upgradable 2>/dev/null | grep -c '^[^/]\+/.*\[upgradable' || echo 0)
+		color=$(get_color "$updates")
+		output="<span color='$DEFAULT_COLOR'>$DEB_ICON</span> <span color='$color'>$updates</span>"
+		;;
+
+	rocky | fedora)
+		updates=$(dnf check-update -q --count-only 2>/dev/null || echo 0)
+		color=$(get_color "$updates")
+		output="<span color='$DEFAULT_COLOR'>$ROCKY_ICON</span> <span color='$color'>$updates</span>"
+		;;
+
+	*)
+		echo -n "<span color='$CRITICAL_COLOR'>$UNKNOWN_ICON Unsupported</span>"
+		return
+		;;
+	esac
+
+	echo -n "$output"
+	echo
+}
+
+main

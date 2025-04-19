@@ -1,0 +1,126 @@
+#!/usr/bin/env bash
+
+: '
+=====================================================
+i3blocks Network Interface Block
+Displays the IP address of the active network interface.
+
+Interface detection priority:
+1. Explicitly set interface (BLOCK_INSTANCE)
+2. Active Ethernet interface
+3. Active WLAN interface
+4. First active interface
+5. Loopback as fallback
+
+If no IP address is found, a warning is displayed.
+
+Environment variables:
+DEFAULT_COLOR  - Default text color (default: #D4CFC9)
+CRITICAL_COLOR - Warning color when no IP (default: #FB2E01)
+
+Output format:
+- Success: <icon> <ip_address> (colored)
+- Warning: <icon> "No IP" (critical color)
+=====================================================
+'
+
+set -euo pipefail
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+CRITICAL_COLOR="${CRITICAL_COLOR:-#FB2E01}"
+
+: '
+detect_interface
+Determines active network interface using priority rules:
+1. User-specified (BLOCK_INSTANCE)
+2. Active Ethernet
+3. Active WLAN
+4. Any active interface
+5. Loopback fallback
+Returns interface name
+'
+detect_interface() {
+	# Detect network interface based on priority rules
+	if [[ -n "${BLOCK_INSTANCE:-}" ]]; then
+		echo "${BLOCK_INSTANCE}"
+		return
+	fi
+
+	# Check for active Ethernet interfaces
+	for intf in /sys/class/net/*; do
+		intf=$(basename "$intf")
+		[[ "$intf" == lo ]] && continue
+		if [[ -f "/sys/class/net/$intf/operstate" ]] && [[ $(cat "/sys/class/net/$intf/operstate") == "up" ]]; then
+			if [[ "$intf" =~ ^(enp|eth|eno|ens)[0-9]+ ]]; then
+				echo "$intf"
+				return
+			fi
+		fi
+	done
+
+	# Check for active WLAN interfaces
+	for intf in /sys/class/net/*; do
+		intf=$(basename "$intf")
+		[[ "$intf" == lo ]] && continue
+		if [[ -f "/sys/class/net/$intf/operstate" ]] && [[ $(cat "/sys/class/net/$intf/operstate") == "up" ]]; then
+			if [[ "$intf" =~ ^(wlp|wlan)[0-9]+ ]]; then
+				echo "$intf"
+				return
+			fi
+		fi
+	done
+
+	# Check for any other active interfaces
+	for intf in /sys/class/net/*; do
+		intf=$(basename "$intf")
+		[[ "$intf" == lo ]] && continue
+		[[ $(cat "/sys/class/net/$intf/operstate") == "up" ]] && echo "$intf" && return
+	done
+
+	# Fallback to loopback interface
+	echo "lo"
+}
+
+: '
+get_ip interface
+Retrieves IPv4 address for specified interface
+Uses ip command if available, falls back to ifconfig
+Returns IP address or empty string
+'
+get_ip() {
+	# Retrieve IPv4 address of given interface using ip or ifconfig
+	if command -v ip &>/dev/null; then
+		ip -4 addr show "$1" 2>/dev/null | awk '/inet/ {print $2}' | cut -d/ -f1
+	else
+		ifconfig "$1" 2>/dev/null | awk '/inet / {print $2}'
+	fi
+}
+
+: '
+main
+Main execution function:
+- Detects active interface
+- Retrieves IP address
+- Generates color-coded output
+Handles interface down state and missing IP cases
+'
+main() {
+	interface=$(detect_interface)
+
+	# Verify interface exists and is up
+	if ! ip link show "$interface" &>/dev/null; then
+		echo "Interface Down"
+		exit 0
+	fi
+
+	ip=$(get_ip "$interface")
+
+	# Output IP or warning with appropriate color
+	if [[ -z "$ip" ]]; then
+		echo "<span color='$CRITICAL_COLOR'> No IP</span>"
+	else
+		echo "<span color='$DEFAULT_COLOR'> $ip</span>"
+	fi
+}
+
+main
