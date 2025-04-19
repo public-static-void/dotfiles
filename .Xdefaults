@@ -103,7 +103,7 @@ URxvt.cursorColor:  #EEEEEE
 !---------!
 
 ! Perl Extensions.
-URxvt.perl-ext-common: default, resize-font
+URxvt.perl-ext-common: default,resize-font
 
 !---------!
 ! KEYMAPS !
@@ -142,4 +142,4 @@ URxvt.keysym.C-KP_Multiply: resize-font:reset
 URxvt.keysym.C-KP_Divide:   resize-font:show
 
 ! Clear Alt+s keybinding.
-URxvt.searchable-scrollback: None
+URxvt.searchable-scrollback:
