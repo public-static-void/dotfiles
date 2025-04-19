@@ -17,8 +17,8 @@ font pango:MesloLGSDZ Nerd Font Mono 13, SauceCodePro Nerd Font Mono 13
 # AUTOSTART #
 #############
 
-# Start compositor.
-exec_always picom -b -f &
+# Start compositor. Kill existing Picom before starting new instance.
+exec --no-startup-id "pkill -x picom; sleep 0.5; picom --backend glx --vsync -b"
 
 # Start URxvt daemon.
 exec_always --no-startup-id urxvtd -q -o -f &
@@ -218,7 +218,6 @@ bindsym $mod+Shift+s exec --no-startup-id urxvt -e nvim ~/.zshrc
 # Open vimrc.
 #bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.vimrc
 # Open neovim config.
-#bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.config/nvim/init.vim
 bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.config/nvim/init.lua
 
 # Open picom config.
@@ -321,7 +320,9 @@ bindsym $mod+Shift+space floating toggle
 
 # Reload the configuration file.
 bindsym $mod+Shift+c reload
+
 # Restart i3 inplace (preserves your layout/session, can be used to upgrade i3).
 bindsym $mod+Shift+r restart
+
 # Exit i3 (logs you out of your X session).
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -b 'Yes, exit i3' 'i3-msg exit'"
