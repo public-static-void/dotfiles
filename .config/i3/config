@@ -24,7 +24,10 @@ exec --no-startup-id "pkill -x picom; sleep 0.5; picom --backend glx --vsync -b"
 exec_always --no-startup-id urxvtd -q -o -f &
 
 # Use nitrogen to set wallpaper.
-exec_always --no-startup-id nitrogen --restore &
+#exec_always --no-startup-id nitrogen --restore
+
+# Use feh to set wallpaper.
+exec_always --no-startup-id sh ~/.fehbg
 
 # Use wal to set wallpaper and extract colors from it.
 # exec_always --no-startup-id wal -i "${HOME}/Bilder/walls/aesthetic2.jpg" -a 100 --backend colorz
