@@ -11,9 +11,10 @@ alias ls="lsd -h --group-dirs first"
 alias la="lsd -hA --group-dirs first"
 alias ll="lsd -hlA --group-dirs first"
 
-# Make pacman and trizen colorful.
+# Make pacman and AUR helper colorful.
 alias pacman="sudo pacman --color=auto"
 alias trizen="trizen --color=auto"
+alias yay="yay --color=auto"
 
 # Make grep highlight matches.
 alias grep="grep --color=auto"
