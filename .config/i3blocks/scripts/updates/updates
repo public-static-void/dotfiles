@@ -83,19 +83,19 @@ check_arch() {
 		echo "0 0"
 		return
 	fi
-
-	# Check official updates safely
+	# Official updates count with whitespace and newline removal
 	official=$(checkupdates 2>/dev/null | wc -l | tr -d '[:space:]')
+	# Fallback to 0 if empty
 	official=${official:-0}
-
-	# AUR check with proper output handling
+	# AUR updates count with strict line validation
 	aur=0
 	if helper=$(find_aur_helper); then
+		# Remove any color codes and carriage returns
 		aur_output=$("$helper" -Qua --quiet --color=never 2>/dev/null)
-		aur=$(grep -c '^' <<<"$aur_output" || echo 0)
+		# Count only valid package update lines (format: pkgname version -> version)
+		aur=$(printf "%s" "$aur_output" | grep -Ec '^[[:alnum:]]+[-+._@[:alnum:]]+ +[0-9.-]+ -> [0-9.-]+')
 	fi
 
-	# Return space-separated counts
 	echo "$official $aur"
 }
 
