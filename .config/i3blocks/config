@@ -16,7 +16,7 @@ markup=pango
 separator_block_width=15
 full_text=
 align=center
-color=DEFAULT_COLOR
+color=#d4d4d4
 separator=false
 
 #############
