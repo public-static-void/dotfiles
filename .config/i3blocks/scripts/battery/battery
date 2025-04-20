@@ -1,0 +1,247 @@
+#!/usr/bin/env bash
+
+: '
+Simple i3blocks Battery Block
+Displays battery percentage, charging status, and estimated time remaining/time to full.
+Shows a plug or flash icon with color depending on AC/charging status.
+Uses only the global color variables already defined in the volume script:
+  DEFAULT_COLOR, OK_COLOR, MID_COLOR, WARNING_COLOR, CRITICAL_COLOR
+No mouse support included for simplicity.
+
+Time estimation:
+  - Tries upower (smoothed, best)
+  - Falls back to acpi if available
+  - Falls back to /sys/class/power_supply (raw, jumpy)
+  - If not available or unreliable, omits time display
+
+Timer label:
+  - HH:mm when charging (time to full)
+  - HH:mm when discharging (time remaining)
+'
+
+set -euo pipefail
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+OK_COLOR="${OK_COLOR:-#9FE8C2}"
+MID_COLOR="${MID_COLOR:-#FFFEB3}"
+WARNING_COLOR="${WARNING_COLOR:-#D45769}"
+CRITICAL_COLOR="${CRITICAL_COLOR:-#FB2E01}"
+
+ICON_FULL=""
+ICON_75=""
+ICON_50=""
+ICON_25=""
+ICON_0=""
+ICON_PLUG=""
+ICON_FLASH=""
+
+THRESH_FULL=80
+THRESH_75=60
+THRESH_50=40
+THRESH_25=20
+
+# Find all battery devices in sysfs
+get_batteries() {
+	find /sys/class/power_supply/ -maxdepth 1 -type d -name "BAT*" -printf "%f\n" 2>/dev/null
+}
+
+# Determine if the system is currently plugged in (AC online)
+get_ac_online() {
+	for ac in /sys/class/power_supply/AC*; do
+		[[ -f "$ac/online" ]] && [[ "$(cat "$ac/online")" == "1" ]] && echo 1 && return
+	done
+	if command -v acpi &>/dev/null; then
+		acpi -a 2>/dev/null | grep -q "on-line" && echo 1 && return
+	fi
+	echo 0
+}
+
+# Try to get battery info and time estimate using upower (smoothed, best if available)
+get_battery_info_upower() {
+	if ! command -v upower &>/dev/null; then
+		return 1
+	fi
+	local bat_path percent status time_raw time
+	bat_path=$(upower -e | grep -m1 battery || true)
+	[[ -z "$bat_path" ]] && return 1
+	percent=$(upower -i "$bat_path" | awk '/percentage:/ {print int($2)}')
+	status=$(upower -i "$bat_path" | awk -F': ' '/state:/ {print $2}')
+	if [[ "$status" == "discharging" ]]; then
+		time_raw=$(upower -i "$bat_path" | awk -F': ' '/time to empty:/ {print $2}')
+	elif [[ "$status" == "charging" ]]; then
+		time_raw=$(upower -i "$bat_path" | awk -F': ' '/time to full:/ {print $2}')
+	else
+		time_raw=""
+	fi
+	# Convert upower's time string to HH:mm format
+	if [[ "$time_raw" =~ ([0-9.]+)\ hours ]]; then
+		local hours
+		hours=$(printf "%.0f" "${BASH_REMATCH[1]}")
+		local minutes
+		minutes=$(awk -v t="${BASH_REMATCH[1]}" 'BEGIN{printf "%02d", (t-int(t))*60}')
+		time=$(printf "%02d:%02d" "$hours" "$minutes")
+	elif [[ "$time_raw" =~ ([0-9.]+)\ minutes ]]; then
+		local minutes
+		minutes=$(printf "%.0f" "${BASH_REMATCH[1]}")
+		time=$(printf "00:%02d" "$minutes")
+	else
+		time=""
+	fi
+	# Normalize upower status to script convention
+	if [[ "$status" == "fully-charged" ]]; then
+		status="Full"
+	elif [[ "$status" == "discharging" ]]; then
+		status="Discharging"
+	elif [[ "$status" == "charging" ]]; then
+		status="Charging"
+	fi
+	echo "$percent" "$status" "$time"
+	return 0
+}
+
+# Try to get battery info and time estimate using acpi (if available)
+get_battery_info_acpi() {
+	if ! command -v acpi &>/dev/null; then
+		return 1
+	fi
+	local acpi_out percent status time
+	acpi_out=$(acpi -b 2>/dev/null | head -n1)
+	percent=$(echo "$acpi_out" | grep -oP '[0-9]+(?=%)')
+	status=$(echo "$acpi_out" | awk '{print $3}' | tr -d ',')
+	time=$(echo "$acpi_out" | grep -oP '\d{2}:\d{2}:\d{2}' | head -n1)
+	if [[ -n "$time" ]]; then
+		IFS=: read -r h m _ <<<"$time"
+		time=$(printf "%02d:%02d" "${h#0}" "${m#0}")
+	fi
+	echo "$percent" "$status" "$time"
+	return 0
+}
+
+# Fallback: Calculate battery info and time estimate directly from sysfs (raw, can be jumpy)
+get_battery_info_sysfs() {
+	local total_now=0 total_full=0 status="" total_current=0
+	local now=0 full=0 current=0
+	for bat in $(get_batteries); do
+		local path="/sys/class/power_supply/$bat"
+		if [[ -f "$path/energy_now" && -f "$path/energy_full" && -f "$path/power_now" ]]; then
+			now=$(cat "$path/energy_now")
+			full=$(cat "$path/energy_full")
+			current=$(cat "$path/power_now")
+		elif [[ -f "$path/charge_now" && -f "$path/charge_full" && -f "$path/current_now" ]]; then
+			now=$(cat "$path/charge_now")
+			full=$(cat "$path/charge_full")
+			current=$(cat "$path/current_now")
+		else
+			continue
+		fi
+		total_now=$((total_now + now))
+		total_full=$((total_full + full))
+		total_current=$((total_current + current))
+		if [[ -z "$status" ]]; then
+			status=$(cat "$path/status")
+		fi
+	done
+
+	local percent=0
+	if ((total_full > 0)); then
+		percent=$((100 * total_now / total_full))
+	fi
+
+	local time=""
+	# Only calculate time if current is nonzero and battery is not almost full
+	if ((total_current > 0 && percent < 98)); then
+		# When charging, estimate time to full
+		if [[ "$status" =~ (Charging|Aufladen|charging) ]]; then
+			local remain=$((total_full - total_now))
+			local hours
+			hours=$(awk -v r="$remain" -v c="$total_current" 'BEGIN{printf "%d", r/c}')
+			local minutes
+			minutes=$(awk -v r="$remain" -v c="$total_current" 'BEGIN{printf "%02d", int((r/c-int(r/c))*60)}')
+			time=$(printf "%02d:%02d" "$hours" "$minutes")
+		# When discharging, estimate time to empty
+		elif [[ "$status" =~ (Discharging|Entladen|discharging) ]]; then
+			local hours
+			hours=$(awk -v n="$total_now" -v c="$total_current" 'BEGIN{printf "%d", n/c}')
+			local minutes
+			minutes=$(awk -v n="$total_now" -v c="$total_current" 'BEGIN{printf "%02d", int((n/c-int(n/c))*60)}')
+			time=$(printf "%02d:%02d" "$hours" "$minutes")
+		fi
+	fi
+
+	echo "$percent" "$status" "$time"
+	return 0
+}
+
+# Try all available methods in order of reliability to get battery info and time
+get_battery_info() {
+	if get_battery_info_upower; then return; fi
+	if get_battery_info_acpi; then return; fi
+	get_battery_info_sysfs
+}
+
+main() {
+	read -r percent status time <<<"$(get_battery_info)"
+	ac_online=$(get_ac_online)
+
+	local plug_icon plug_color
+
+	# When plugged in and battery is full, show plug icon in green
+	if [[ "$ac_online" == "1" ]]; then
+		if [[ "$status" =~ (Full|Voll|full) ]]; then
+			plug_icon="$ICON_PLUG"
+			plug_color="$OK_COLOR"
+		# When plugged in and charging, show flash icon in yellow
+		elif [[ "$status" =~ (Charging|Aufladen|charging) ]]; then
+			plug_icon="$ICON_FLASH"
+			plug_color="$MID_COLOR"
+		# When plugged in but not full or charging (rare case), show plug icon in yellow
+		else
+			plug_icon="$ICON_PLUG"
+			plug_color="$MID_COLOR"
+		fi
+	# When not plugged in, show plug icon in red
+	else
+		plug_icon="$ICON_PLUG"
+		plug_color="$CRITICAL_COLOR"
+	fi
+
+	local icon color
+
+	# Select battery icon and color based on charge percentage and status
+	if [[ "$status" =~ (Full|Voll|full) ]]; then
+		icon="$ICON_FULL"
+		color="$DEFAULT_COLOR"
+	elif ((percent >= THRESH_FULL)); then
+		icon="$ICON_FULL"
+		color="$OK_COLOR"
+	elif ((percent >= THRESH_75)); then
+		icon="$ICON_75"
+		color="$MID_COLOR"
+	elif ((percent >= THRESH_50)); then
+		icon="$ICON_50"
+		color="$WARNING_COLOR"
+	elif ((percent >= THRESH_25)); then
+		icon="$ICON_25"
+		color="$CRITICAL_COLOR"
+	else
+		icon="$ICON_0"
+		color="$CRITICAL_COLOR"
+	fi
+
+	local time_str=""
+	# Show timer if charging or discharging and time is available, otherwise show placeholder if charging
+	if [[ "$status" =~ (Charging|Aufladen|charging) ]]; then
+		if [[ "$time" =~ ^[0-9]{2}:[0-9]{2}$ ]]; then
+			time_str=" <span color='${DEFAULT_COLOR}'>$time</span>"
+		else
+			time_str=" <span color='${DEFAULT_COLOR}'>--:--</span>"
+		fi
+	elif [[ "$status" =~ (Discharging|Entladen|discharging) ]] && [[ "$time" =~ ^[0-9]{2}:[0-9]{2}$ ]]; then
+		time_str=" <span color='${DEFAULT_COLOR}'>$time</span>"
+	fi
+
+	# Output the formatted battery block for i3blocks
+	echo "<span color='${DEFAULT_COLOR}'>$icon</span> <span color='${color}'>${percent}%</span> <span color='${plug_color}'>$plug_icon</span>${time_str}"
+}
+
+main

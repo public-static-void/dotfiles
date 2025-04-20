@@ -11,6 +11,7 @@ OK_COLOR=#b5cea8
 MID_COLOR=#dcdcaa
 WARNING_COLOR=#ce9178
 CRITICAL_COLOR=#f14c4c
+INACTIVE_COLOR=#1e1e1e
 command=~/.config/i3blocks/scripts/$BLOCK_NAME/$BLOCK_NAME
 markup=pango
 separator_block_width=15
@@ -25,8 +26,8 @@ separator=false
 
 [separator]
 
-[temperature]
-interval=10
+# [temperature]
+# interval=10
 
 [load]
 interval=30
@@ -36,8 +37,8 @@ interval=30
 
 [separator]
 
-[iface]
-interval=1800
+# [iface]
+# interval=1800
 
 [ping]
 interval=30
@@ -47,6 +48,13 @@ interval=30
 [volume]
 interval=once
 signal=1
+
+[brightness]
+interval=once
+signal=2
+
+[battery]
+interval=1
 
 [separator]
 

@@ -59,10 +59,10 @@ Returns the helper path or empty string if none found.
 '
 find_aur_helper() {
 	for helper in "${ARCH_AUR_HELPERS[@]}"; do
-		# Get absolute path bypassing shell aliases
 		helper_path=$(type -P "$helper" 2>/dev/null)
 		if [[ -n "$helper_path" ]]; then
-			if "$helper_path" --version &>/dev/null; then
+			# Test actual update-checking capability
+			if "$helper_path" -Qua --color=never 2>/dev/null | grep -q '^'; then
 				echo "$helper_path"
 				return
 			fi
@@ -83,17 +83,17 @@ check_arch() {
 		echo "0 0"
 		return
 	fi
+
 	# Official updates count with whitespace and newline removal
 	official=$(checkupdates 2>/dev/null | wc -l | tr -d '[:space:]')
-	# Fallback to 0 if empty
 	official=${official:-0}
-	# AUR updates count with strict line validation
+
+	# AUR updates count with simplified detection
 	aur=0
 	if helper=$(find_aur_helper); then
-		# Remove any color codes and carriage returns
-		aur_output=$("$helper" -Qua --quiet --color=never 2>/dev/null)
-		# Count only valid package update lines (format: pkgname version -> version)
-		aur=$(printf "%s" "$aur_output" | grep -Ec '^[[:alnum:]]+[-+._@[:alnum:]]+ +[0-9.-]+ -> [0-9.-]+')
+		aur_output=$("$helper" -Qua --color=never 2>/dev/null)
+		# Count all lines starting with package names (works with/without version info)
+		aur=$(printf "%s" "$aur_output" | grep -c '^[^ ]\+')
 	fi
 
 	echo "$official $aur"

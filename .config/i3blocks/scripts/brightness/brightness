@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+: '
+i3blocks Brightness Block
+Shows current monitor brightness and allows mouse scroll to adjust it.
+Uses brightnessctl without specifying a device (auto-detects).
+Scroll up   - Increase brightness
+Scroll down - Decrease brightness
+Requires: brightnessctl
+
+Uses same global color variables as other i3blocks scripts:
+  DEFAULT_COLOR, OK_COLOR, MID_COLOR, WARNING_COLOR, CRITICAL_COLOR
+'
+
+DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
+OK_COLOR="${OK_COLOR:-#9FE8C2}"
+MID_COLOR="${MID_COLOR:-#FFFEB3}"
+WARNING_COLOR="${WARNING_COLOR:-#D45769}"
+CRITICAL_COLOR="${CRITICAL_COLOR:-#FB2E01}"
+
+BR_DELTA=5
+
+# Handle mouse scroll events for brightness adjustment
+if [[ -n "${BLOCK_BUTTON:-}" ]]; then
+	if [[ "$BLOCK_BUTTON" == "4" ]]; then
+		brightnessctl set +${BR_DELTA}% >/dev/null 2>&1
+	elif [[ "$BLOCK_BUTTON" == "5" ]]; then
+		brightnessctl set ${BR_DELTA}%- >/dev/null 2>&1
+	fi
+fi
+
+# Get current and maximum brightness values
+CUR=$(brightnessctl get 2>/dev/null)
+MAX=$(brightnessctl max 2>/dev/null)
+
+# Check for valid output
+if [[ -z "$CUR" || -z "$MAX" || "$MAX" -eq 0 ]]; then
+	echo "<span color='$CRITICAL_COLOR'>󰛨 brightnessctl error</span>"
+	exit 1
+fi
+
+# Calculate brightness percentage
+PCT=$((100 * CUR / MAX))
+
+# Choose icon and color based on brightness level
+if ((PCT >= 90)); then
+	ICON="󰃠"
+	COLOR="$CRITICAL_COLOR"
+elif ((PCT >= 75)); then
+	ICON="󰃠"
+	COLOR="$WARNING_COLOR"
+elif ((PCT >= 50)); then
+	ICON="󰃟"
+	COLOR="$MID_COLOR"
+elif ((PCT >= 25)); then
+	ICON="󰃞"
+	COLOR="$OK_COLOR"
+else
+	ICON="󰃞"
+	COLOR="$OK_COLOR"
+fi
+
+echo "<span color='$COLOR'>$ICON</span> <span color='$DEFAULT_COLOR'>${PCT}%</span>"
