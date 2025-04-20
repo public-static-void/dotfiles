@@ -1,44 +1,9 @@
 #!/usr/bin/env bash
+# i3blocks volume control script with advanced features
+# Supports pactl/pulseaudio, pamixer, and ALSA backends
+# Features: device cycling, volume stepping, mute toggle, and automatic locale detection
 
-: '
-i3blocks Volume Block
-Supports PulseAudio (pamixer), PipeWire (pamixer/pactl), and ALSA (amixer).
-Displays volume with icons and color coding.
-
-Color scale:
-  Green (<50%)     #9FE8C2
-  Yellow (50-75%)  #FFFEB3
-  Orange (75-90%)  #D45769
-  Red (≥90%)       #FB2E01
-Muted state shown in gray.
-
-Mouse controls:
-  Left click      - Switch audio output device (cycles through available outputs)
-  Right click     - Toggle mute
-  Scroll up       - Increase volume
-  Scroll down     - Decrease volume
-
-Environment variables:
-  DEFAULT_COLOR   - Default icon color (default: #D4CFC9)
-  OK_COLOR        - Volume <50% (default: #9FE8C2)
-  MID_COLOR       - Volume 50-75% (default: #FFFEB3)
-  WARNING_COLOR   - Volume 75-90% (default: #D45769)
-  CRITICAL_COLOR  - Volume ≥90% (default: #FB2E01)
-  MUTED_COLOR     - Muted color (default: #1e1e1e)
-
-Audio backend detection:
-  The script auto-detects pamixer (PulseAudio/PipeWire), then pactl (PulseAudio/PipeWire), then amixer (ALSA).
-  For ALSA, the first available simple control is used (not hardcoded to "Master").
-  Device switching is supported for all backends (see Mouse controls).
-'
-
-set -euo pipefail
-
-# State tracking for device cycling
-STATE_FILE="${HOME}/.i3audio.state"
-mkdir -p "$(dirname "$STATE_FILE")"
-touch "$STATE_FILE"
-
+# ──── Configuration ────
 DEFAULT_COLOR="${DEFAULT_COLOR:-#D4CFC9}"
 OK_COLOR="${OK_COLOR:-#9FE8C2}"
 MID_COLOR="${MID_COLOR:-#FFFEB3}"
@@ -47,179 +12,239 @@ CRITICAL_COLOR="${CRITICAL_COLOR:-#FB2E01}"
 MUTED_COLOR="${INACTIVE_COLOR:-#1e1e1e}"
 
 AUDIO_HIGH_SYMBOL="󰕾"
-AUDIO_MED_SYMBOL="󰖀"
+AUDIO_MID_SYMBOL="󰖀"
 AUDIO_LOW_SYMBOL="󰕿"
-AUDIO_MUTED_SYMBOL="󰖁"
-AUDIO_HIGH_THRESH=90
-AUDIO_MED_THRESH=75
-AUDIO_LOW_THRESH=50
+AUDIO_MUTED_SYMBOL="󰝟"
 AUDIO_DELTA=5
 
-# Detect which audio backend is available and set helpers accordingly
-if command -v pamixer &>/dev/null; then
-  AUDIO_BACKEND="pamixer"
-elif command -v pactl &>/dev/null; then
-  AUDIO_BACKEND="pactl"
-elif command -v amixer &>/dev/null; then
-  AUDIO_BACKEND="alsa"
-  # For ALSA, dynamically find the first available simple control
-  ALSA_CONTROL=$(amixer scontrols | awk -F"'" '{print $2}' | head -n1)
-else
-  # If no supported backend is found, show a warning icon and exit
-  echo "<span color='$CRITICAL_COLOR'>󰟎 -</span>"
-  exit 1
-fi
+# Persistent state storage
+STATE_FILE="${HOME}/.i3audio.state"
 
-# Get the default sink for PulseAudio/PipeWire in a locale-agnostic way
-get_default_sink() {
-  local sink
-  sink=$(pactl info | grep -E 'Default Sink|Standard-Ausgabe' | head -n1 | awk -F': ' '{print $2}')
-  if [[ -z "$sink" ]]; then
-    sink=$(pactl list short sinks | awk 'NR==1{print $2}')
-  fi
-  echo "$sink"
+# Initialize state directory
+mkdir -p "$(dirname "$STATE_FILE")"
+touch "$STATE_FILE"
+
+# ──── Function Library ────
+
+function init_backend {
+	# Detects available audio backend in order of preference:
+	# 1. pamixer
+	# 2. pactl (PulseAudio)
+	# 3. ALSA
+	# Sets global AUDIO_BACKEND variable
+	if command -v pamixer &>/dev/null; then
+		AUDIO_BACKEND="pamixer"
+	elif command -v pactl &>/dev/null; then
+		AUDIO_BACKEND="pactl"
+	elif command -v amixer &>/dev/null; then
+		AUDIO_BACKEND="alsa"
+		ALSA_CONTROL=$(amixer scontrols 2>/dev/null | awk -F"'" '/Simple mixer control/{print $2; exit}' || echo "Master")
+	else
+		exit 1
+	fi
 }
 
-# Handle mouse click events for volume block
-handle_click() {
-  case "${BLOCK_BUTTON}" in
-  1)
-    # Left click: Switch audio output device with persistent state
-    if [[ "$AUDIO_BACKEND" == "pamixer" || "$AUDIO_BACKEND" == "pactl" ]]; then
-      mapfile -t sinks < <(pactl list short sinks | awk '{print $2}')
-      current_index=$(grep '^pulse_index=' "$STATE_FILE" | cut -d= -f2 || echo 0)
+function shorten_name {
+	# Simplifies audio device names for display
+	# Arguments:
+	#   $1 - Raw device name string
+	# Returns:
+	#   Shortened name (e.g., "PCM2902" from "PCM2902 Audio Codec")
+	local name="${1:-}"
+	[[ -z "$name" ]] && echo "Audio" && return
 
-      # Increment and wrap index
-      current_index=$(((current_index + 1) % ${#sinks[@]}))
-      new_sink="${sinks[$current_index]}"
+	name=$(echo "$name" | sed -E '
+        s/ (Audio|Codec|Controller|Device)//Ig;
+        s/[()]//g;
+        s/[_-]/ /g;
+        s/\b(USB|HDA|AC97|IEC958|S\/PDIF|Surround|Duplex)\b//Ig;
+        s/\s+/ /g;
+        s/^\s*|\s*$//g;
+    ')
 
-      # Update state
-      echo "pulse_index=${current_index}" >"$STATE_FILE"
-
-      pactl set-default-sink "$new_sink"
-      mapfile -t inputs < <(pactl list short sink-inputs | awk '{print $1}')
-      for input in "${inputs[@]}"; do
-        pactl move-sink-input "$input" "$new_sink"
-      done
-      notify-send "Audio Output" "Switched to $new_sink (${current_index}/${#sinks[@]})"
-    else
-      mapfile -t cards < <(aplay -l 2>/dev/null | awk -F: '/card/ {print $1}' | awk '{print $2}' | sort | uniq)
-      current_index=$(grep '^alsa_index=' "$STATE_FILE" | cut -d= -f2 || echo 0)
-
-      current_index=$(((current_index + 1) % ${#cards[@]}))
-      next_card="${cards[$current_index]}"
-
-      echo "alsa_index=${current_index}" >"$STATE_FILE"
-      export ALSA_CARD="$next_card"
-      notify-send "Audio Output" "Switched to card $next_card (${current_index}/${#cards[@]})"
-    fi
-    ;;
-  3)
-    # Right click: Toggle mute, supporting all backends and localized output
-    if [[ "$AUDIO_BACKEND" == "pamixer" ]]; then
-      pamixer --toggle-mute
-    elif [[ "$AUDIO_BACKEND" == "pactl" ]]; then
-      SINK=$(get_default_sink)
-      if [[ -z "$SINK" ]]; then
-        echo "<span color='$CRITICAL_COLOR'>󰟎 -</span>"
-        exit 1
-      fi
-      IS_MUTED=$(pactl get-sink-mute "$SINK" | awk '{print $2}')
-      # Support both English and German output for mute state
-      if [[ "$IS_MUTED" =~ ^(ja|yes)$ ]]; then
-        pactl set-sink-mute "$SINK" 0
-      else
-        pactl set-sink-mute "$SINK" 1
-      fi
-    else
-      amixer -q set "$ALSA_CONTROL" toggle
-    fi
-    ;;
-  4)
-    # Scroll up: Increase volume and unmute if necessary
-    if [[ "$AUDIO_BACKEND" == "pamixer" ]]; then
-      pamixer --increase $AUDIO_DELTA --allow-boost
-    elif [[ "$AUDIO_BACKEND" == "pactl" ]]; then
-      SINK=$(get_default_sink)
-      if [[ -z "$SINK" ]]; then
-        echo "<span color='$CRITICAL_COLOR'>󰟎 -</span>"
-        exit 1
-      fi
-      pactl set-sink-volume "$SINK" +${AUDIO_DELTA}%
-      pactl set-sink-mute "$SINK" 0
-    else
-      amixer -q set "$ALSA_CONTROL" "${AUDIO_DELTA}%+" unmute
-    fi
-    ;;
-  5)
-    # Scroll down: Decrease volume and unmute if necessary
-    if [[ "$AUDIO_BACKEND" == "pamixer" ]]; then
-      pamixer --decrease $AUDIO_DELTA
-    elif [[ "$AUDIO_BACKEND" == "pactl" ]]; then
-      SINK=$(get_default_sink)
-      if [[ -z "$SINK" ]]; then
-        echo "<span color='$CRITICAL_COLOR'>󰟎 -</span>"
-        exit 1
-      fi
-      pactl set-sink-volume "$SINK" -${AUDIO_DELTA}%
-      pactl set-sink-mute "$SINK" 0
-    else
-      amixer -q set "$ALSA_CONTROL" "${AUDIO_DELTA}%-" unmute
-    fi
-    ;;
-  esac
+	[[ "$name" =~ (PCM[0-9]+|CS[0-9]+|ALC[0-9]+|TU[0-9]+) ]] && echo "${BASH_REMATCH[1]}" || echo "${name:-Audio}"
 }
 
-# Get current volume and mute state for the detected backend
-get_volume() {
-  if [[ "$AUDIO_BACKEND" == "pamixer" ]]; then
-    volume=$(pamixer --get-volume)
-    muted=$(pamixer --get-mute)
-  elif [[ "$AUDIO_BACKEND" == "pactl" ]]; then
-    SINK=$(get_default_sink)
-    if [[ -z "$SINK" ]]; then
-      echo "<span color='$CRITICAL_COLOR'>󰟎 -</span>"
-      exit 1
-    fi
-    volume=$(pactl get-sink-volume "$SINK" | awk -F'/' '{print $2}' | tr -d ' %')
-    muted=$(pactl get-sink-mute "$SINK" | awk '{print $2}')
-    [[ "$muted" =~ ^(ja|yes)$ ]] && muted="true" || muted="false"
-  else
-    volume=$(amixer get "$ALSA_CONTROL" | awk -F'[][]' '/%/ {print $2}' | tr -d '%' | head -1)
-    muted=$(amixer get "$ALSA_CONTROL" | grep -q "\[off\]" && echo true || echo false)
-  fi
-  echo "${volume} ${muted}"
+function get_volume {
+	# Retrieves current volume and mute status
+	# Returns:
+	#   Two values: volume_percentage mute_state
+	#   mute_state: "true" or "false"
+	case "$AUDIO_BACKEND" in
+	pamixer)
+		volume=$(pamixer --get-volume 2>/dev/null)
+		muted=$(pamixer --get-mute 2>/dev/null)
+		;;
+	pactl)
+		sink=$(pactl get-default-sink 2>/dev/null)
+		volume=$(pactl list sinks 2>/dev/null | awk -v sink="$sink" '
+            /Name:/ {current_sink=$2}
+            /Volume:/ && current_sink == sink {
+                if (/Lautstärke:/) { gsub(/%/, "", $3); print $3 }
+                else { gsub(/%/, "", $5); print $5 }
+                exit
+            }')
+		muted=$(pactl list sinks 2>/dev/null | awk -v sink="$sink" '
+            /Name:/ {current_sink=$2}
+            /Mute:/ && current_sink == sink { print $2; exit }
+            /Stumm:/ && current_sink == sink { print $2; exit }')
+		[[ "$muted" == "yes" || "$muted" == "ja" ]] && muted=true || muted=false
+		;;
+	alsa)
+		control="${ALSA_CONTROL:-Master}"
+		raw_output=$(amixer get "$control" 2>&1)
+		volume=$(echo "$raw_output" | awk -F'[][]' '/%/ {print $2; exit}' | tr -d '%')
+		muted=$(echo "$raw_output" | grep -q '\[off\]' && echo true || echo false)
+		;;
+	esac
+
+	# Validation and fallback
+	[[ "$volume" =~ ^[0-9]+$ ]] || {
+		[[ "$AUDIO_BACKEND" == "pactl" ]] &&
+			volume=$(pactl list sinks | awk -v sink="$sink" '
+            /Name:/ {current_sink=$2}
+            /Lautstärke:/ && current_sink == sink {
+                match($0, /[0-9]+%/)
+                pct=substr($0, RSTART, RLENGTH)
+                gsub(/%/, "", pct)
+                print pct
+                exit
+            }')
+		[[ "$volume" =~ ^[0-9]+$ ]] || volume=0
+	}
+
+	echo "$volume $muted"
 }
 
-main() {
-  # Get current volume and mute state
-  read -r volume muted <<<"$(get_volume)"
+function get_device_name {
+	# Retrieves current audio device name
+	# Returns:
+	#   Full device name string
+	case "$AUDIO_BACKEND" in
+	pamixer | pactl)
+		sink=$(pactl get-default-sink 2>/dev/null)
+		pactl_output=$(pactl list sinks 2>/dev/null)
+		name=$(echo "$pactl_output" | awk -v sink="$sink" '
+            /Name:/ {current_sink=$2}
+            /device.product.name/ && current_sink == sink {
+                desc=substr($0, index($0,$3))
+                gsub(/["\r]/, "", desc)
+                print desc
+                exit
+            }
+            /Beschreibung:/ && current_sink == sink {
+                desc=substr($0, index($0,$2))
+                sub(/^Built-in /, "", desc)
+                sub(/^Headset /, "", desc)
+                print desc
+                exit
+            }
+            /Description:/ && current_sink == sink {
+                desc=substr($0, index($0,$2))
+                sub(/^Built-in /, "", desc)
+                sub(/^Headset /, "", desc)
+                print desc
+                exit
+            }')
+		;;
+	alsa)
+		card="${ALSA_CARD:-0}"
+		name=$(amixer -c "$card" info 2>&1 | awk -F"'" '/Simple mixer control/{print $2; exit}')
+		;;
+	esac
 
-  # If a mouse event occurred, handle it and refresh volume/mute state
-  [[ -n "${BLOCK_BUTTON:-}" ]] && handle_click && read -r volume muted <<<"$(get_volume)"
-
-  # If muted, show muted icon and color
-  if [[ "$muted" == "true" ]]; then
-    echo "<span color='${MUTED_COLOR}'>${AUDIO_MUTED_SYMBOL} ${volume}%</span>"
-  else
-    # Select icon and color based on volume thresholds
-    if ((volume >= AUDIO_HIGH_THRESH)); then
-      color="$CRITICAL_COLOR"
-      symbol="$AUDIO_HIGH_SYMBOL"
-    elif ((volume >= AUDIO_MED_THRESH)); then
-      color="$WARNING_COLOR"
-      symbol="$AUDIO_MED_SYMBOL"
-    elif ((volume >= AUDIO_LOW_THRESH)); then
-      color="$MID_COLOR"
-      symbol="$AUDIO_MED_SYMBOL"
-    else
-      color="$OK_COLOR"
-      symbol="$AUDIO_LOW_SYMBOL"
-    fi
-
-    # Output icon and volume percentage with color coding
-    echo "<span color='${DEFAULT_COLOR}'>${symbol}</span> <span color='${color}'>${volume}%</span>"
-  fi
+	echo "${name:-Unknown Device}"
 }
 
-main
+function handle_click {
+	# Handles mouse click events from i3blocks
+	# Supported actions:
+	#   Left-click: Cycle audio devices
+	#   Right-click: Toggle mute
+	#   Scroll-up: Increase volume
+	#   Scroll-down: Decrease volume
+	case "$BLOCK_BUTTON" in
+	1) # Device cycling
+		if [[ "$AUDIO_BACKEND" == @(pamixer|pactl) ]]; then
+			mapfile -t sinks < <(pactl list short sinks 2>/dev/null | awk '{print $2}')
+			current=$(pactl get-default-sink 2>/dev/null)
+			index=$(printf '%s\n' "${sinks[@]}" | awk -v cur="$current" '{if ($1==cur) print NR-1}')
+			next=$(((index + 1) % ${#sinks[@]}))
+			pactl set-default-sink "${sinks[$next]}" 2>/dev/null &&
+				pactl list short sink-inputs 2>/dev/null | awk '{print $1}' | xargs -r -I{} pactl move-sink-input {} "${sinks[$next]}" 2>/dev/null
+		else
+			readarray -t cards < <(aplay -l 2>/dev/null | awk -F: '/^card/ {print $1}' | awk '{print $2}' | sort -u)
+			current_index=$(grep '^alsa_index=' "$STATE_FILE" 2>/dev/null | cut -d= -f2 || echo 0)
+			next=$(((current_index + 1) % ${#cards[@]}))
+			export ALSA_CARD="${cards[$next]}"
+			echo alsa_index=$next >"$STATE_FILE"
+		fi
+		;;
+	3) # Mute toggle
+		case "$AUDIO_BACKEND" in
+		pamixer) pamixer --toggle-mute 2>/dev/null ;;
+		pactl) pactl set-sink-mute @DEFAULT_SINK@ toggle 2>/dev/null ;;
+		alsa) amixer -q set "${ALSA_CONTROL:-Master}" toggle 2>/dev/null ;;
+		esac
+		;;
+	4) # Volume up
+		case "$AUDIO_BACKEND" in
+		pamixer) pamixer -i "$AUDIO_DELTA" --allow-boost 2>/dev/null ;;
+		pactl) pactl set-sink-volume @DEFAULT_SINK@ +"$AUDIO_DELTA%" 2>/dev/null ;;
+		alsa) amixer -q set "${ALSA_CONTROL:-Master}" "${AUDIO_DELTA}%+" 2>/dev/null ;;
+		esac
+		;;
+	5) # Volume down
+		case "$AUDIO_BACKEND" in
+		pamixer) pamixer -d "$AUDIO_DELTA" 2>/dev/null ;;
+		pactl) pactl set-sink-volume @DEFAULT_SINK@ -"$AUDIO_DELTA%" 2>/dev/null ;;
+		alsa) amixer -q set "${ALSA_CONTROL:-Master}" "${AUDIO_DELTA}%-" 2>/dev/null ;;
+		esac
+		;;
+	esac
+	pkill -RTMIN+10 i3blocks 2>/dev/null
+}
+
+# ──── Main Execution ────
+function main {
+	# Primary control flow
+	init_backend
+	[[ -n "${BLOCK_BUTTON:-}" ]] && handle_click
+
+	read -r volume muted <<<"$(get_volume)"
+	device_name=$(get_device_name)
+	short_name=$(shorten_name "$device_name")
+
+	# Volume validation
+	[[ "$volume" =~ ^[0-9]+$ ]] || volume=0
+	[[ "$muted" == "true" ]] || muted=false
+
+	# Display logic
+	if $muted; then
+		symbol="$AUDIO_MUTED_SYMBOL"
+		color="$MUTED_COLOR"
+	elif ((volume >= 90)); then
+		symbol="$AUDIO_HIGH_SYMBOL"
+		color="$CRITICAL_COLOR"
+	elif ((volume >= 75)); then
+		symbol="$AUDIO_HIGH_SYMBOL"
+		color="$WARNING_COLOR"
+	elif ((volume >= 50)); then
+		symbol="$AUDIO_MID_SYMBOL"
+		color="$MID_COLOR"
+	elif ((volume >= 25)); then
+		symbol="$AUDIO_MID_SYMBOL"
+		color="$OK_COLOR"
+	else
+		symbol="$AUDIO_LOW_SYMBOL"
+		color="$OK_COLOR"
+	fi
+
+	# Final output formatting
+	echo "<span color='${DEFAULT_COLOR}'>$symbol</span> \
+<span color='${color}'>${volume}%</span> \
+<span color='${DEFAULT_COLOR}'>(${short_name})</span>"
+}
+
+# Execute main function
+main "$@"
