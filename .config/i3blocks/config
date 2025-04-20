@@ -49,12 +49,12 @@ interval=30
 interval=once
 signal=1
 
-[brightness]
-interval=once
-signal=2
+# [brightness]
+# interval=once
+# signal=2
 
-[battery]
-interval=1
+# [battery]
+# interval=1
 
 [separator]
 
