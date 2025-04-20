@@ -125,6 +125,9 @@ local options = {
 
 	-- Always show the signcolumn (where diagnostics etc. appear).
 	signcolumn = "yes",
+
+	-- Set the window border style.
+	winborder = "rounded",
 }
 
 -- Apply the options to Neovim.
