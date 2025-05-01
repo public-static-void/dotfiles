@@ -135,12 +135,6 @@ return lazy.setup({
 	{
 		"nvim-java/nvim-java",
 	},
-	-- Rust
-	{
-		"mrcjkb/rustaceanvim",
-		version = "^4", -- Recommended
-		lazy = false, -- This plugin is already lazy
-	},
 
 	-- Snippet engine
 	{

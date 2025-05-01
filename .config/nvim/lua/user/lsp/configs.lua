@@ -52,6 +52,7 @@ local servers = {
 	"prismals",
 	"pylsp",
 	"rubocop",
+	"rust_analyzer",
 	"somesass_ls",
 	"sqls",
 	"stimulus_ls",
