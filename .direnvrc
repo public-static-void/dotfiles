@@ -3,9 +3,12 @@ layout_poetry() {
         log_error 'No pyproject.toml found. Use `poetry new` or `poetry init` to create one first.'
         exit 2
     fi
-
-    local VENV=$(dirname $(poetry run which python))
-    export VIRTUAL_ENV=$(echo "$VENV" | rev | cut -d'/' -f2- | rev)
+    VENV=$(poetry env info --path 2>/dev/null)
+    if [[ -z "$VENV" ]]; then
+        poetry install --no-root
+        VENV=$(poetry env info --path)
+    fi
+    export VIRTUAL_ENV=$VENV
     export POETRY_ACTIVE=1
-    PATH_add "$VENV"
+    PATH_add "$VENV/bin"
 }
