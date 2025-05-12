@@ -168,17 +168,7 @@ main() {
 		;;
 
 	rocky | fedora)
-		dnf_output=$(dnf check-update -q 2>&1)
-		exit_code=$?
-		if [[ $exit_code -eq 0 ]]; then
-			updates=0
-		elif [[ $exit_code -eq 100 ]]; then
-			updates=$(echo "$dnf_output" | grep -cvE '^$|^[[:space:]]|^Repo|^Last')
-			updates=${updates:-0}
-		else
-			echo -n "<span color='$CRITICAL_COLOR'>$UNKNOWN_ICON DNF Error</span>"
-			return
-		fi
+		updates=$( (dnf check-update --refresh --assumeno -q 2>/dev/null || true) | awk 'NF==3' | wc -l)
 		color=$(get_color "$updates")
 		output="<span color='$DEFAULT_COLOR'>$ROCKY_ICON</span> <span color='$color'>$updates</span>"
 		;;
