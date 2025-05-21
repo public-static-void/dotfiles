@@ -113,6 +113,17 @@ return lazy.setup({
 		-- enable LSP
 		"neovim/nvim-lspconfig",
 		lazy = true,
+		dependencies = {
+			{
+				"folke/lazydev.nvim",
+				ft = "lua",
+				opts = {
+					library = {
+						{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+					},
+				},
+			},
+		},
 	},
 	{
 		"williamboman/mason.nvim",
@@ -327,5 +338,20 @@ return lazy.setup({
 	{
 		"famiu/bufdelete.nvim",
 		lazy = true,
+	},
+
+	{
+		"m4xshen/hardtime.nvim",
+		lazy = false,
+		dependencies = { "MunifTanjim/nui.nvim" },
+		opts = {
+			disabled_keys = {
+				["<Up>"] = false,
+				["<Down>"] = false,
+				["<Left>"] = false,
+				["<Right>"] = false,
+			},
+			disable_mouse = false,
+		},
 	},
 })
