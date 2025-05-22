@@ -1,5 +1,7 @@
 local function set_colorscheme(scheme)
-	local status_ok, _ = pcall(vim.cmd, "colorscheme " .. scheme)
+	local status_ok, _ = pcall(function()
+		vim.cmd("colorscheme " .. scheme)
+	end)
 	if not status_ok then
 		vim.notify("Colorscheme '" .. scheme .. "' not found!", vim.log.levels.ERROR)
 		return false

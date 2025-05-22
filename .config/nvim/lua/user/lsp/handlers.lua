@@ -2,32 +2,38 @@ local utils = require("user.utils")
 
 local M = {}
 
--- TODO: backfill this to template
-M.setup = function()
-	-- Define custom icons for diagnostics
-	local signs = {
-		[vim.diagnostic.severity.ERROR] = { text = "", hl_group = "DiagnosticSignError" },
-		[vim.diagnostic.severity.WARN] = { text = "", hl_group = "DiagnosticSignWarn" },
-		[vim.diagnostic.severity.HINT] = { text = "󰛨", hl_group = "DiagnosticSignHint" },
-		[vim.diagnostic.severity.INFO] = { text = "", hl_group = "DiagnosticSignInfo" },
+-- Helper function: diagnostic sign and color template
+local function diagnostic_sign_template()
+	return {
+		signs = {
+			[vim.diagnostic.severity.ERROR] = { text = "", hl_group = "DiagnosticSignError" },
+			[vim.diagnostic.severity.WARN] = { text = "", hl_group = "DiagnosticSignWarn" },
+			[vim.diagnostic.severity.HINT] = { text = "󰛨", hl_group = "DiagnosticSignHint" },
+			[vim.diagnostic.severity.INFO] = { text = "", hl_group = "DiagnosticSignInfo" },
+		},
+		fallback_colors = {
+			DiagnosticSignError = { fg = "#f44747", bg = "NONE" },
+			DiagnosticSignWarn = { fg = "#ffcc00", bg = "NONE" },
+			DiagnosticSignHint = { fg = "#10b981", bg = "NONE" },
+			DiagnosticSignInfo = { fg = "#3794ff", bg = "NONE" },
+		},
+		fallback_groups = {
+			DiagnosticSignError = "Error",
+			DiagnosticSignWarn = "Warning",
+			DiagnosticSignHint = "Hint",
+			DiagnosticSignInfo = "Info",
+		},
 	}
+end
 
-	-- Fallback colors (default VSCode colors)
-	local fallback_colors = {
-		DiagnosticSignError = { fg = "#f44747", bg = "NONE" }, -- Red (Error)
-		DiagnosticSignWarn = { fg = "#ffcc00", bg = "NONE" }, -- Yellow (Warning)
-		DiagnosticSignHint = { fg = "#10b981", bg = "NONE" }, -- Green (Hint)
-		DiagnosticSignInfo = { fg = "#3794ff", bg = "NONE" }, -- Blue (Info)
-	}
+M.setup = function()
+	-- Use the template for diagnostic signs and colors
+	local template = diagnostic_sign_template()
+	local signs = template.signs
+	local fallback_colors = template.fallback_colors
+	local fallback_groups = template.fallback_groups
 
 	-- Dynamically configure highlight groups based on the current color scheme
-	local fallback_groups = {
-		DiagnosticSignError = "Error",
-		DiagnosticSignWarn = "Warning",
-		DiagnosticSignHint = "Hint",
-		DiagnosticSignInfo = "Info",
-	}
-
 	for hl_group, fallback in pairs(fallback_groups) do
 		local existing_hl = vim.api.nvim_get_hl(0, { name = hl_group })
 		local fallback_hl = vim.api.nvim_get_hl(0, { name = fallback })
@@ -61,14 +67,11 @@ M.setup = function()
 			focusable = true,
 			style = "minimal",
 			border = "rounded",
-			source = "always",
+			source = true,
 			header = "",
 			prefix = "",
 		},
 	})
-
-	vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "rounded" })
-	vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help)
 end
 
 local function lsp_highlight_document(client)

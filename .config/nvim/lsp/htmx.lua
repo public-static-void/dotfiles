@@ -6,8 +6,9 @@ if not handlers then
 end
 
 return {
+	cmd = { "htmx-lsp" },
+	filetypes = { "html", "htmx", "typescript" },
+	root_markers = { "package.json", ".git" },
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
-	filetypes = { "html", "htmx", "typescript" },
-	root_dir = require("lspconfig").util.root_pattern("package.json", ".git"),
 }

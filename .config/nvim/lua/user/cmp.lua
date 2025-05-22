@@ -56,7 +56,7 @@ local kind_icons = {
 cmp.setup({
 	enabled = function()
 		-- Skip completion in special buffers unless it's a DAP buffer
-		local buftype = vim.api.nvim_buf_get_option(0, "buftype")
+		local buftype = vim.bo.buftype
 		if buftype == "prompt" then
 			return require("cmp_dap").is_dap_buffer()
 		end
@@ -160,7 +160,6 @@ cmp.setup.cmdline(":", {
 	mapping = cmp.mapping.preset.cmdline(),
 	sources = cmp.config.sources({
 		{ name = "path" },
-	}, {
 		{ name = "cmdline" },
 	}),
 })

@@ -1,5 +1,10 @@
 local utils = require("user.utils")
 
+-- local java = utils.safe_require("java")
+-- if java then
+-- 	java.setup({})
+-- end
+
 local handlers = utils.safe_require("user.lsp.handlers")
 if not handlers then
 	return

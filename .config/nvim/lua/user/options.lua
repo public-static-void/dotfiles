@@ -138,7 +138,7 @@ end
 -- Create necessary directories for undo and swap files if they don't exist.
 local function create_dir_if_not_exists(dir)
 	if not vim.fn.isdirectory(dir) then
-		vim.fn.mkdir(dir, "p", 0700)
+		vim.fn.mkdir(dir, "p", "0700")
 	end
 end
 create_dir_if_not_exists(vim.fn.expand("$HOME") .. "/.local/share/nvim/undodir")
