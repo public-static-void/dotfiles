@@ -104,8 +104,28 @@ local function disable_formatting(client)
 	end
 end
 
+local function disable_navigation_capabilities(client)
+	local navigation_disabled_servers = {
+		"phpactor",
+	}
+
+	for _, server in ipairs(navigation_disabled_servers) do
+		if client.name == server then
+			client.server_capabilities.definitionProvider = false
+			client.server_capabilities.typeDefinitionProvider = false
+			client.server_capabilities.declarationProvider = false
+			client.server_capabilities.implementationProvider = false
+			client.server_capabilities.referencesProvider = false
+			client.server_capabilities.documentSymbolProvider = false
+			client.server_capabilities.workspaceSymbolProvider = false
+			break
+		end
+	end
+end
+
 M.on_attach = function(client)
 	disable_formatting(client)
+	disable_navigation_capabilities(client)
 	lsp_highlight_document(client)
 end
 
