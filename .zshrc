@@ -71,6 +71,7 @@ path=(
     "$HOME/go/bin"
     "$HOME/.config/composer/vendor/bin"
     "$HOME/.gem/ruby/*/bin"(N)
+    "$HOME/.local/share/gem/ruby/3.4.0/bin"
     ${path}
 )
 
