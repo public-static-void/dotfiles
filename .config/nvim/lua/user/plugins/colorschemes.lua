@@ -4,10 +4,6 @@ return {
 		lazy = true,
 	},
 	{
-		"lunarvim/darkplus.nvim",
-		lazy = true,
-	},
-	{
 		"zacanger/angr.vim",
 		lazy = true,
 	},

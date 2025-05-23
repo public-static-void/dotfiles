@@ -1,10 +1,5 @@
 local utils = require("user.utils")
 
-local java = utils.safe_require("java")
-if not java then
-	return
-end
-
 local nvim_tree = utils.safe_require("nvim-tree")
 if not nvim_tree then
 	return

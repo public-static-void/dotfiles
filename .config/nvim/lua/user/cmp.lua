@@ -2,11 +2,13 @@ local utils = require("user.utils")
 
 local cmp = utils.safe_require("cmp")
 if not cmp then
+	vim.notify("nvim-cmp not found! Check your plugin setup.", vim.log.levels.ERROR)
 	return
 end
 
 local luasnip = utils.safe_require("luasnip")
 if not luasnip then
+	vim.notify("LuaSnip not found! Check your plugin setup.", vim.log.levels.ERROR)
 	return
 end
 
@@ -58,7 +60,8 @@ cmp.setup({
 		-- Skip completion in special buffers unless it's a DAP buffer
 		local buftype = vim.bo.buftype
 		if buftype == "prompt" then
-			return require("cmp_dap").is_dap_buffer()
+			local ok, cmp_dap = pcall(require, "cmp_dap")
+			return ok and cmp_dap.is_dap_buffer()
 		end
 		return true
 	end,
@@ -104,7 +107,7 @@ cmp.setup({
 	formatting = {
 		fields = { "kind", "abbr", "menu" },
 		format = function(entry, vim_item)
-			vim_item.kind = kind_icons[vim_item.kind]
+			vim_item.kind = kind_icons[vim_item.kind] or vim_item.kind
 			vim_item.menu = ({
 				codeium = "[Codeium]",
 				nvim_lsp = "[LSP]",
@@ -119,18 +122,15 @@ cmp.setup({
 		end,
 	},
 
-	sources = (function()
-		local default_sources = {
-			{ name = "codeium", priority = 1000 },
-			{ name = "nvim_lsp", priority = 900 },
-			{ name = "luasnip", priority = 750 },
-			{ name = "nvim_lua", priority = 700 },
-			{ name = "buffer", priority = 500 },
-			{ name = "path", priority = 250 },
-			{ name = "spell", priority = 200 },
-		}
-		return default_sources
-	end)(),
+	sources = {
+		{ name = "codeium", priority = 1000 },
+		{ name = "nvim_lsp", priority = 900 },
+		{ name = "luasnip", priority = 750 },
+		{ name = "nvim_lua", priority = 700 },
+		{ name = "buffer", priority = 500 },
+		{ name = "path", priority = 250 },
+		{ name = "spell", priority = 200 },
+	},
 
 	window = {
 		documentation = cmp.config.window.bordered(),

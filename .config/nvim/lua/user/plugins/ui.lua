@@ -48,4 +48,17 @@ return {
 			})
 		end,
 	},
+	-- Keymaps
+	{
+		"folke/which-key.nvim",
+		event = "VeryLazy",
+	},
+	-- Error handling
+	{
+		"folke/trouble.nvim",
+		branch = "main", -- or "v3.x" for the latest version
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		opts = {}, -- you can add custom settings here if desired
+		cmd = { "Trouble", "TroubleToggle", "TroubleClose", "TroubleRefresh" }, -- lazy-load on command
+	},
 }

@@ -5,7 +5,7 @@ local options = {
 
 	-- Set encoding to UTF-8.
 	encoding = "utf-8",
-	fileencodings = "utf-8",
+	fileencodings = "utf-8,ucs-bom,latin1",
 
 	-- Enables 24-bit RBG colors in the TUI. Uses "gui" :highlight instead of "cterm".
 	termguicolors = true,
@@ -20,7 +20,7 @@ local options = {
 	autoread = true,
 
 	-- Enable system clipboard for copy/paste from/to outside vim.
-	clipboard = { "unnamed", "unnamedplus" },
+	clipboard = "unnamed,unnamedplus",
 
 	-- Show the file name in the terminal title bar.
 	title = true,
@@ -110,18 +110,15 @@ local options = {
 	splitright = true,
 
 	-- Set undo directory.
-	undodir = { vim.fn.expand("$HOME") .. "/.local/share/nvim/undodir" },
+	undodir = vim.fn.expand("$HOME") .. "/.local/share/nvim/undodir",
 	-- Keep track of all undos globally in this directory only.
 	undofile = true,
 
 	-- Set backup directory.
-	directory = { vim.fn.expand("$HOME") .. "/.local/share/nvim/swap" },
+	directory = vim.fn.expand("$HOME") .. "/.local/share/nvim/swap",
 	-- Delete local backup since everything is stored centrally.
 	backup = false,
 	writebackup = false,
-
-	-- Dont remove buffer when tab is closed.
-	hidden = true,
 
 	-- Always show the signcolumn (where diagnostics etc. appear).
 	signcolumn = "yes",

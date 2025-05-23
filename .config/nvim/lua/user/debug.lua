@@ -1,250 +1,241 @@
-local utils = require("user.utils")
+local mason_dap_packages = {
+	"python",
+	"codelldb",
+	"delve",
+	"js",
+	"php",
+}
 
--- Safely load required modules
-local dap = utils.safe_require("dap")
-if not dap then
-	return
-end
+--  Custom DAPs (not in Mason)
+local custom_dap_packages = {
+	"local-lua-debugger-vscode",
+}
 
-local dap_utils = utils.safe_require("dap.utils")
-if not dap_utils then
-	return
-end
+-- Mason auto-install for official DAPs
+require("mason").setup()
+require("mason-nvim-dap").setup({
+	ensure_installed = mason_dap_packages,
+	automatic_installation = true,
+})
 
-local mason = utils.safe_require("mason")
-if not mason then
-	return
-end
-
+-- Custom installer for non-Mason DAPs
 local mason_registry_ok, mason_registry = pcall(require, "mason-registry")
 if not mason_registry_ok or not mason_registry then
 	vim.notify("Mason Registry could not be loaded. Check your Mason setup.", vim.log.levels.ERROR)
 	return
 end
 
-local mason_nvim_dap = utils.safe_require("mason-nvim-dap")
-if not mason_nvim_dap then
-	return
+local function custom_install_adapter(adapter)
+	local ok, package = pcall(mason_registry.get_package, adapter)
+	if ok and package and not package:is_installed() then
+		vim.schedule(function()
+			vim.notify("[custom-dap] installing " .. adapter, vim.log.levels.INFO)
+		end)
+		package:install():once("closed", function()
+			vim.schedule(function()
+				if package:is_installed() then
+					vim.notify("[custom-dap] " .. adapter .. " was installed", vim.log.levels.INFO)
+				else
+					vim.notify("[custom-dap] failed to install " .. adapter, vim.log.levels.ERROR)
+				end
+			end)
+		end)
+	end
 end
 
-local dapui = utils.safe_require("dapui")
-if not dapui then
-	return
-end
-
-local dap_virtual_text = utils.safe_require("nvim-dap-virtual-text")
-if not dap_virtual_text then
-	return
-end
-
--- Dap Virtual Text
-dap_virtual_text.setup()
-
--- List of adapters
-local adapters = {
-	"debugpy",
-	"codelldb",
-	"delve",
-	"php-debug-adapter",
-	"js-debug-adapter",
-	"local-lua-debugger-vscode",
-}
-
--- Auto-install missing adapters on startup using the adapter list
 vim.api.nvim_create_autocmd("VimEnter", {
 	callback = function()
-		local missing_adapters = {} -- Collect missing adapters for batch notification
-
-		for _, adapter in ipairs(adapters) do
-			local ok, package = pcall(mason_registry.get_package, adapter)
-			if ok and package then
-				if not package:is_installed() then
-					vim.schedule(function()
-						vim.notify("Installing missing adapter: " .. adapter, vim.log.levels.INFO)
-					end)
-					package:install():once("closed", function()
-						vim.schedule(function()
-							if package:is_installed() then
-								vim.notify("Successfully installed adapter: " .. adapter, vim.log.levels.INFO)
-							else
-								vim.notify("Failed to install adapter: " .. adapter, vim.log.levels.ERROR)
-							end
-						end)
-					end)
-				end
-			else
-				table.insert(missing_adapters, adapter)
-			end
+		for _, adapter in ipairs(custom_dap_packages) do
+			custom_install_adapter(adapter)
 		end
 	end,
 })
 
--- Mason DAP setup
-mason_nvim_dap.setup({
-	ensure_installed = adapters,
-	automatic_installation = true,
-	handlers = {
-		function(config)
-			require("mason-nvim-dap").default_setup(config)
-		end,
-	},
-})
+-- DAP UI and virtual text
+local dap = require("dap")
+local dapui = require("dapui")
+dapui.setup()
+require("nvim-dap-virtual-text").setup({})
 
--- Function to build C/C++/Rust projects and find executables
-local function build_and_find_executable(build_command, find_command)
-	-- Run the build command and capture its output
-	local handle = io.popen(build_command .. " 2>&1")
-	if not handle then
-		error("Failed to execute: " .. build_command)
+-- Helper for Mason adapter path
+local function mason_adapter_path(pkg, subpath)
+	local root = vim.env.MASON or (vim.fn.stdpath("data") .. "/mason")
+	local path = root .. "/packages/" .. pkg .. "/" .. subpath
+	if vim.loop.fs_stat(path) then
+		return path
+	else
+		return nil
 	end
+end
 
-	local result = handle:read("*a")
-	handle:close()
-
-	-- Print the build output to the command-line window
-	vim.cmd("echo ''") -- Clear any existing messages
+-- Build helpers
+local function print_build_output(result)
+	vim.cmd("echo ''")
 	for _, line in ipairs(vim.split(result, "\n", { trimempty = true })) do
 		vim.cmd(string.format("echo '%s'", vim.fn.escape(line, "'")))
 	end
+end
 
-	-- Locate the resulting executable
+local function build_and_find_executable(build_command, find_command, callback)
+	local handle = io.popen(build_command .. " 2>&1")
+	if not handle then
+		vim.notify("Failed to execute: " .. build_command, vim.log.levels.ERROR)
+		return
+	end
+	local result = handle:read("*a")
+	handle:close()
+	print_build_output(result)
+
 	local find_handle = io.popen(find_command)
 	if not find_handle then
-		error("Failed to execute: " .. find_command)
+		vim.notify("Failed to execute: " .. find_command, vim.log.levels.ERROR)
+		return
 	end
-
 	local find_result = find_handle:read("*a")
 	find_handle:close()
 
 	local executables = vim.split(find_result, "\n", { trimempty = true })
 	if #executables == 0 then
-		error(string.format("No executable found for %s. Compilation might have failed."))
+		vim.notify("No executable found. Compilation might have failed.", vim.log.levels.ERROR)
 	elseif #executables == 1 then
-		return executables[1] -- Return the path to the single executable
+		callback(executables[1])
 	else
-		-- If multiple executables are found, prompt the user to select one
 		local choices = { "Select an executable:" }
 		for i, executable in ipairs(executables) do
 			table.insert(choices, string.format("%d: %s", i, executable))
 		end
-
 		local choice = vim.fn.inputlist(choices)
 		if choice > 0 and executables[choice] then
-			return executables[choice]
+			callback(executables[choice])
 		else
-			error("No valid executable selected.")
+			vim.notify("No valid executable selected.", vim.log.levels.ERROR)
 		end
 	end
 end
 
--- Configurations for supported languages
+local function async_program_builder(build_cmd, find_cmd)
+	return function()
+		return coroutine.create(function(co)
+			build_and_find_executable(build_cmd(), find_cmd(), function(exe)
+				coroutine.resume(co, exe)
+			end)
+			local exe = coroutine.yield()
+			return exe
+		end)
+	end
+end
 
--- C/C++/Rust
+-- DAP Adapters and Configurations
+
+-- C/C++/Rust (codelldb)
 dap.adapters.codelldb = {
 	type = "server",
 	host = "127.0.0.1",
 	port = "${port}",
 	executable = {
-		command = vim.fn.stdpath("data") .. "/mason/packages/codelldb/extension/adapter/codelldb",
+		command = mason_adapter_path("codelldb", "extension/adapter/codelldb"),
 		args = { "--port", "${port}" },
 	},
 }
-
--- C
 dap.configurations.c = {
 	{
 		name = "Launch file",
 		type = "codelldb",
 		request = "launch",
-		program = function()
-			local current_file = vim.fn.expand("%:p") -- Full path of the current file
-			local output_binary = "./build/" .. vim.fn.fnamemodify(current_file, ":t:r") -- Output binary path
-
-			-- Custom message for feedback
-			vim.cmd(string.format("echo 'Compiling %s to %s'", current_file, output_binary))
-
-			return build_and_find_executable(
-				string.format("mkdir -p build && gcc %s -g -o %s 2>&1", current_file, output_binary), -- Build command for C
-				string.format("find ./build -maxdepth 1 -type f -name '%s'", vim.fn.fnamemodify(output_binary, ":t")) -- Find command for binary
-			)
-		end,
+		program = async_program_builder(function()
+			local current_file = vim.fn.expand("%:p")
+			local output_binary = "./build/" .. vim.fn.fnamemodify(current_file, ":t:r")
+			return string.format("mkdir -p build && gcc %s -g -o %s", current_file, output_binary)
+		end, function()
+			local current_file = vim.fn.expand("%:p")
+			local output_binary = "./build/" .. vim.fn.fnamemodify(current_file, ":t:r")
+			return string.format("find ./build -maxdepth 1 -type f -name '%s'", vim.fn.fnamemodify(output_binary, ":t"))
+		end),
 		cwd = "${workspaceFolder}",
 		stopOnEntry = false,
 	},
 }
-
--- C++
 dap.configurations.cpp = {
 	{
 		name = "Launch file",
 		type = "codelldb",
 		request = "launch",
-		program = function()
-			local current_file = vim.fn.expand("%:p") -- Full path of the current file
-			local output_binary = "./build/" .. vim.fn.fnamemodify(current_file, ":t:r") -- Output binary path
-
-			-- Custom message for feedback
-			vim.cmd(string.format("echo 'Compiling %s to %s'", current_file, output_binary))
-
-			return build_and_find_executable(
-				string.format("mkdir -p build && g++ %s -g -o %s 2>&1", current_file, output_binary), -- Build command for C++
-				string.format("find ./build -maxdepth 1 -type f -name '%s'", vim.fn.fnamemodify(output_binary, ":t")) -- Find command for binary
-			)
-		end,
+		program = async_program_builder(function()
+			local current_file = vim.fn.expand("%:p")
+			local output_binary = "./build/" .. vim.fn.fnamemodify(current_file, ":t:r")
+			return string.format("mkdir -p build && g++ %s -g -o %s", current_file, output_binary)
+		end, function()
+			local current_file = vim.fn.expand("%:p")
+			local output_binary = "./build/" .. vim.fn.fnamemodify(current_file, ":t:r")
+			return string.format("find ./build -maxdepth 1 -type f -name '%s'", vim.fn.fnamemodify(output_binary, ":t"))
+		end),
 		cwd = "${workspaceFolder}",
 		stopOnEntry = false,
 	},
 }
-
--- Rust
+dap.configurations["c++"] = dap.configurations.cpp
+dap.configurations["cc"] = dap.configurations.cpp
 dap.configurations.rust = {
 	{
 		name = "Launch file",
 		type = "codelldb",
 		request = "launch",
-		program = function()
-			return build_and_find_executable(
-				"cargo build", -- Build command for Rust
-				string.format("find ./target/debug -maxdepth 1 -type f -executable") -- Find command for Rust binaries in `target/debug`
-			)
-		end,
+		program = async_program_builder(function()
+			return "cargo build"
+		end, function()
+			return "find ./target/debug -maxdepth 1 -type f -executable"
+		end),
 		cwd = "${workspaceFolder}",
 		stopOnEntry = false,
 	},
 }
 
--- Python
-local dap_python = utils.safe_require("dap-python")
-if dap_python then
-	dap_python.setup(vim.fn.stdpath("data") .. "/mason/packages/debugpy/venv/bin/python")
-	dap.configurations.python = {
-		{
-			name = "Launch file",
-			type = "python",
-			request = "launch",
-			program = "${file}",
-			cwd = vim.fn.getcwd(),
-			console = "integratedTerminal",
-		},
-	}
-end
+-- Python (debugpy)
+dap.adapters.python = {
+	type = "executable",
+	command = mason_adapter_path("debugpy", "venv/bin/python"),
+	args = { "-m", "debugpy.adapter" },
+}
+dap.configurations.python = {
+	{
+		name = "Launch file",
+		type = "python",
+		request = "launch",
+		program = "${file}",
+		cwd = vim.fn.getcwd(),
+		console = "integratedTerminal",
+		pythonPath = function()
+			local cwd = vim.fn.getcwd()
+			if vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
+				return cwd .. "/venv/bin/python"
+			elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
+				return cwd .. "/.venv/bin/python"
+			else
+				return mason_adapter_path("debugpy", "venv/bin/python")
+			end
+		end,
+	},
+}
 
--- Golang
-local dap_go = utils.safe_require("dap-go")
-if dap_go then
-	dap_go.setup()
-	dap.configurations.go = {
-		{
-			name = "Debug main.go",
-			type = "delve",
-			request = "launch",
-			program = "${file}",
-		},
-	}
-end
+-- Go (delve)
+dap.adapters.go = {
+	type = "server",
+	port = "${port}",
+	executable = {
+		command = mason_adapter_path("delve", "dlv"),
+		args = { "dap", "-l", "127.0.0.1:${port}" },
+	},
+}
+dap.configurations.go = {
+	{
+		name = "Debug main.go",
+		type = "go",
+		request = "launch",
+		program = "${file}",
+	},
+}
 
--- PHP
-
+-- PHP (php-debug-adapter)
 -- NOTE: Requires PHP and Xdebug to be installed and configured
 -- Install PHP (i.e. `pacman -S php`)
 -- Install xdebug (i.e. `pacman -S xdebug`)
@@ -261,7 +252,7 @@ end
 dap.adapters.php = {
 	type = "executable",
 	command = "node",
-	args = { vim.fn.stdpath("data") .. "/mason/packages/php-debug-adapter/extension/out/phpDebug.js" },
+	args = { mason_adapter_path("php-debug-adapter", "extension/out/phpDebug.js") },
 }
 dap.configurations.php = {
 	{
@@ -275,7 +266,7 @@ dap.configurations.php = {
 	},
 }
 
--- JS/TS
+-- JS/TS (js-debug-adapter)
 dap.adapters["pwa-node"] = {
 	type = "server",
 	host = "localhost",
@@ -283,42 +274,39 @@ dap.adapters["pwa-node"] = {
 	executable = {
 		command = "node",
 		args = {
-			vim.fn.stdpath("data") .. "/mason/packages/js-debug-adapter/js-debug/src/dapDebugServer.js",
+			mason_adapter_path("js-debug-adapter", "js-debug/src/dapDebugServer.js"),
 			"${port}",
 		},
 	},
 }
--- Supported languages
 local js_based_languages = { "typescript", "javascript" }
--- NOTE: Requires tsx installed globally (i.e. `npm install -g tsx`)
 for _, language in ipairs(js_based_languages) do
 	dap.configurations[language] = {
-		-- Launch file configuration
 		{
 			type = "pwa-node",
 			request = "launch",
 			name = "Launch file",
 			program = "${file}",
-			runtimeExecutable = "tsx", -- Use tsx runtime (must be globally installed)
+			runtimeExecutable = "tsx",
 			cwd = "${workspaceFolder}",
 			sourceMaps = true,
 			resolveSourceMapLocations = { "${workspaceFolder}/**", "!**/node_modules/**" },
-			console = "integratedTerminal", -- Use the integrated terminal for output
-			internalConsoleOptions = "neverOpen", -- Prevent opening the debug console
+			console = "integratedTerminal",
+			internalConsoleOptions = "neverOpen",
 			skipFiles = { "<node_internals>/**", "${workspaceFolder}/node_modules/**" },
 		},
 	}
 end
 
--- Lua
+-- Lua (local-lua-debugger-vscode)
 dap.adapters["local-lua"] = {
 	type = "executable",
 	command = "node",
 	args = {
-		vim.fn.stdpath("data") .. "/mason/packages/local-lua-debugger-vscode/extension/extension/debugAdapter.js",
+		mason_adapter_path("local-lua-debugger-vscode", "extension/extension/debugAdapter.js"),
 	},
 	enrich_config = function(config, on_config)
-		config.extensionPath = vim.fn.stdpath("data") .. "/mason/packages/local-lua-debugger-vscode/extension"
+		config.extensionPath = mason_adapter_path("local-lua-debugger-vscode", "extension")
 		on_config(config)
 	end,
 }
@@ -337,33 +325,20 @@ dap.configurations.lua = {
 	},
 }
 
--- Dap UI
-
-dapui.setup()
-
--- Function to set highlight group dynamically
+-- 9. Custom breakpoint color and sign
 local function set_dap_breakpoint_color()
-	local fallback_color = "#E82424" -- VSCode red color
-
-	-- Try to get the default error color from the current colorscheme
-	local ok, hl_error = pcall(vim.api.nvim_get_hl_by_name, "Error", true)
-
-	if ok and hl_error.foreground then
-		-- Use the foreground color of the "Error" highlight group
-		vim.api.nvim_set_hl(0, "DapBreakpoint", { fg = string.format("#%06x", hl_error.foreground) })
+	local fallback_color = "#E82424"
+	local ok, hl_error = pcall(vim.api.nvim_get_hl, 0, { name = "Error" })
+	if ok and hl_error.fg then
+		vim.api.nvim_set_hl(0, "DapBreakpoint", { fg = string.format("#%06x", hl_error.fg) })
 	else
-		-- Fallback to VSCode red if "Error" group is not available
 		vim.api.nvim_set_hl(0, "DapBreakpoint", { fg = fallback_color })
 	end
-
-	-- Define the DapBreakpoint sign with the custom highlight group
 	vim.fn.sign_define("DapBreakpoint", { text = "●", texthl = "DapBreakpoint" })
 end
-
--- Call the function
 set_dap_breakpoint_color()
 
--- Open/close DAP UI automatically on events
+-- 10. DAP UI open/close logic
 dap.listeners.before.attach.dapui_config = function()
 	dapui.open()
 end
@@ -376,3 +351,47 @@ end
 dap.listeners.before.event_exited.dapui_config = function()
 	dapui.close()
 end
+
+-- 11. (Optional) DapContinueChecked command as before
+local adapter_exec_map = {
+	codelldb = { pkg = "codelldb", exec = "extension/adapter/codelldb" },
+	python = { pkg = "debugpy", exec = "venv/bin/python" },
+	delve = { pkg = "delve", exec = "dlv" },
+	php = { pkg = "php-debug-adapter", exec = "extension/out/phpDebug.js" },
+	["php-debug-adapter"] = { pkg = "php-debug-adapter", exec = "extension/out/phpDebug.js" },
+	["js-debug-adapter"] = { pkg = "js-debug-adapter", exec = "js-debug/src/dapDebugServer.js" },
+	["pwa-node"] = { pkg = "js-debug-adapter", exec = "js-debug/src/dapDebugServer.js" },
+	["local-lua"] = { pkg = "local-lua-debugger-vscode", exec = "extension/extension/debugAdapter.js" },
+	["local-lua-debugger-vscode"] = { pkg = "local-lua-debugger-vscode", exec = "extension/extension/debugAdapter.js" },
+	go = { pkg = "delve", exec = "dlv" },
+}
+
+local function is_adapter_installed(adapter)
+	local entry = adapter_exec_map[adapter]
+	if not entry then
+		return true
+	end
+	local mason_root = vim.env.MASON or (vim.fn.stdpath("data") .. "/mason")
+	local path = mason_root .. "/packages/" .. entry.pkg .. "/" .. entry.exec
+	return vim.loop.fs_stat(path) ~= nil
+end
+
+vim.api.nvim_create_user_command("DapContinueChecked", function()
+	local session = dap.session()
+	local config = session and session.config
+	if not config then
+		local ft = vim.bo.filetype
+		config = dap.configurations[ft] and dap.configurations[ft][1]
+	end
+	local adapter = config and config.type
+	if adapter and not is_adapter_installed(adapter) then
+		vim.notify(
+			"DAP adapter '"
+				.. adapter
+				.. "' is still installing (via Mason or custom). Please try again in a few seconds.",
+			vim.log.levels.WARN
+		)
+		return
+	end
+	dap.continue()
+end, {})

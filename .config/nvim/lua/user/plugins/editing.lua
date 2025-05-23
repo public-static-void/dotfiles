@@ -49,4 +49,10 @@ return {
 			disable_mouse = false,
 		},
 	},
+	-- UndoTree
+	{
+		"jiaoshijie/undotree",
+		dependencies = "nvim-lua/plenary.nvim",
+		config = true,
+	},
 }

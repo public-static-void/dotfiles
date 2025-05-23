@@ -38,7 +38,7 @@ local servers = {
 	"gopls",
 	"hls",
 	"html",
-	"htmx",
+	-- "htmx",
 	"intelephense",
 	"jdtls",
 	"jinja_lsp",
