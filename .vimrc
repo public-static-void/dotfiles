@@ -31,7 +31,7 @@ else
 endif
 
 " Leader key variable.
-let mapleader = ','
+let mapleader = ' '
 
 " Allow plugins to determine indentation.
 filetype plugin indent on
@@ -332,6 +332,9 @@ xnoremap <silent><ESC><C-k> :m '<-2<CR>gv-gv
 nnoremap <silent><ESC>v :vsplit<CR>
 nnoremap <silent><ESC>b :split<CR>
 
+" Close current split.
+nnoremap <silent><ESC>s :close<CR>
+
 " Swap splits positions.
 nnoremap <silent><ESC>x <C-w>x
 
@@ -366,24 +369,34 @@ noremap <silent><ESC>l :vertical resize +1<CR>
 " Tabs.
 
 " Open new tab.
-noremap <silent><C-a> :tabnew<CR>
+nnoremap <silent><leader>w :tabnew<CR>
 " Select next tab.
-nnoremap <silent><C-s> gT
+nnoremap <silent><leader><S-Tab> gT
 " Select previous tab.
-nnoremap <silent><C-d> gt
+nnoremap <silent><leader><Tab> gt
 " Close current tab.
-nnoremap <silent><C-f> :tabclose<CR>
+nnoremap <silent><leader>q :tabclose<CR>
+" Go to tab 1-9.
+for i in range(1, 9)
+  execute 'nnoremap <silent><leader>' . i . ' ' . i . 'gt'
+endfor
+nnoremap <silent><leader>z :ls<CR>
 
 " Buffers.
 
 " Open new buffer.
-nnoremap <silent><ESC>a :enew<CR>
+nnoremap <silent><ESC>w :enew<CR>
 " Select next buffer.
-nnoremap <silent><ESC>s :bn<CR>
+nnoremap <silent><ESC><Tab> :bn<CR>
 " Select previous buffer.
-nnoremap <silent><ESC>d :bp<CR>
+nnoremap <silent><ESC><S-Tab> :bp<CR>
 " Close current buffer.
-nnoremap <silent><ESC>f :bd<CR>
+nnoremap <silent><ESC>q :bd!<CR>
+" Go to buffer 1-9.
+for i in range(1, 9)
+  execute 'nnoremap <silent><ESC>' . i . ' :buffer ' . i . '<CR>'
+endfor
+nnoremap <silent><ESC>z :tabs<CR>
 
 " Terminal.
 let g:toggle_term = "<C-t>"
@@ -427,6 +440,7 @@ nnoremap <silent><leader>d i<C-R>=strftime('%c')<CR><ESC>
 vnoremap <silent><leader>d c<C-R>=strftime('%c')<CR><ESC>
 
 " Completion.
-inoremap <silent> <C-@> <C-x><C-o>
-inoremap <silent> <TAB> <C-n>
-inoremap <silent> <S-TAB> <C-p>
+inoremap <expr> <Tab>    pumvisible() ? "\<C-n>" : (col('.') > 1 && getline('.')[col('.')-2] =~ '\S' ? "\<C-x>\<C-o>" : "\<Tab>")
+inoremap <expr> <S-Tab>  pumvisible() ? "\<C-p>" : "\<C-d>"
+inoremap <expr> <C-@>    pumvisible() ? '' : "\<C-x>\<C-o>"
+inoremap <expr> <CR>     pumvisible() ? "\<C-y>" : "\<CR>"
