@@ -16,6 +16,10 @@ return {
 		tag = "0.1.8",
 		dependencies = { "nvim-lua/plenary.nvim" },
 	},
+	{
+		"LukasPietzschmann/telescope-tabs",
+		dependencies = { "nvim-telescope/telescope.nvim" },
+	},
 	-- Code Navigation
 	{
 		"stevearc/aerial.nvim",

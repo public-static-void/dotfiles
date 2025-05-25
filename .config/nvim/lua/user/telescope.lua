@@ -10,7 +10,7 @@ if not actions then
 	return
 end
 
-local extensions_to_load = { "fzf", "ui-select" }
+local extensions_to_load = { "fzf", "ui-select", "telescope-tabs" }
 
 telescope.setup({
 	defaults = {

@@ -1,8 +1,5 @@
-local opts = { noremap = true, silent = true }
-local comm_opts = { noremap = true, silent = false }
-
-vim.g.mapleader = ","
-vim.g.maplocalleader = ","
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
 -- Commands (cabbrev)
 vim.cmd([[
@@ -52,6 +49,10 @@ vim.keymap.set({ "n", "v" }, "<Up>", "gk", { noremap = true, silent = true, desc
 vim.keymap.set("i", "<Down>", "<C-o>gj", { noremap = true, silent = true, desc = "Move down (visual line)" })
 vim.keymap.set("i", "<Up>", "<C-o>gk", { noremap = true, silent = true, desc = "Move up (visual line)" })
 
+vim.keymap.set({ "n", "v" }, "<C-u>", "<C-u>zz", { noremap = true, silent = true, desc = "Scroll up and center" })
+vim.keymap.set({ "n", "v" }, "<C-d>", "<C-d>zz", { noremap = true, silent = true, desc = "Scroll down and center" })
+
+-- Indentation --
 vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true, desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true, desc = "Indent right and reselect" })
 
@@ -97,19 +98,42 @@ vim.keymap.set(
 	":vertical resize +1<CR>",
 	{ noremap = true, silent = true, desc = "Resize split right" }
 )
+vim.keymap.set("n", "<M-s>", "<C-w>c", { noremap = true, silent = true, desc = "Close current split" })
 
 -- Tabs --
-vim.keymap.set("n", "<C-a>", ":tabnew<CR>", { noremap = true, silent = true, desc = "New tab" })
-vim.keymap.set("n", "<C-s>", "gT", { noremap = true, silent = true, desc = "Previous tab" })
-vim.keymap.set("n", "<C-d>", "gt", { noremap = true, silent = true, desc = "Next tab" })
-vim.keymap.set("n", "<C-f>", ":tabclose<CR>", { noremap = true, silent = true, desc = "Close tab" })
+vim.keymap.set("n", "<leader><Tab>", "gt", { noremap = true, silent = true, desc = "Next tab" })
+vim.keymap.set("n", "<leader><S-Tab>", "gT", { noremap = true, silent = true, desc = "Previous tab" })
+vim.keymap.set("n", "<leader>w", ":tabnew<CR>", { noremap = true, silent = true, desc = "New tab" })
+vim.keymap.set("n", "<leader>q", ":tabclose<CR>", { noremap = true, silent = true, desc = "Close tab" })
+for i = 1, 9 do
+	vim.keymap.set("n", "<leader>" .. i, i .. "gt", { noremap = true, silent = true, desc = "Go to tab " .. i })
+end
 
 -- Buffers --
-vim.keymap.set("n", "<M-a>", ":enew<CR>", { noremap = true, silent = true, desc = "New buffer" })
-vim.keymap.set("n", "<M-d>", ":bn<CR>", { noremap = true, silent = true, desc = "Next buffer" })
-vim.keymap.set("n", "<M-s>", ":bp<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
-vim.keymap.set("n", "<M-f>", ":bd<CR>", { noremap = true, silent = true, desc = "Delete buffer" })
-vim.keymap.set("n", "<M-g>", ":Bdelete<CR>", { noremap = true, silent = true, desc = "Force delete buffer" })
+vim.keymap.set("n", "<M-Tab>", ":bn<CR>", { noremap = true, silent = true, desc = "Next buffer" })
+vim.keymap.set("n", "<M-S-Tab>", ":bp<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
+vim.keymap.set("n", "<M-w>", ":enew<CR>", { noremap = true, silent = true, desc = "New buffer" })
+vim.keymap.set("n", "<M-q>", function()
+	if vim.fn.exists(":Bdelete") == 2 then
+		return ":Bdelete!<CR>"
+	else
+		return ":bd!<CR>"
+	end
+end, {
+	expr = true,
+	replace_keycodes = true,
+	noremap = true,
+	silent = true,
+	desc = "Delete buffer",
+})
+for i = 1, 9 do
+	vim.keymap.set(
+		"n",
+		"<A-" .. i .. ">",
+		":buffer " .. i .. "<CR>",
+		{ noremap = true, silent = true, desc = "Go to buffer " .. i }
+	)
+end
 
 -- Telescope --
 vim.keymap.set(
@@ -124,12 +148,22 @@ vim.keymap.set(
 	":Telescope live_grep<cr>",
 	{ noremap = true, silent = true, desc = "Live grep (Telescope)" }
 )
-vim.keymap.set(
-	"n",
-	"<leader>z",
-	":Telescope buffers<cr>",
-	{ noremap = true, silent = true, desc = "Buffers (Telescope)" }
-)
+vim.keymap.set("n", "<M-z>", function()
+	local ok, telescope = pcall(require, "telescope.builtin")
+	if ok and telescope then
+		telescope.buffers()
+	else
+		vim.cmd("ls")
+	end
+end, { noremap = true, silent = true, desc = "Show Buffers" })
+vim.keymap.set("n", "<leader>z", function()
+	local ok, telescope_tabs = pcall(require, "telescope-tabs")
+	if ok and telescope_tabs then
+		require("telescope-tabs").list_tabs()
+	else
+		vim.cmd("tabs")
+	end
+end, { noremap = true, silent = true, desc = "Show Tabs" })
 
 -- Gitsigns --
 vim.keymap.set(
@@ -223,7 +257,7 @@ vim.keymap.set("n", "gr", function()
 		vim.lsp.buf.references()
 	end
 end, { noremap = true, silent = true, desc = "LSP: References (Trouble)" })
-vim.keymap.set("n", "<leader>q", function()
+vim.keymap.set("n", "<leader>x", function()
 	local ok, trouble = pcall(require, "trouble")
 	if ok and trouble then
 		trouble.toggle("quickfix")
