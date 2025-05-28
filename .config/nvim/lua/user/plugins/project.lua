@@ -29,4 +29,9 @@ return {
 			"nvim-tree/nvim-web-devicons",
 		},
 	},
+	-- Autocreate Directories on Save
+	{
+		"jghauser/mkdir.nvim",
+		event = { "BufWritePre" },
+	},
 }
