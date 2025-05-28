@@ -26,6 +26,7 @@ setopt nobeep
 HISTFILE=~/.histfile
 HISTSIZE=10000
 SAVEHIST=10000
+setopt INC_APPEND_HISTORY SHARE_HISTORY
 
 # Enable vi-mode.
 bindkey -v
@@ -41,12 +42,12 @@ path=()
 
 # Core system paths (essential utilities first)
 path=(
-    /usr/bin
-    /bin
-    /usr/local/bin
-    /usr/sbin
-    /sbin
-    ${path}
+  /usr/bin
+  /bin
+  /usr/local/bin
+  /usr/sbin
+  /sbin
+  ${path}
 )
 
 # Load NVM early but after system paths
@@ -55,29 +56,29 @@ export NVM_DIR="$HOME/.nvm"
 
 # Node.js paths (only if NVM loaded successfully)
 if command -v nvm &>/dev/null; then
-    path=(
-        "$NVM_DIR/versions/node/$(nvm version default)/bin"
-        ${path}
-    )
+  path=(
+    "$NVM_DIR/versions/node/$(nvm version default)/bin"
+    ${path}
+  )
 fi
 
 # Other tool paths
 path=(
-    "$HOME/.pyenv/bin"
-    "$HOME/perl5/bin"
-    "$HOME/.local/bin"
-    "$HOME/scripts"
-    "$HOME/.cargo/bin"
-    "$HOME/go/bin"
-    "$HOME/.config/composer/vendor/bin"
-    "$HOME/.gem/ruby/*/bin"(N)
-    "$HOME/.local/share/gem/ruby/3.4.0/bin"
-    ${path}
+  "$HOME/.pyenv/bin"
+  "$HOME/perl5/bin"
+  "$HOME/.local/bin"
+  "$HOME/scripts"
+  "$HOME/.cargo/bin"
+  "$HOME/go/bin"
+  "$HOME/.config/composer/vendor/bin"
+  "$HOME/.gem/ruby/*/bin"(N)
+  "$HOME/.local/share/gem/ruby/3.4.0/bin"
+  ${path}
 )
 
 # Angular CLI (only if npm is available)
 if command -v npm &>/dev/null; then
-    path+=("$(npm root -g)/@angular/cli/bin")
+  path+=("$(npm root -g)/@angular/cli/bin")
 fi
 
 # Perl (local::lib)
@@ -96,8 +97,20 @@ command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
 
 # Exports
 export PATH
-export EDITOR="${SSH_CONNECTION:+vim}" || nvim
-export MANPAGER="nvim +Man!"
+# Editor and colors
+if [[ -n "$SSH_CONNECTION" ]]; then
+    export EDITOR="vim"
+    export VISUAL="vim"
+    export MANPAGER="vim -c 'set ft=man' -"
+elif command -v nvim >/dev/null 2>&1; then
+    export EDITOR="nvim"
+    export VISUAL="nvim"
+    export MANPAGER="nvim +Man!"
+else
+    export EDITOR="vim"
+    export VISUAL="vim"
+    export MANPAGER="vim -c 'set ft=man' -"
+fi
 export LS_COLORS="${LS_COLORS}:di=0;36:"
 
 #############
@@ -167,12 +180,12 @@ zstyle ":completion::complete:*" gain-privileges 1
 
 # Enable command and folder completion when line is empty.
 blanktab() {
-    if [[ $#BUFFER == 0 ]]; then
-        CURSOR=3
-        zle list-choices
-    else
-        zle expand-or-complete
-    fi
+  if [[ $#BUFFER == 0 ]]; then
+    CURSOR=3
+    zle list-choices
+  else
+    zle expand-or-complete
+  fi
 }
 
 # Register the blanktab function and bind it to the Tab key.
@@ -201,26 +214,26 @@ zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
 
 # Function to set the beam shape cursor.
 set_beam_cursor() {
-    echo -ne "\e[5 q"
+  echo -ne "\e[5 q"
 }
 
 # Change cursor shape based on vi modes.
 zle-keymap-select() {
-    case ${KEYMAP} in
-        vicmd)
-            # Block cursor for command mode
-            echo -ne "\e[1 q" ;;
-        main|viins|"")
-            # Beam cursor for insert and main modes
-            set_beam_cursor ;;
-    esac
+  case ${KEYMAP} in
+    vicmd)
+      # Block cursor for command mode
+      echo -ne "\e[1 q" ;;
+    main|viins|"")
+      # Beam cursor for insert and main modes
+      set_beam_cursor ;;
+  esac
 }
 
 # Initialize keymap and set cursor shape on line initialization.
 zle-line-init() {
-    # Set vi insert mode as keymap.
-    zle -K viins
-    set_beam_cursor
+  # Set vi insert mode as keymap.
+  zle -K viins
+  set_beam_cursor
 }
 
 # Register ZLE functions.
@@ -302,28 +315,28 @@ bindkey -a "^[[8~" end-of-line
 
 # Load zsh-syntax-highlighting.
 if [[ -f /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
-    source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 elif [[ -f /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]]; then
-    source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 fi
 
 # Load zsh-autosuggestions.
 if [[ -f /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
-    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
 elif [[ -f /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]]; then
-    source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+  source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 fi
 
 # Angular CLI completion (only if installed).
 if command -v ng &>/dev/null; then
-    source <(ng completion script)
+  source <(ng completion script)
 fi
 
 # Load Powerlevel10k prompt theme.
 if [[ -f /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme ]]; then
-    source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
+  source /usr/share/zsh-theme-powerlevel10k/powerlevel10k.zsh-theme
 elif [[ -f ~/.powerlevel10k/powerlevel10k.zsh-theme ]]; then
-    source ~/.powerlevel10k/powerlevel10k.zsh-theme
+  source ~/.powerlevel10k/powerlevel10k.zsh-theme
 fi
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
