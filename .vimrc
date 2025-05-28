@@ -9,9 +9,19 @@
 " Turn off filetype detection for a second. Will be turned back on later on.
 filetype off
 
+" Enable comment toggling
+if exists(':packadd')
+  packadd comment
+endif
+
 """"""""""""""""""""
 " GENERAL SETTINGS "
 """"""""""""""""""""
+
+" Disable beeps.
+set noerrorbells
+set visualbell
+set t_vb=
 
 " Set encoding to UTF-8.
 set encoding=utf-8
@@ -20,14 +30,14 @@ scriptencoding utf-8
 
 " Enables 24-bit RGB colors. Uses 'gui' attributes instead of 'cterm' attributes. Requires an ISO-8613-3 compatible terminal.
 if has('termguicolors')
-    set termguicolors
+  set termguicolors
 endif
 
 " Set shell.
 if exists('$SHELL')
-    set shell=$SHELL
+  set shell=$SHELL
 else
-    set shell=/bin/sh
+  set shell=/bin/sh
 endif
 
 " Leader key variable.
@@ -50,7 +60,7 @@ set autoread
 
 " Enable system clipboard for copy/paste from/to outside vim.
 if has('unnamedplus')
-    set clipboard=unnamed,unnamedplus
+  set clipboard=unnamed,unnamedplus
 endif
 
 " Enable syntax highlighting.
@@ -79,7 +89,8 @@ set noshowmode
 " Colors.
 " colorscheme koehler
 " colorscheme sorbet
-colorscheme slate
+" colorscheme slate
+colorscheme desert
 
 " Highlight cursor line.
 set cursorline
@@ -137,14 +148,17 @@ set showcmd
 autocmd FileType * setlocal formatoptions=cjqt
 
 " Completion.
-set completeopt=longest,menuone,menu
+set completeopt=menuone
 set omnifunc=syntaxcomplete#Complete
 
 " Enable Tab completion for the command line.
 set wildmenu
 set wildmode=longest:full,full
+if v:version >= 900
+  set wildoptions=pum
+endif
 " Ignore certain files.
-set wildignore+=*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx
+set wildignore+=*/tmp/*,*.so,*.swp,*.swo,*.zip,.git,.cabal-sandbox,*.docx,*.jpg,*.png,*.gif,*.pdf,*.pyc,*.exe,*.flv,*.img,*.xlsx,*/node_modules/**,*/.venv/**,*/vendor/**,*/target/**,*/.git/**,*/.hg/**,*/.svn/**,*/dist/**,*/dist/assets/**,*.min.js
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
@@ -156,7 +170,7 @@ set splitright
 
 " Set up backups swap.
 if !isdirectory($HOME.'/.vim/undodir')
-    call mkdir($HOME.'/.vim/undodir', 'p', 0700)
+  call mkdir($HOME.'/.vim/undodir', 'p', 0700)
 endif
 " Keep track of undos for all files in following directory only.
 set undodir=~/.vim/undodir
@@ -164,7 +178,7 @@ set undofile
 
 " Set up swap.
 if !isdirectory($HOME.'/.vim/swap')
-    call mkdir($HOME.'/.vim/swap', 'p', 0700)
+  call mkdir($HOME.'/.vim/swap', 'p', 0700)
 endif
 " Keep swap files in following directory only.
 set directory=~/.vim/swap
@@ -178,24 +192,24 @@ set hidden
 
 " Define a function to remove trailing whitespace.
 fun! TrimTrailingWhitespace()
-    if !&binary && &filetype != 'diff'
-        let l:save = winsaveview()
-        keeppatterns %s/\s\+$//e
-        call winrestview(l:save)
-    endif
+  if !&binary && &filetype != 'diff'
+    let l:save = winsaveview()
+    keeppatterns %s/\s\+$//e
+    call winrestview(l:save)
+  endif
 endfun
 
 augroup vimrc
-    " Remove all autocommands for the current group.
-    au!
-    " Jump to the last known cursor position.
-    " Don't when the position is invalid, when inside an event handler and for a commit message.
-    autocmd BufReadPost *
-    \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
-    \ |   exe "normal! g`\""
-    \ | endif
-    " Call the function defined above to remove trailing whitespace on save.
-    autocmd BufWritePre * :call TrimTrailingWhitespace()
+  " Remove all autocommands for the current group.
+  au!
+  " Jump to the last known cursor position.
+  " Don't when the position is invalid, when inside an event handler and for a commit message.
+  autocmd BufReadPost *
+        \ if line("'\"") >= 1 && line("'\"") <= line("$") && &ft !~# 'commit'
+        \ |   exe "normal! g`\""
+        \ | endif
+  " Call the function defined above to remove trailing whitespace on save.
+  autocmd BufWritePre * :call TrimTrailingWhitespace()
 augroup END
 
 " Set up skeletons.
@@ -203,6 +217,45 @@ augroup skeletons
   au!
   autocmd BufNewFile *.* silent! execute '0r ~/.vim/templates/skeleton.'.expand('<afile>:e')
 augroup END
+
+" Auto create directories on save.
+augroup auto_mkdir
+  autocmd!
+  autocmd BufWritePre * if !isdirectory(expand('%:p:h')) | call mkdir(expand('%:p:h'), 'p') | endif
+augroup END
+
+" Netrw.
+" Hide banner.
+let g:netrw_banner=0
+" Tree-style view.
+let g:netrw_liststyle=3
+" Open files in previous window.
+let g:netrw_browse_split=4
+" Open splits to the left.
+let g:netrw_altv=1
+" Set split width.
+let g:netrw_winsize=30
+" Toggle Netrw.
+function! ToggleNetrw()
+  if exists("t:netrw_open") && t:netrw_open
+    let t:netrw_open = 0
+    close
+  else
+    let t:netrw_open = 1
+    leftabove 30vsplit .
+  endif
+endfunction
+nnoremap <silent> <C-n> :call ToggleNetrw()<CR>
+
+" Grep.
+function! GrepPrompt()
+  let l:word = expand('<cword>')
+  let l:search = input('Grep for: ', l:word)
+  if !empty(l:search)
+    execute 'vimgrep /' . escape(l:search, '/\') . '/gj **/*'
+    copen
+  endif
+endfunction
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
@@ -403,19 +456,19 @@ let g:toggle_term = "<C-t>"
 
 let s:term_buf_nr = -1
 function! g:ToggleTerminal() abort
-    if s:term_buf_nr == -1
-        execute "botright terminal"
-        let s:term_buf_nr = bufnr("$")
-    else
-        try
-            execute "bdelete! " . s:term_buf_nr
-        catch
-            let s:term_buf_nr = -1
-            call <SID>ToggleTerminal()
-            return
-        endtry
-        let s:term_buf_nr = -1
-    endif
+  if s:term_buf_nr == -1
+    execute "botright terminal"
+    let s:term_buf_nr = bufnr("$")
+  else
+    try
+      execute "bdelete! " . s:term_buf_nr
+    catch
+      let s:term_buf_nr = -1
+      call <SID>ToggleTerminal()
+      return
+    endtry
+    let s:term_buf_nr = -1
+  endif
 endfunction
 
 execute "nnoremap <silent>".g:toggle_term ." :call ToggleTerminal()<CR>"
@@ -431,6 +484,36 @@ tnoremap <C-Left>  <C-w>h
 tnoremap <C-Down>  <C-w>j
 tnoremap <C-Up>    <C-w>k
 tnoremap <C-Right> <C-w>l
+
+" Netrw.
+nnoremap <silent> <C-n> :call ToggleNetrw()<CR>
+
+" Grep.
+nnoremap <leader>g :call GrepPrompt()<CR>
+
+" Diagnostics.
+
+" Next/previous error.
+nnoremap <leader>n :cnext<CR>
+nnoremap <leader>b :cprev<CR>
+
+" Show undo list.
+
+nnoremap <leader>u :undolist<CR>
+
+" Formatting.
+nnoremap <leader>f gg=G``
+vnoremap <leader>f ='
+
+" Auto-close parentheses
+inoremap ( ()<Left>
+inoremap [ []<Left>
+inoremap { {}<Left>
+
+" Auto-close quotes
+inoremap ' ''<Left>
+inoremap " ""<Left>
+inoremap ` ``<Left>
 
 " Other.
 
