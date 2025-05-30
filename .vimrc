@@ -11,7 +11,7 @@ filetype off
 
 " Enable comment toggling
 if exists(':packadd')
-  packadd comment
+  silent! packadd comment
 endif
 
 """"""""""""""""""""
