@@ -39,14 +39,26 @@ local function setup_gen(model)
 	config.host = host
 	config.port = port
 
+	local is_windows = (vim.uv and vim.uv.os_uname and vim.uv.os_uname().sysname == "Windows_NT")
 	config.command = function()
 		local body = { model = model, stream = true }
-		return string.format(
-			"curl --silent --no-buffer -X POST http://%s:%s/api/chat -d '%s'",
-			host,
-			port,
-			vim.json.encode(body)
-		)
+		local json_body = vim.json.encode(body)
+		if is_windows then
+			-- Use double quotes for PowerShell/cmd compatibility
+			return string.format(
+				"powershell -Command \"curl -s -X POST http://%s:%s/api/chat -d '%s'\"",
+				host,
+				port,
+				json_body
+			)
+		else
+			return string.format(
+				"curl --silent --no-buffer -X POST http://%s:%s/api/chat -d '%s'",
+				host,
+				port,
+				json_body
+			)
+		end
 	end
 
 	-- Wrap the setup in a protected call

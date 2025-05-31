@@ -1,7 +1,8 @@
 local utils = require("user.utils")
 
 -- Automatically install lazy.nvim
-local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
+local sep = package.config:sub(1, 1)
+local lazypath = vim.fn.stdpath("data") .. sep .. "lazy" .. sep .. "lazy.nvim"
 if not vim.uv.fs_stat(lazypath) then
 	local lazyrepo = "https://github.com/folke/lazy.nvim.git"
 	local out = vim.fn.system({ "git", "clone", "--filter=blob:none", "--branch=stable", lazyrepo, lazypath })

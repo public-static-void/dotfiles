@@ -37,7 +37,8 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 	pattern = "*.*",
 	callback = function()
 		local ext = vim.fn.expand("<afile>:e")
-		local skeleton = string.format("%s/skeleton.%s", vim.fn.expand("~/.config/nvim/templates"), ext)
+		local sep = package.config:sub(1, 1)
+		local skeleton = string.format("%s%sskeleton.%s", vim.fn.expand("~/.config/nvim/templates"), sep, ext)
 		if vim.fn.filereadable(skeleton) == 1 then
 			vim.cmd("0r " .. skeleton)
 		end

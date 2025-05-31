@@ -58,10 +58,13 @@ dapui.setup()
 require("nvim-dap-virtual-text").setup({})
 
 -- Helper for Mason adapter path
+local sep = package.config:sub(1, 1)
+local is_windows = vim.uv.os_uname().sysname == "Windows_NT"
 local function mason_adapter_path(pkg, subpath)
-	local root = vim.env.MASON or (vim.fn.stdpath("data") .. "/mason")
-	local path = root .. "/packages/" .. pkg .. "/" .. subpath
-	if vim.loop.fs_stat(path) then
+	-- Compose the full path to an adapter, cross-platform
+	local root = vim.env.MASON or (vim.fn.stdpath("data") .. sep .. "mason")
+	local path = root .. sep .. "packages" .. sep .. pkg .. sep .. subpath
+	if vim.uv.fs_stat(path) then
 		return path
 	else
 		return nil
@@ -125,15 +128,13 @@ local function async_program_builder(build_cmd, find_cmd)
 	end
 end
 
--- DAP Adapters and Configurations
-
--- C/C++/Rust (codelldb)
+-- C (codelldb, gcc)
 dap.adapters.codelldb = {
 	type = "server",
 	host = "127.0.0.1",
 	port = "${port}",
 	executable = {
-		command = mason_adapter_path("codelldb", "extension/adapter/codelldb"),
+		command = mason_adapter_path("codelldb", "extension" .. sep .. "adapter" .. sep .. "codelldb"),
 		args = { "--port", "${port}" },
 	},
 }
@@ -144,17 +145,31 @@ dap.configurations.c = {
 		request = "launch",
 		program = async_program_builder(function()
 			local current_file = vim.fn.expand("%:p")
-			local output_binary = "./build/" .. vim.fn.fnamemodify(current_file, ":t:r")
-			return string.format("mkdir -p build && gcc %s -g -o %s", current_file, output_binary)
+			local output_binary = "." .. sep .. "build" .. sep .. vim.fn.fnamemodify(current_file, ":t:r")
+			if is_windows then
+				return string.format(
+					"if not exist build mkdir build && gcc %s -g -o %s.exe",
+					current_file,
+					output_binary
+				)
+			else
+				return string.format("mkdir -p build && gcc %s -g -o %s", current_file, output_binary)
+			end
 		end, function()
 			local current_file = vim.fn.expand("%:p")
-			local output_binary = "./build/" .. vim.fn.fnamemodify(current_file, ":t:r")
-			return string.format("find ./build -maxdepth 1 -type f -name '%s'", vim.fn.fnamemodify(output_binary, ":t"))
+			local output_binary = vim.fn.fnamemodify(current_file, ":t:r")
+			if is_windows then
+				return string.format("dir /b build\\%s.exe", output_binary)
+			else
+				return string.format("find .%sbuild -maxdepth 1 -type f -name '%s'", sep, output_binary)
+			end
 		end),
 		cwd = "${workspaceFolder}",
 		stopOnEntry = false,
 	},
 }
+
+-- C++ (codelldb, g++)
 dap.configurations.cpp = {
 	{
 		name = "Launch file",
@@ -162,12 +177,24 @@ dap.configurations.cpp = {
 		request = "launch",
 		program = async_program_builder(function()
 			local current_file = vim.fn.expand("%:p")
-			local output_binary = "./build/" .. vim.fn.fnamemodify(current_file, ":t:r")
-			return string.format("mkdir -p build && g++ %s -g -o %s", current_file, output_binary)
+			local output_binary = "." .. sep .. "build" .. sep .. vim.fn.fnamemodify(current_file, ":t:r")
+			if is_windows then
+				return string.format(
+					"if not exist build mkdir build && g++ %s -g -o %s.exe",
+					current_file,
+					output_binary
+				)
+			else
+				return string.format("mkdir -p build && g++ %s -g -o %s", current_file, output_binary)
+			end
 		end, function()
 			local current_file = vim.fn.expand("%:p")
-			local output_binary = "./build/" .. vim.fn.fnamemodify(current_file, ":t:r")
-			return string.format("find ./build -maxdepth 1 -type f -name '%s'", vim.fn.fnamemodify(output_binary, ":t"))
+			local output_binary = vim.fn.fnamemodify(current_file, ":t:r")
+			if is_windows then
+				return string.format("dir /b build\\%s.exe", output_binary)
+			else
+				return string.format("find .%sbuild -maxdepth 1 -type f -name '%s'", sep, output_binary)
+			end
 		end),
 		cwd = "${workspaceFolder}",
 		stopOnEntry = false,
@@ -175,6 +202,8 @@ dap.configurations.cpp = {
 }
 dap.configurations["c++"] = dap.configurations.cpp
 dap.configurations["cc"] = dap.configurations.cpp
+
+-- Rust (codelldb)
 dap.configurations.rust = {
 	{
 		name = "Launch file",
@@ -183,7 +212,11 @@ dap.configurations.rust = {
 		program = async_program_builder(function()
 			return "cargo build"
 		end, function()
-			return "find ./target/debug -maxdepth 1 -type f -executable"
+			if is_windows then
+				return "dir /b target\\debug\\*.exe"
+			else
+				return string.format("find .%starget%sdebug -maxdepth 1 -type f -executable", sep, sep)
+			end
 		end),
 		cwd = "${workspaceFolder}",
 		stopOnEntry = false,
@@ -193,7 +226,13 @@ dap.configurations.rust = {
 -- Python (debugpy)
 dap.adapters.python = {
 	type = "executable",
-	command = mason_adapter_path("debugpy", "venv/bin/python"),
+	command = (function()
+		if is_windows then
+			return mason_adapter_path("debugpy", "venv" .. sep .. "Scripts" .. sep .. "python.exe")
+		else
+			return mason_adapter_path("debugpy", "venv" .. sep .. "bin" .. sep .. "python")
+		end
+	end)(),
 	args = { "-m", "debugpy.adapter" },
 }
 dap.configurations.python = {
@@ -206,12 +245,23 @@ dap.configurations.python = {
 		console = "integratedTerminal",
 		pythonPath = function()
 			local cwd = vim.fn.getcwd()
-			if vim.fn.executable(cwd .. "/venv/bin/python") == 1 then
-				return cwd .. "/venv/bin/python"
-			elseif vim.fn.executable(cwd .. "/.venv/bin/python") == 1 then
-				return cwd .. "/.venv/bin/python"
+			if is_windows then
+				if vim.fn.executable(cwd .. sep .. "venv" .. sep .. "Scripts" .. sep .. "python.exe") == 1 then
+					return cwd .. sep .. "venv" .. sep .. "Scripts" .. sep .. "python.exe"
+				elseif vim.fn.executable(cwd .. sep .. ".venv" .. sep .. "Scripts" .. sep .. "python.exe") == 1 then
+					return cwd .. sep .. ".venv" .. sep .. "Scripts" .. sep .. "python.exe"
+				end
 			else
-				return mason_adapter_path("debugpy", "venv/bin/python")
+				if vim.fn.executable(cwd .. sep .. "venv" .. sep .. "bin" .. sep .. "python") == 1 then
+					return cwd .. sep .. "venv" .. sep .. "bin" .. sep .. "python"
+				elseif vim.fn.executable(cwd .. sep .. ".venv" .. sep .. "bin" .. sep .. "python") == 1 then
+					return cwd .. sep .. ".venv" .. sep .. "bin" .. sep .. "python"
+				end
+			end
+			if is_windows then
+				return mason_adapter_path("debugpy", "venv" .. sep .. "Scripts" .. sep .. "python.exe")
+			else
+				return mason_adapter_path("debugpy", "venv" .. sep .. "bin" .. sep .. "python")
 			end
 		end,
 	},
@@ -236,23 +286,10 @@ dap.configurations.go = {
 }
 
 -- PHP (php-debug-adapter)
--- NOTE: Requires PHP and Xdebug to be installed and configured
--- Install PHP (i.e. `pacman -S php`)
--- Install xdebug (i.e. `pacman -S xdebug`)
--- Adjust php.ini (i.e. /etc/php/php.ini) or xdebug.ini (i.e. /etc/php/conf.d/xdebug.ini)):
--- zend_extension=xdebug.so
--- xdebug.mode=debug
--- xdebug.start_with_request=yes
--- xdebug.client_host=127.0.0.1
--- xdebug.client_port=9003
--- xdebug.remote_host=127.0.0.1
--- xdebug.remote_port=9003
--- xdebug.remote_enable=1
--- xdebug.remote_autostart=1
 dap.adapters.php = {
 	type = "executable",
 	command = "node",
-	args = { mason_adapter_path("php-debug-adapter", "extension/out/phpDebug.js") },
+	args = { mason_adapter_path("php-debug-adapter", "extension" .. sep .. "out" .. sep .. "phpDebug.js") },
 }
 dap.configurations.php = {
 	{
@@ -274,7 +311,7 @@ dap.adapters["pwa-node"] = {
 	executable = {
 		command = "node",
 		args = {
-			mason_adapter_path("js-debug-adapter", "js-debug/src/dapDebugServer.js"),
+			mason_adapter_path("js-debug-adapter", "js-debug" .. sep .. "src" .. sep .. "dapDebugServer.js"),
 			"${port}",
 		},
 	},
@@ -303,7 +340,7 @@ dap.adapters["local-lua"] = {
 	type = "executable",
 	command = "node",
 	args = {
-		mason_adapter_path("local-lua-debugger-vscode", "extension/extension/debugAdapter.js"),
+		mason_adapter_path("local-lua-debugger-vscode", "extension" .. sep .. "extension" .. sep .. "debugAdapter.js"),
 	},
 	enrich_config = function(config, on_config)
 		config.extensionPath = mason_adapter_path("local-lua-debugger-vscode", "extension")
@@ -354,15 +391,27 @@ end
 
 -- 11. (Optional) DapContinueChecked command as before
 local adapter_exec_map = {
-	codelldb = { pkg = "codelldb", exec = "extension/adapter/codelldb" },
-	python = { pkg = "debugpy", exec = "venv/bin/python" },
+	codelldb = { pkg = "codelldb", exec = "extension" .. sep .. "adapter" .. sep .. "codelldb" },
+	python = {
+		pkg = "debugpy",
+		exec = (
+			is_windows and "venv" .. sep .. "Scripts" .. sep .. "python.exe"
+			or "venv" .. sep .. "bin" .. sep .. "python"
+		),
+	},
 	delve = { pkg = "delve", exec = "dlv" },
-	php = { pkg = "php-debug-adapter", exec = "extension/out/phpDebug.js" },
-	["php-debug-adapter"] = { pkg = "php-debug-adapter", exec = "extension/out/phpDebug.js" },
-	["js-debug-adapter"] = { pkg = "js-debug-adapter", exec = "js-debug/src/dapDebugServer.js" },
-	["pwa-node"] = { pkg = "js-debug-adapter", exec = "js-debug/src/dapDebugServer.js" },
-	["local-lua"] = { pkg = "local-lua-debugger-vscode", exec = "extension/extension/debugAdapter.js" },
-	["local-lua-debugger-vscode"] = { pkg = "local-lua-debugger-vscode", exec = "extension/extension/debugAdapter.js" },
+	php = { pkg = "php-debug-adapter", exec = "extension" .. sep .. "out" .. sep .. "phpDebug.js" },
+	["php-debug-adapter"] = { pkg = "php-debug-adapter", exec = "extension" .. sep .. "out" .. sep .. "phpDebug.js" },
+	["js-debug-adapter"] = { pkg = "js-debug-adapter", exec = "js-debug" .. sep .. "src" .. sep .. "dapDebugServer.js" },
+	["pwa-node"] = { pkg = "js-debug-adapter", exec = "js-debug" .. sep .. "src" .. sep .. "dapDebugServer.js" },
+	["local-lua"] = {
+		pkg = "local-lua-debugger-vscode",
+		exec = "extension" .. sep .. "extension" .. sep .. "debugAdapter.js",
+	},
+	["local-lua-debugger-vscode"] = {
+		pkg = "local-lua-debugger-vscode",
+		exec = "extension" .. sep .. "extension" .. sep .. "debugAdapter.js",
+	},
 	go = { pkg = "delve", exec = "dlv" },
 }
 
@@ -371,9 +420,9 @@ local function is_adapter_installed(adapter)
 	if not entry then
 		return true
 	end
-	local mason_root = vim.env.MASON or (vim.fn.stdpath("data") .. "/mason")
-	local path = mason_root .. "/packages/" .. entry.pkg .. "/" .. entry.exec
-	return vim.loop.fs_stat(path) ~= nil
+	local mason_root = vim.env.MASON or (vim.fn.stdpath("data") .. sep .. "mason")
+	local path = mason_root .. sep .. "packages" .. sep .. entry.pkg .. sep .. entry.exec
+	return vim.uv.fs_stat(path) ~= nil
 end
 
 vim.api.nvim_create_user_command("DapContinueChecked", function()

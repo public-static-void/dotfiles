@@ -20,7 +20,16 @@ M.current_models = {}
 
 -- Check if Ollama is running
 function M.is_ollama_available()
-	local handle = io.popen("pgrep -f 'ollama serve'")
+	local is_windows = (vim.uv and vim.uv.os_uname and vim.uv.os_uname().sysname == "Windows_NT")
+	local handle
+	if is_windows then
+		-- Use PowerShell to check for 'ollama serve' process on Windows
+		handle = io.popen(
+			[[powershell -Command "Get-Process | Where-Object { $_.Path -like '*ollama*' -and $_.Path -like '*serve*' }"]]
+		)
+	else
+		handle = io.popen("pgrep -f 'ollama serve'")
+	end
 	if not handle then
 		return false
 	end

@@ -5,7 +5,8 @@ if not handlers then
 	return
 end
 
-local home = os.getenv("HOME")
+local sep = package.config:sub(1, 1)
+local config_path = vim.fn.stdpath("config") .. sep .. "lua" .. sep .. "typos.toml"
 
 return {
 	filetypes = {
@@ -13,6 +14,6 @@ return {
 	},
 	init_options = {
 		diagnosticSeverity = "Warning",
-		config = home .. "/.config/nvim/lua/typos.toml",
+		config = config_path,
 	},
 }

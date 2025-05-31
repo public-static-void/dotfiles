@@ -1,3 +1,5 @@
+local sep = package.config:sub(1, 1)
+
 return {
 	-- Core Completion
 	{
@@ -29,7 +31,7 @@ return {
 				require("codeium").setup({
 					enable_chat = true,
 					enable_cmp = true,
-					config_path = vim.fn.stdpath("data") .. "/codeium/config.json",
+					config_path = vim.fn.stdpath("data") .. sep .. "codeium" .. sep .. "config.json",
 				})
 			end)
 		end,

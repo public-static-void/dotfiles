@@ -110,12 +110,12 @@ local options = {
 	splitright = true,
 
 	-- Set undo directory.
-	undodir = vim.fn.expand("$HOME") .. "/.local/share/nvim/undodir",
+	undodir = vim.fn.stdpath("data") .. package.config:sub(1, 1) .. "undodir",
 	-- Keep track of all undos globally in this directory only.
 	undofile = true,
 
 	-- Set backup directory.
-	directory = vim.fn.expand("$HOME") .. "/.local/share/nvim/swap",
+	directory = vim.fn.stdpath("data") .. package.config:sub(1, 1) .. "swap",
 	-- Delete local backup since everything is stored centrally.
 	backup = false,
 	writebackup = false,
@@ -138,8 +138,8 @@ local function create_dir_if_not_exists(dir)
 		vim.fn.mkdir(dir, "p", "0700")
 	end
 end
-create_dir_if_not_exists(vim.fn.expand("$HOME") .. "/.local/share/nvim/undodir")
-create_dir_if_not_exists(vim.fn.expand("$HOME") .. "/.local/share/nvim/swap")
+create_dir_if_not_exists(vim.fn.stdpath("data") .. package.config:sub(1, 1) .. "undodir")
+create_dir_if_not_exists(vim.fn.stdpath("data") .. package.config:sub(1, 1) .. "swap")
 
 -- Ignore certain folders/filetypes in the wildmenu.
 vim.opt.wildignore:append(
@@ -155,8 +155,17 @@ vim.cmd("set whichwrap+=<,>,[,],h,l")
 -- Treat compound words connected with "-" as single words.
 vim.cmd("set iskeyword+=-")
 
-local home = os.getenv("HOME")
--- Set Neovim specific Python path.
-vim.g.python3_host_prog = home .. "/.local/share/nvim/py3nvim/bin/python"
--- Set Neovim specific Perl path.
-vim.g.perl_host_prog = "/usr/bin/perl"
+-- Set Neovim Python 3 provider path dynamically
+local python3 = vim.fn.exepath("python3")
+if python3 == "" then
+	python3 = vim.fn.exepath("python")
+end
+if python3 ~= "" then
+	vim.g.python3_host_prog = python3
+end
+
+-- Set Perl provider path dynamically
+local perl = vim.fn.exepath("perl")
+if perl ~= "" then
+	vim.g.perl_host_prog = perl
+end
