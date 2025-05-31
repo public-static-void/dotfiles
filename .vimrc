@@ -266,6 +266,39 @@ set signcolumn=yes
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
 
+" Always show the statusline
+set laststatus=2
+" Start with a clean statusline
+set statusline=
+" Change highlight group
+set statusline+=%#TabLineSel#
+" Show current mode (Normal, Insert, etc.)
+set statusline+=\ %{mode()}
+" Show file name
+set statusline+=\ %f
+" Show modified flag [+] if the file is modified
+set statusline+=%m
+" Show readonly flag [RO] if the file is readonly
+set statusline+=%r
+" Change highlight group
+set statusline+=%#TabLineFill#
+" Powerline separator
+set statusline+=
+" Split the statusline into left and right sections
+set statusline+=%=
+" Powerline separator
+set statusline+=
+" Change highlight group
+set statusline+=%#TabLineSel#
+" Show file encoding
+set statusline+=\ %{&fileencoding?&fileencoding:&encoding}
+" Show filetype
+set statusline+=\ %y
+" Show line and column number
+set statusline+=\ %l:%c
+" Show percentage through the file
+set statusline+=\ %p%%
+
 """""""""""""""""""""""""""
 " LANGUAGE SPECIFIC STUFF "
 """""""""""""""""""""""""""
