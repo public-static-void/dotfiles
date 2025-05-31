@@ -209,7 +209,26 @@ vim.keymap.set("n", "<leader>i", ":DapStepInto<CR>", { noremap = true, silent = 
 
 -- LSP --
 vim.keymap.set("n", "<leader>f", function()
-	vim.lsp.buf.format({ async = true })
+	local bufnr = vim.api.nvim_get_current_buf()
+	local can_format = false
+	for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
+		if client.supports_method and client:supports_method("textDocument/formatting") then
+			can_format = true
+			break
+		end
+	end
+	if can_format then
+		vim.lsp.buf.format({ async = true })
+	else
+		local pos = vim.api.nvim_win_get_cursor(0)
+		vim.cmd("silent normal! gg=G")
+		vim.cmd([[%s/\s\+$//e]])
+		vim.cmd([[%s#\($\n\)\+\%$##e]])
+		-- Clamp line number to last line in buffer
+		local last_line = vim.api.nvim_buf_line_count(0)
+		local new_line = math.min(pos[1], last_line)
+		vim.api.nvim_win_set_cursor(0, { new_line, pos[2] })
+	end
 end, { noremap = true, silent = true, desc = "LSP: Format buffer" })
 vim.keymap.set(
 	"n",
