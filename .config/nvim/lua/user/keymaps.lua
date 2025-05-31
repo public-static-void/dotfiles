@@ -209,6 +209,10 @@ vim.keymap.set("n", "<leader>i", ":DapStepInto<CR>", { noremap = true, silent = 
 
 -- LSP --
 vim.keymap.set("n", "<leader>f", function()
+	if not vim.bo.modifiable then
+		vim.notify("Buffer is not modifiable!", vim.log.levels.WARN)
+		return
+	end
 	local bufnr = vim.api.nvim_get_current_buf()
 	local can_format = false
 	for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
@@ -224,7 +228,6 @@ vim.keymap.set("n", "<leader>f", function()
 		vim.cmd("silent normal! gg=G")
 		vim.cmd([[%s/\s\+$//e]])
 		vim.cmd([[%s#\($\n\)\+\%$##e]])
-		-- Clamp line number to last line in buffer
 		local last_line = vim.api.nvim_buf_line_count(0)
 		local new_line = math.min(pos[1], last_line)
 		vim.api.nvim_win_set_cursor(0, { new_line, pos[2] })
