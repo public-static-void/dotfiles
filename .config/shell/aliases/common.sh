@@ -18,11 +18,11 @@ else
 fi
 
 # Use 'rg' (ripgrep) as grep replacement if available, else grep with color
-if command -v rg >/dev/null 2>&1; then
-  alias grep="rg"
-else
-  alias grep="grep --color=auto"
-fi
+# if command -v rg >/dev/null 2>&1; then
+#   alias grep="rg"
+# else
+#   alias grep="grep --color=auto"
+# fi
 
 # Use 'fd' as a modern, fast alternative to 'find' if available
 if command -v fd >/dev/null 2>&1; then
