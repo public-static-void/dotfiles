@@ -4,47 +4,31 @@
 # ~/.bashrc #
 #############
 
-####################
-# GENERAL SETTINGS #
-####################
+# Exit if not running interactively
+[[ $- != *i* ]] && return
 
-# Disable beeps.
+# Disable beeps and terminal freezing from Ctrl-S
 set bell-style none
-
-# Disable ctrl+s ctrl+q.
 stty -ixon
 
-# Enable vi mode.
+# Enable vi mode and autocd
 set -o vi
-
-# Allow to change directory without typing 'cd'.
 shopt -s autocd
 
-# History settings.
+# History settings
 HISTSIZE=10000
 HISTFILESIZE=10000
 shopt -s histappend
 PROMPT_COMMAND='history -a; history -n'
 
-# If not running interactively, don't do anything.
-[[ $- != *i* ]] && return
-
-###################
-# PROMPT SETTINGS #
-###################
-
-# Function to get current git branch, if any
+# Prompt with Git branch
 parse_git_branch() {
 	git rev-parse --is-inside-work-tree &>/dev/null || return
 	git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
 }
-
-# Set prompt with colors and git branch, red for root, cyan for user
 if [ "$(id -u)" -eq 0 ]; then
-	# Root: Red user/host, cyan path, yellow git branch
 	PS1='\[\e[31m\]\u@\h:\[\e[36m\]\w\[\e[33m\]$(parse_git_branch)\[\e[0m\] # '
 else
-	# User: Green user/host, cyan path, yellow git branch
 	PS1='\[\e[32m\]\u@\h:\[\e[36m\]\w\[\e[33m\]$(parse_git_branch)\[\e[0m\] $ '
 fi
 
@@ -62,13 +46,9 @@ else
 	export VISUAL="vim"
 	export MANPAGER="vim -c 'set ft=man' -"
 fi
-
 export LS_COLORS="${LS_COLORS}:di=0;36:"
 
-#########
-# PATHS #
-#########
-
+# PATH additions (preserve order and uniqueness)
 add_to_path() {
 	for dir in "$@"; do
 		case ":$PATH:" in
@@ -78,37 +58,25 @@ add_to_path() {
 	done
 }
 add_to_path "$HOME/.pyenv/bin" "$HOME/perl5/bin" "$HOME/.local/bin" "$HOME/scripts" "$HOME/.cargo/bin" "$HOME/go/bin" "$HOME/.config/composer/vendor/bin"
-
-# Export the PATH-variable.
 export PATH
 
-#############
-# AUTOSTART #
-#############
-
-# Start fastfetch with terminal.
+# Autostart (fastfetch)
 if command -v fastfetch &>/dev/null; then
 	fastfetch --logo-color-2 "22"
 fi
 
-###########
-# ALIASES #
-###########
+# --- Aliases (universal/common) ---
+[ -f "$HOME/.config/shell/aliases/common.sh" ] && . "$HOME/.config/shell/aliases/common.sh"
 
-if [ -f "$HOME/.aliases" ]; then
-	. "$HOME/.aliases"
-fi
+# --- Aliases (context-specific) ---
+[ -f "$HOME/.config/shell/aliases/xrandr.sh" ] && . "$HOME/.config/shell/aliases/xrandr.sh"
+[ -f "$HOME/.config/shell/aliases/cam.sh" ] && . "$HOME/.config/shell/aliases/cam.sh"
+[ -f "$HOME/.config/shell/aliases/games.sh" ] && . "$HOME/.config/shell/aliases/games.sh"
 
-#############
-# FUNCTIONS #
-#############
+# --- Functions (all) ---
+for f in "$HOME/.config/shell/functions/"*.sh; do
+	[ -f "$f" ] && . "$f"
+done
 
-if [ -f "$HOME/.functions" ]; then
-	. "$HOME/.functions"
-fi
-
-##############
-# COMPLETION #
-##############
-
+# Bash completion
 [ -f /etc/bash_completion ] && . /etc/bash_completion
