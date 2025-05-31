@@ -92,12 +92,16 @@ mods = "Control"
 
 [scrolling]
 history = 25000
-multiplier = 3
+multiplier = 1
 
 [terminal.shell]
 program = "/bin/zsh"
 
 [window]
 dynamic_title = true
+decorations = "full"
+opacity = 1
 
-[terminal]
+[bell]
+duration = 0
+[window.padding]
