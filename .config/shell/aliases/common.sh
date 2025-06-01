@@ -25,12 +25,12 @@ fi
 # fi
 
 # Use 'fd' as a modern, fast alternative to 'find' if available
-if command -v fd >/dev/null 2>&1; then
-  alias find="fd"
-  alias fdf="fd --type f"      # Find files only
-  alias fdd="fd --type d"      # Find directories only
-  alias fdh="fd --hidden"      # Include hidden files
-fi
+# if command -v fd >/dev/null 2>&1; then
+#   alias find="fd"
+#   alias fdf="fd --type f"      # Find files only
+#   alias fdd="fd --type d"      # Find directories only
+#   alias fdh="fd --hidden"      # Include hidden files
+# fi
 
 # Package managers with color output
 alias pacman="sudo pacman --color=auto"
