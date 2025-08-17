@@ -6,9 +6,9 @@ if not handlers then
 end
 
 return {
+	on_attach = handlers.on_attach,
+	capabilities = handlers.capabilities,
 	cmd = { "htmx-lsp" },
 	filetypes = { "html", "htmx", "typescript" },
 	root_markers = { "package.json", ".git" },
-	on_attach = handlers.on_attach,
-	capabilities = handlers.capabilities,
 }

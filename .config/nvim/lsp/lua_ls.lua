@@ -8,6 +8,8 @@ end
 return {
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
+	cmd = { "lua-language-server" },
+	filetypes = { "lua" },
 	settings = {
 		Lua = {
 			runtime = {
@@ -15,7 +17,11 @@ return {
 				path = vim.split(package.path, ";"),
 			},
 			diagnostics = {
-				-- no need for 'globals'
+				globals = { "vim", "use" },
+			},
+			workspace = {
+				library = vim.api.nvim_get_runtime_file("", true),
+				checkThirdParty = false,
 			},
 			telemetry = {
 				enable = false,

@@ -6,6 +6,9 @@ if not handlers then
 end
 
 return {
+	on_attach = handlers.on_attach,
+	capabilities = handlers.capabilities,
+	cmd = { "tailwindcss-language-server", "--stdio" },
 	filetypes = {
 		"css",
 		"scss",
@@ -18,5 +21,26 @@ return {
 		"typescriptreact",
 		"svelte",
 		"elixir",
+	},
+	root_markers = {
+		"tailwind.config.ts",
+		"tailwind.config.js",
+		"tailwind.config.cjs",
+		"package.json",
+		".git",
+	},
+	settings = {
+		tailwindCSS = {
+			experimental = {
+				classRegex = {
+					{ 'class[:=]\\s*"([^"]*)"', 1 },
+					{ '~H"([^"]*)"', 1 },
+				},
+			},
+			includeLanguages = {
+				elixir = "html-eex",
+				heex = "html-eex",
+			},
+		},
 	},
 }

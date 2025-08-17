@@ -6,13 +6,15 @@ if not handlers then
 end
 
 return {
+	on_attach = handlers.on_attach,
+	capabilities = handlers.capabilities,
+	filetypes = { "python" },
 	settings = {
 		python = {
 			analysis = {
 				autoSearchPaths = true,
 				useLibraryCodeForTypes = true,
 				typeCheckingMode = "off",
-				-- diagnosticMode = "workspace",
 				diagnosticMode = "openFilesOnly",
 				inlayHints = {
 					variableTypes = true,

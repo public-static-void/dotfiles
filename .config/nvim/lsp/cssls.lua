@@ -8,6 +8,8 @@ end
 return {
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
+	cmd = { "vscode-css-language-server", "--stdio" },
+	filetypes = { "css", "scss", "less" },
 	settings = {
 		css = {
 			validate = true,

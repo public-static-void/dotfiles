@@ -8,6 +8,7 @@ end
 return {
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
+	cmd = { "ltex-ls" },
 	filetypes = {
 		"bib",
 		"context",
@@ -26,9 +27,9 @@ return {
 		"text",
 		-- "xhtml",
 	},
+	root_markers = { ".git" },
 	settings = {
 		ltex = {
-			-- language = "de-DE",
 			language = "en-US",
 		},
 	},

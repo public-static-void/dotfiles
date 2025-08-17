@@ -1,0 +1,20 @@
+local utils = require("user.utils")
+local handlers = require("user.lsp.handlers")
+
+local M = {}
+
+M.on_attach = function(client, bufnr)
+	if client.name == "jdtls" then
+		-- Setup the DAP integration managed by nvim-jdtls
+		require("jdtls").setup_dap()
+	end
+	handlers.on_attach(client, bufnr)
+end
+
+return {
+	on_attach = M.on_attach,
+	capabilities = handlers.capabilities,
+	cmd = { "jdtls" },
+	root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" },
+	filetypes = { "java" },
+}

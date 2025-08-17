@@ -6,8 +6,11 @@ return {
 		build = ":MasonUpdate",
 	},
 	{
-		"williamboman/mason-lspconfig.nvim",
-		dependencies = { "williamboman/mason.nvim" },
+		"WhoIsSethDaniel/mason-tool-installer.nvim",
+		dependencies = {
+			"williamboman/mason.nvim",
+			"williamboman/mason-lspconfig.nvim",
+		},
 	},
 	-- Null-LS
 	{
@@ -20,7 +23,7 @@ return {
 	},
 	-- Java LSP
 	{
-		"nvim-java/nvim-java",
+		"mfussenegger/nvim-jdtls",
 	},
 	-- Neovim Lua LSP
 	{

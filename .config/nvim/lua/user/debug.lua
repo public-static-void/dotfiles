@@ -1,61 +1,25 @@
-local mason_dap_packages = {
-	"python",
-	"codelldb",
-	"delve",
-	"js",
-	"php",
-}
+local utils = require("user.utils")
 
---  Custom DAPs (not in Mason)
-local custom_dap_packages = {
-	"local-lua-debugger-vscode",
-}
-
--- Mason auto-install for official DAPs
-require("mason").setup()
-require("mason-nvim-dap").setup({
-	ensure_installed = mason_dap_packages,
-	automatic_installation = true,
-})
-
--- Custom installer for non-Mason DAPs
-local mason_registry_ok, mason_registry = pcall(require, "mason-registry")
-if not mason_registry_ok or not mason_registry then
-	vim.notify("Mason Registry could not be loaded. Check your Mason setup.", vim.log.levels.ERROR)
+local dap = utils.safe_require("dap")
+if not dap then
 	return
 end
 
-local function custom_install_adapter(adapter)
-	local ok, package = pcall(mason_registry.get_package, adapter)
-	if ok and package and not package:is_installed() then
-		vim.schedule(function()
-			vim.notify("[custom-dap] installing " .. adapter, vim.log.levels.INFO)
-		end)
-		package:install():once("closed", function()
-			vim.schedule(function()
-				if package:is_installed() then
-					vim.notify("[custom-dap] " .. adapter .. " was installed", vim.log.levels.INFO)
-				else
-					vim.notify("[custom-dap] failed to install " .. adapter, vim.log.levels.ERROR)
-				end
-			end)
-		end)
-	end
+-- DAP UI and virtual text
+
+local dapui = utils.safe_require("dapui")
+if not dapui then
+	return
 end
 
-vim.api.nvim_create_autocmd("VimEnter", {
-	callback = function()
-		for _, adapter in ipairs(custom_dap_packages) do
-			custom_install_adapter(adapter)
-		end
-	end,
-})
-
--- DAP UI and virtual text
-local dap = require("dap")
-local dapui = require("dapui")
 dapui.setup()
-require("nvim-dap-virtual-text").setup({})
+
+local virtual_text = utils.safe_require("nvim-dap-virtual-text")
+if not virtual_text then
+	return
+end
+
+virtual_text.setup({})
 
 -- Helper for Mason adapter path
 local sep = package.config:sub(1, 1)
@@ -128,44 +92,14 @@ local function async_program_builder(build_cmd, find_cmd)
 	end
 end
 
--- C (codelldb, gcc)
-dap.adapters.codelldb = {
-	type = "server",
-	host = "127.0.0.1",
-	port = "${port}",
-	executable = {
-		command = mason_adapter_path("codelldb", "extension" .. sep .. "adapter" .. sep .. "codelldb"),
-		args = { "--port", "${port}" },
-	},
-}
-dap.configurations.c = {
+-- Java
+dap.configurations.java = {
 	{
-		name = "Launch file",
-		type = "codelldb",
+		type = "java",
 		request = "launch",
-		program = async_program_builder(function()
-			local current_file = vim.fn.expand("%:p")
-			local output_binary = "." .. sep .. "build" .. sep .. vim.fn.fnamemodify(current_file, ":t:r")
-			if is_windows then
-				return string.format(
-					"if not exist build mkdir build && gcc %s -g -o %s.exe",
-					current_file,
-					output_binary
-				)
-			else
-				return string.format("mkdir -p build && gcc %s -g -o %s", current_file, output_binary)
-			end
-		end, function()
-			local current_file = vim.fn.expand("%:p")
-			local output_binary = vim.fn.fnamemodify(current_file, ":t:r")
-			if is_windows then
-				return string.format("dir /b build\\%s.exe", output_binary)
-			else
-				return string.format("find .%sbuild -maxdepth 1 -type f -name '%s'", sep, output_binary)
-			end
-		end),
-		cwd = "${workspaceFolder}",
-		stopOnEntry = false,
+		name = "Launch Java Main Class",
+		cwd = vim.fn.getcwd(),
+		console = "internalConsole",
 	},
 }
 
@@ -286,6 +220,19 @@ dap.configurations.go = {
 }
 
 -- PHP (php-debug-adapter)
+-- NOTE: Requires PHP and Xdebug to be installed and configured
+-- Install PHP (i.e. `pacman -S php`)
+-- Install xdebug (i.e. `pacman -S xdebug`)
+-- Adjust php.ini (i.e. /etc/php/php.ini) or xdebug.ini (i.e. /etc/php/conf.d/xdebug.ini)):
+-- zend_extension=xdebug.so
+-- xdebug.mode=debug
+-- xdebug.start_with_request=yes
+-- xdebug.client_host=127.0.0.1
+-- xdebug.client_port=9003
+-- xdebug.remote_host=127.0.0.1
+-- xdebug.remote_port=9003
+-- xdebug.remote_enable=1
+-- xdebug.remote_autostart=1
 dap.adapters.php = {
 	type = "executable",
 	command = "node",
@@ -362,7 +309,7 @@ dap.configurations.lua = {
 	},
 }
 
--- 9. Custom breakpoint color and sign
+-- Custom breakpoint color and sign
 local function set_dap_breakpoint_color()
 	local fallback_color = "#E82424"
 	local ok, hl_error = pcall(vim.api.nvim_get_hl, 0, { name = "Error" })
@@ -375,7 +322,7 @@ local function set_dap_breakpoint_color()
 end
 set_dap_breakpoint_color()
 
--- 10. DAP UI open/close logic
+-- DAP UI open/close logic
 dap.listeners.before.attach.dapui_config = function()
 	dapui.open()
 end
@@ -389,7 +336,7 @@ dap.listeners.before.event_exited.dapui_config = function()
 	dapui.close()
 end
 
--- 11. (Optional) DapContinueChecked command as before
+-- DapContinueChecked command
 local adapter_exec_map = {
 	codelldb = { pkg = "codelldb", exec = "extension" .. sep .. "adapter" .. sep .. "codelldb" },
 	python = {

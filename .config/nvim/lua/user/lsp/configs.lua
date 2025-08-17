@@ -1,10 +1,5 @@
 local utils = require("user.utils")
 
--- local java = utils.safe_require("java")
--- if java then
--- 	java.setup({})
--- end
-
 local handlers = utils.safe_require("user.lsp.handlers")
 if not handlers then
 	return
@@ -16,12 +11,6 @@ if not mason then
 	return
 end
 mason.setup({})
-
-local mason_lsp = utils.safe_require("mason-lspconfig")
-if not mason_lsp then
-	vim.notify("mason-lspconfig.nvim not available", vim.log.levels.WARN)
-	return
-end
 
 local servers = {
 	"angularls",
@@ -45,7 +34,7 @@ local servers = {
 	"jsonls",
 	"kotlin_language_server",
 	"lemminx",
-	"ltex",
+	-- "ltex",
 	"lua_ls",
 	"marksman",
 	"omnisharp",
@@ -66,15 +55,62 @@ local servers = {
 	"twiggy_language_server",
 	-- "typos_lsp",
 	"vimls",
+	"java_test",
 	"vuels",
 	"yamlls",
 	"zls",
 }
 
--- Setup mason-lspconfig
-mason_lsp.setup({
-	ensure_installed = servers,
-	automatic_installation = true,
+local formatters = {
+	"black",
+	"blade_formatter",
+	"google_java_format",
+	"isort",
+	"ktlint",
+	"pint",
+	-- "php-cs-fixer",
+	"prettier",
+	"shellcheck",
+	"shfmt",
+	"sql_formatter",
+	"stylua",
+}
+
+local linters = {
+	"codespell",
+	"djlint",
+	"gitlint",
+	"markuplint",
+	"mypy",
+	"stylelint",
+}
+
+local debuggers = {
+	"codelldb",
+	"delve",
+	"java-debug-adapter",
+	"js",
+	"local-lua-debugger-vscode",
+	"php",
+	"python",
+}
+
+local mason_tool_installer = utils.safe_require("mason-tool-installer")
+if not mason_tool_installer then
+	vim.notify("mason-tool-installer.nvim not available", vim.log.levels.WARN)
+	return
+end
+
+local ensure_installed = {}
+vim.list_extend(ensure_installed, servers)
+vim.list_extend(ensure_installed, linters)
+vim.list_extend(ensure_installed, formatters)
+vim.list_extend(ensure_installed, debuggers)
+
+mason_tool_installer.setup({
+	ensure_installed = ensure_installed,
+	auto_update = true,
+	run_on_start = true,
 })
 
 vim.lsp.enable(servers)

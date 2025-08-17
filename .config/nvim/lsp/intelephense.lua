@@ -8,6 +8,9 @@ end
 return {
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
+	cmd = { "intelephense", "--stdio" },
+	filetypes = { "php" },
+	root_markers = { "composer.json", ".git" },
 	settings = {
 		intelephense = {
 			diagnostics = {
@@ -21,4 +24,7 @@ return {
 			},
 		},
 	},
+	on_init = function(client)
+		client.server_capabilities.documentFormattingProvider = false
+	end,
 }

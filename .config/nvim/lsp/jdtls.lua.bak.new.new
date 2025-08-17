@@ -1,0 +1,72 @@
+local utils = require("user.utils")
+
+local handlers = utils.safe_require("user.lsp.handlers")
+if not handlers then
+	return
+end
+
+local mason_path = vim.fn.stdpath("data") .. "/mason/packages"
+local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
+local root_dir = vim.fs.root(0, root_markers)
+local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
+local workspace_dir = vim.fn.expand("~") .. "/workspace/" .. project_name
+
+local bundles = utils.find_bundles({
+	mason_path .. "/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar",
+	mason_path .. "/java-test/extension/server/com.microsoft.java.test.plugin-*.jar",
+})
+
+local extendedClientCapabilities = {
+	resolveAdditionalTextEditsSupport = true,
+	progressReportProvider = true,
+	inlayHints = { parameterNames = { enabled = "all" } },
+	onCompletionItemSelectedCommand = "editor.action.triggerParameterHints",
+}
+
+return {
+	on_attach = handlers.on_attach,
+	capabilities = handlers.capabilities,
+	cmd = { "jdtls", "-data", workspace_dir },
+	root_dir = root_dir,
+	filetypes = { "java" },
+	settings = {
+		java = {
+			eclipse = { downloadSources = true },
+			configuration = { updateBuildConfiguration = "interactive" },
+			maven = { downloadSources = true },
+			implementationsCodeLens = { enabled = true },
+			referencesCodeLens = { enabled = true },
+			references = { includeDecompiledSources = true },
+			format = { enabled = false },
+		},
+		signatureHelp = { enabled = true },
+		completion = {
+			favoriteStaticMembers = {
+				"org.hamcrest.MatcherAssert.assertThat",
+				"org.hamcrest.Matchers.*",
+				"org.hamcrest.CoreMatchers.*",
+				"org.junit.jupiter.api.Assertions.*",
+				"java.util.Objects.requireNonNull",
+				"java.util.Objects.requireNonNullElse",
+				"org.mockito.Mockito.*",
+			},
+		},
+		contentProvider = { preferred = "fernflower" },
+		extendedClientCapabilities = extendedClientCapabilities,
+		sources = {
+			organizeImports = {
+				starThreshold = 9999,
+				staticStarThreshold = 9999,
+			},
+		},
+		codeGeneration = {
+			toString = {
+				template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
+			},
+			useBlocks = true,
+		},
+	},
+	init_options = {
+		bundles = bundles,
+	},
+}

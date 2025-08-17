@@ -1,0 +1,105 @@
+local utils = require("user.utils")
+
+local handlers = utils.safe_require("user.lsp.handlers")
+if not handlers then
+	return
+end
+
+local jdtls = utils.safe_require("jdtls")
+if not jdtls then
+	return
+end
+
+local on_attach = function(client, bufnr)
+	if client.name == "jdtls" then
+		-- Setup the DAP integration managed by nvim-jdtls
+		jdtls.setup_dap()
+	end
+	handlers.on_attach(client, bufnr)
+end
+
+local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
+local root_dir = jdtls.setup.find_root(root_markers)
+if root_dir == "" then
+	print("No Project root found!")
+	return
+end
+
+local home = os.getenv("HOME")
+local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
+local workspace_dir = home .. "/workspace/" .. project_name
+
+local mason_path = vim.fn.stdpath("data") .. "/mason/packages"
+
+local bundles = {}
+
+local function add_bundles_from_glob(pattern)
+	local items = vim.fn.glob(pattern, true, true)
+	for _, path in ipairs(items) do
+		if
+			path ~= ""
+			and not path:match("jacocoagent.jar")
+			and not path:match("test.runner-jar-with-dependencies.jar")
+		then
+			table.insert(bundles, path)
+		end
+	end
+end
+
+-- Add only valid debug plugin bundle
+add_bundles_from_glob(mason_path .. "/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar")
+
+-- Add only OSGi-compatible java-test bundles, excluding jacocoagent and runner bundles
+add_bundles_from_glob(mason_path .. "/java-test/extension/server/com.microsoft.java.test.plugin-*.jar")
+
+return {
+	on_attach = on_attach,
+	capabilities = handlers.capabilities,
+	cmd = { "jdtls" },
+	root_markers = root_markers,
+	root_dir = root_dir,
+	filetypes = { "java" },
+	settings = {
+		java = {
+			eclipse = { downloadSources = true },
+			configuration = { updateBuildConfiguration = "interactive" },
+			maven = { downloadSources = true },
+			implementationsCodeLens = { enabled = true },
+			referencesCodeLens = { enabled = true },
+			references = { includeDecompiledSources = true },
+			format = { enabled = false },
+		},
+		signatureHelp = { enabled = true },
+		completion = {
+			favoriteStaticMembers = {
+				"org.hamcrest.MatcherAssert.assertThat",
+				"org.hamcrest.Matchers.*",
+				"org.hamcrest.CoreMatchers.*",
+				"org.junit.jupiter.api.Assertions.*",
+				"java.util.Objects.requireNonNull",
+				"java.util.Objects.requireNonNullElse",
+				"org.mockito.Mockito.*",
+			},
+		},
+		contentProvider = { preferred = "fernflower" },
+		extendedClientCapabilities = jdtls.extendedClientCapabilities,
+		sources = {
+			organizeImports = {
+				starThreshold = 9999,
+				staticStarThreshold = 9999,
+			},
+		},
+		codeGeneration = {
+			toString = {
+				template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
+			},
+			useBlocks = true,
+		},
+	},
+	flags = {
+		allow_incremental_sync = true,
+	},
+	init_options = {
+		bundles = bundles,
+	},
+}

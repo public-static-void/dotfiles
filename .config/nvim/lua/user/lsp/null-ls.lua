@@ -5,37 +5,6 @@ if not null_ls then
 	return
 end
 
-local mason_null_ls = utils.safe_require("mason-null-ls")
-if not mason_null_ls then
-	return
-end
-
-local servers = {
-	"black",
-	"blade_formatter",
-	"codespell",
-	"djlint",
-	"gitlint",
-	"google_java_format",
-	"isort",
-	"ktlint",
-	"markuplint",
-	"mypy",
-	"pint",
-	-- "php-cs-fixer",
-	"prettier",
-	"shellcheck",
-	"shfmt",
-	"sql_formatter",
-	"stylelint",
-	"stylua",
-}
-
-mason_null_ls.setup({
-	ensure_installed = servers,
-	automatically_install = true,
-})
-
 -- Setup Null-LS with formatting and diagnostics sources
 null_ls.setup({
 	debug = false,
