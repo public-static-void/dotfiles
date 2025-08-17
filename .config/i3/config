@@ -201,7 +201,7 @@ bindsym $mod+r mode "resize"
 bindsym $mod+Shift+f exec --no-startup-id firefox
 
 # Start telegram.
-bindsym $mod+Shift+t exec --no-startup-id telegram-desktop
+bindsym $mod+Shift+t exec --no-startup-id Telegram
 
 # Open i3 config.
 bindsym $mod+Shift+a exec --no-startup-id urxvt -e nvim ~/.config/i3/config
