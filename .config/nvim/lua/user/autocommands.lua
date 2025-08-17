@@ -78,6 +78,7 @@ local runners = {
 	rust = "cargo run %",
 	sh = "bash %",
 	lua = "lua %",
+	php = "php %",
 }
 
 for ft, cmd in pairs(runners) do
