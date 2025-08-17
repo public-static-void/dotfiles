@@ -103,7 +103,7 @@ URxvt.cursorColor:  #EEEEEE
 !---------!
 
 ! Perl Extensions.
-URxvt.perl-ext-common: default,resize-font,-searchable-scrollback
+URxvt.perl-ext-common: default,keyboard-select,resize-font,-searchable-scrollback
 
 !---------!
 ! KEYMAPS !
@@ -141,4 +141,5 @@ URxvt.keysym.C-KP_Add:      resize-font:bigger
 URxvt.keysym.C-KP_Multiply: resize-font:reset
 URxvt.keysym.C-KP_Divide:   resize-font:show
 
-
+! Enter keyboard-select mode
+URxvt.keysym.M-Escape: perl:keyboard-select:activate
