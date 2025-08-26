@@ -32,6 +32,9 @@ command -v pyenv &>/dev/null && eval "$(pyenv init -)"
 command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
 [ -d "/usr/lib/jvm/default" ] && export JAVA_HOME="/usr/lib/jvm/default"
 
+# ghcup-env
+[ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
+
 # Editor and colors
 if [[ -n "$SSH_CONNECTION" ]]; then
   export EDITOR="vim"
