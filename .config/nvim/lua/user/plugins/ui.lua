@@ -16,6 +16,10 @@ return {
 		event = "UIEnter",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
+	-- Scrollbar
+	{
+		"dstein64/nvim-scrollview",
+	},
 	-- Filetree
 	{
 		"nvim-tree/nvim-tree.lua",

@@ -45,7 +45,9 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 	end,
 })
 
--- Filetype-specific settings
+--- Filetype-specific settings
+
+-- Text
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = { "markdown", "gitcommit" },
 	callback = function()
@@ -55,6 +57,7 @@ vim.api.nvim_create_autocmd("FileType", {
 	end,
 })
 
+-- Python
 vim.api.nvim_create_autocmd("FileType", {
 	pattern = "python",
 	callback = function()
@@ -67,6 +70,17 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.opt_local.smartindent = true
 		vim.opt_local.colorcolumn = "80"
 		vim.keymap.set("n", "<leader>e", ":sp | term python %<CR>:startinsert<CR>", { buffer = true })
+	end,
+})
+
+-- Ansible
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	pattern = { "*.yml", "*.yaml" },
+	callback = function()
+		local path = vim.fn.expand("%:p")
+		if path:match("/roles/") or path:match("/playbooks/") or path:match("/tasks/") then
+			vim.bo.filetype = "yaml.ansible"
+		end
 	end,
 })
 

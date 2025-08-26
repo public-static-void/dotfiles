@@ -5,10 +5,40 @@ if not handlers then
 	return
 end
 
-return {
+--- Root markers used to identify the root directory for Haskell projects.
+local root_markers = { "hie.yaml", "stack.yaml", "cabal.project", "package.yaml", ".git" }
+
+--- Find root directory for Haskell projects based on root markers.
+---@param bufnr number Buffer number
+---@param on_dir fun(path: string) Callback to set root directory
+local function root_dir(bufnr, on_dir)
+	local filepath = vim.api.nvim_buf_get_name(bufnr)
+	if not filepath or filepath == "" then
+		on_dir(vim.loop.cwd())
+		return
+	end
+	local root = utils.find_root(filepath, root_markers)
+	on_dir(root or vim.loop.cwd())
+end
+
+local cmd = { "haskell-language-server-wrapper", "--lsp" }
+local filetypes = { "haskell", "lhaskell", "cabal" }
+local settings = {
+	haskell = {
+		formattingProvider = "ormolu",
+		cabalFormattingProvider = "cabalfmt",
+	},
+}
+local single_file_support = true
+
+local config = {
+	cmd = cmd,
+	filetypes = filetypes,
+	root_dir = root_dir,
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
-	cmd = { "haskell-language-server-wrapper", "--lsp" },
-	filetypes = { "haskell", "lhaskell", "cabal" },
-	root_markers = { "hie.yaml", "stack.yaml", "cabal.project", "package.yaml", ".git" },
+	settings = settings,
+	single_file_support = single_file_support,
 }
+
+return config

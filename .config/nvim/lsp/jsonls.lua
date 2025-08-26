@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+--- Predefined JSON schemas for common config files.
+--- This avoids needing external plugins like SchemaStore.nvim.
 local schemas = {
 	{
 		description = "TypeScript compiler configuration file",
@@ -47,52 +49,52 @@ local schemas = {
 		url = "https://json.schemastore.org/stylelintrc",
 	},
 	{
-		description = "A JSON schema for the ASP.NET LaunchSettings.json files",
+		description = "ASP.NET LaunchSettings.json",
 		fileMatch = { "launchsettings.json" },
 		url = "https://json.schemastore.org/launchsettings.json",
 	},
 	{
-		description = "Schema for CMake Presets",
+		description = "CMake Presets",
 		fileMatch = { "CMakePresets.json", "CMakeUserPresets.json" },
 		url = "https://raw.githubusercontent.com/Kitware/CMake/master/Help/manual/presets/schema.json",
 	},
 	{
-		description = "Configuration file as an alternative for configuring your repository in the settings page.",
+		description = "Code Climate config",
 		fileMatch = { ".codeclimate.json" },
 		url = "https://json.schemastore.org/codeclimate.json",
 	},
 	{
-		description = "LLVM compilation database",
+		description = "LLVM compile_commands.json",
 		fileMatch = { "compile_commands.json" },
 		url = "https://json.schemastore.org/compile-commands.json",
 	},
 	{
-		description = "Config file for Command Task Runner",
+		description = "Command Task Runner",
 		fileMatch = { "commands.json" },
 		url = "https://json.schemastore.org/commands.json",
 	},
 	{
-		description = "AWS CloudFormation schema",
+		description = "AWS CloudFormation",
 		fileMatch = { "*.cf.json", "cloudformation.json" },
 		url = "https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/cloudformation.schema.json",
 	},
 	{
-		description = "The AWS Serverless Application Model (AWS SAM) schema",
+		description = "AWS SAM",
 		fileMatch = { "serverless.template", "*.sam.json", "sam.json" },
 		url = "https://raw.githubusercontent.com/awslabs/goformation/v5.2.9/schema/sam.schema.json",
 	},
 	{
-		description = "Json schema for GitHub Workflow template properties json file",
+		description = "GitHub Workflow template properties",
 		fileMatch = { ".github/workflow-templates/**/*.properties.json" },
 		url = "https://json.schemastore.org/github-workflow-template-properties.json",
 	},
 	{
-		description = "golangci-lint configuration file",
+		description = "golangci-lint config",
 		fileMatch = { ".golangci.toml", ".golangci.json" },
 		url = "https://json.schemastore.org/golangci-lint.json",
 	},
 	{
-		description = "JSON schema for the JSON Feed format",
+		description = "JSON Feed format",
 		fileMatch = { "feed.json" },
 		url = "https://json.schemastore.org/feed.json",
 		versions = {
@@ -101,44 +103,45 @@ local schemas = {
 		},
 	},
 	{
-		description = "Packer template JSON configuration",
+		description = "Packer template",
 		fileMatch = { "packer.json" },
 		url = "https://json.schemastore.org/packer.json",
 	},
 	{
-		description = "NPM configuration file",
+		description = "NPM package.json",
 		fileMatch = { "package.json" },
 		url = "https://json.schemastore.org/package.json",
 	},
 	{
-		description = "JSON schema for Visual Studio component configuration files",
+		description = "VS component config",
 		fileMatch = { "*.vsconfig" },
 		url = "https://json.schemastore.org/vsconfig.json",
 	},
 	{
-		description = "Resume json",
+		description = "Resume schema",
 		fileMatch = { "resume.json" },
 		url = "https://raw.githubusercontent.com/jsonresume/resume-schema/v1.0.0/schema.json",
 	},
 }
 
+-- Final config for JSON language server
 return {
-	on_attach = handlers.on_attach,
-	capabilities = handlers.capabilities,
 	cmd = { "vscode-json-language-server", "--stdio" },
 	filetypes = { "json", "jsonc" },
+	root_markers = { ".git" },
+	on_attach = handlers.on_attach,
+	capabilities = handlers.capabilities,
+
+	-- Init options give server control over formatting
+	init_options = {
+		provideFormatter = true,
+	},
+
+	-- Enable schema-based validation and completions
 	settings = {
 		json = {
 			schemas = schemas,
 			validate = { enable = true },
 		},
 	},
-	commands = {
-		Format = {
-			function()
-				vim.lsp.buf.range_formatting({}, { 0, 0 }, { vim.fn.line("$"), 0 })
-			end,
-		},
-	},
-	root_markers = { ".git" },
 }

@@ -5,10 +5,33 @@ if not handlers then
 	return
 end
 
-return {
+--- Root marker to identify project root, typically a Git repository.
+local root_markers = { ".git" }
+
+--- Locate the root directory for Jinja projects.
+---@param bufnr number Buffer number
+---@param on_dir fun(path: string) Callback to set root directory
+local function root_dir(bufnr, on_dir)
+	local filepath = vim.api.nvim_buf_get_name(bufnr)
+	if not filepath or filepath == "" then
+		on_dir(vim.loop.cwd())
+		return
+	end
+	local root = utils.find_root(filepath, root_markers)
+	on_dir(root or vim.loop.cwd())
+end
+
+local cmd = { "jinja-lsp" }
+local filetypes = { "jinja", "html.jinja", "jinja.html" }
+local single_file_support = true
+
+local config = {
+	cmd = cmd,
+	filetypes = filetypes,
+	root_dir = root_dir,
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
-	cmd = { "jinja-lsp" },
-	filetypes = { "jinja", "html.jinja", "jinja.html" },
-	root_markers = { ".git" },
+	single_file_support = single_file_support,
 }
+
+return config

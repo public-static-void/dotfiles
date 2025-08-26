@@ -5,10 +5,27 @@ if not handlers then
 	return
 end
 
+-- Root markers used for Twig projects.
+local root_markers = { "composer.json", ".git" }
+
+--- Determine the root directory for Twig files.
+---@param bufnr number Buffer number
+---@param on_dir fun(path: string) Callback with root directory path
+local function root_dir(bufnr, on_dir)
+	local filepath = vim.api.nvim_buf_get_name(bufnr)
+	if not filepath or filepath == "" then
+		on_dir(vim.loop.cwd())
+		return
+	end
+	local root = utils.find_root(filepath, root_markers)
+	on_dir(root or vim.loop.cwd())
+end
+
 return {
+	cmd = { "twiggy-language-server", "--stdio" },
+	filetypes = { "twig" },
+	root_dir = root_dir,
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
-	cmd = { "twiggy-language-server" },
-	filetypes = { "twig" },
-	root_markers = { ".git" },
+	single_file_support = true,
 }

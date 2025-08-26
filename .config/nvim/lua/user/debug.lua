@@ -103,6 +103,17 @@ dap.configurations.java = {
 	},
 }
 
+-- C & Rust (codelldb, gcc)
+dap.adapters.codelldb = {
+	type = "server",
+	host = "127.0.0.1",
+	port = "${port}",
+	executable = {
+		command = mason_adapter_path("codelldb", "extension" .. sep .. "adapter" .. sep .. "codelldb"),
+		args = { "--port", "${port}" },
+	},
+}
+
 -- C++ (codelldb, g++)
 dap.configurations.cpp = {
 	{
@@ -135,7 +146,7 @@ dap.configurations.cpp = {
 	},
 }
 dap.configurations["c++"] = dap.configurations.cpp
-dap.configurations["cc"] = dap.configurations.cpp
+dap.configurations["c"] = dap.configurations.cpp
 
 -- Rust (codelldb)
 dap.configurations.rust = {
