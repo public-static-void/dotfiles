@@ -10,6 +10,11 @@ if not jdtls then
 	return
 end
 
+local jdtls_dap = utils.safe_require("jdtls.dap")
+if not jdtls_dap then
+	return
+end
+
 --- Markers to find project root for java
 local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
 
@@ -34,6 +39,7 @@ local bundles = utils.find_bundles({
 
 --- Launcher jar and config dir adjusted per platform
 local launcher_jar = vim.fn.glob(mason_path .. "/jdtls/plugins/org.eclipse.equinox.launcher_*.jar")
+local lombok_jar = vim.fn.glob(mason_path .. "/jdtls/lombok.jar")
 local config_dir = mason_path
 	.. "/jdtls/config_"
 	.. (vim.fn.has("win32") == 1 and "win" or (vim.fn.has("macunix") == 1 and "mac" or "linux"))
@@ -42,8 +48,21 @@ local config_dir = mason_path
 local function on_attach(client, bufnr)
 	if client.name == "jdtls" then
 		jdtls.setup_dap()
+		jdtls_dap.setup_dap_main_class_configs()
 	end
 	handlers.on_attach(client, bufnr)
+	-- refresh codelens after attaching
+	vim.lsp.codelens.refresh()
+	-- auto refresh codelens on each save of a Java file
+	vim.api.nvim_create_autocmd("BufWritePost", {
+		buffer = bufnr,
+		callback = function()
+			local ok, _ = pcall(vim.lsp.codelens.refresh)
+			if not ok then
+				print("[jdtls] codelens refresh failed")
+			end
+		end,
+	})
 end
 
 --- Command to launch jdtls language server with necessary JVM options and paths
@@ -60,6 +79,9 @@ local cmd = {
 	"java.base/java.util=ALL-UNNAMED",
 	"--add-opens",
 	"java.base/java.lang=ALL-UNNAMED",
+	"-javaagent:" .. lombok_jar,
+	"-Xdiag", -- diagnostic messages about annotation processing
+	"-verbose:class", -- verbose class loading info
 	"-jar",
 	launcher_jar,
 	"-configuration",
@@ -90,6 +112,22 @@ local settings = {
 			"java.util.Objects.requireNonNullElse",
 			"org.mockito.Mockito.*",
 		},
+		-- Try not to suggest imports from these packages in the code action window
+		filteredTypes = {
+			"com.sun.*",
+			"io.micrometer.shaded.*",
+			"java.awt.*",
+			"jdk.*",
+			"sun.*",
+		},
+		-- Set the order in which the language server should organize imports
+		importOrder = {
+			"java",
+			"jakarta",
+			"javax",
+			"com",
+			"org",
+		},
 	},
 	contentProvider = { preferred = "fernflower" },
 	extendedClientCapabilities = jdtls.extendedClientCapabilities,
@@ -103,8 +141,19 @@ local settings = {
 		toString = {
 			template = "${object.className}{${member.name()}=${member.value}, ${otherMembers}}",
 		},
+		hashCodeEquals = {
+			useJava7Objects = true,
+		},
 		useBlocks = true,
 	},
+}
+
+local extendedCapabilities = jdtls.extendedClientCapabilities
+extendedCapabilities.resolveAdditionalTextEditsSupport = true
+
+local init_options = {
+	bundles = bundles,
+	extendedClientCapabilities = extendedCapabilities,
 }
 
 return {
@@ -118,7 +167,5 @@ return {
 	flags = {
 		allow_incremental_sync = true,
 	},
-	init_options = {
-		bundles = bundles,
-	},
+	init_options = init_options,
 }

@@ -24,7 +24,7 @@ local function root_dir(bufnr, on_dir)
 end
 
 local cmd = { "bash-language-server", "start" }
-local filetypes = { "sh", "bash" }
+local filetypes = { "sh", "bash", "zsh" }
 
 -- Settings to prevent recursive scanning and improve performance.
 local settings = {

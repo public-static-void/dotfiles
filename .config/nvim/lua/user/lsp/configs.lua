@@ -15,6 +15,7 @@ mason.setup({})
 local servers = {
 	"angularls",
 	"ansiblels",
+  -- "basedpyright",
 	"bashls",
 	"clangd",
 	"clojure_lsp",
@@ -33,6 +34,7 @@ local servers = {
 	"jinja_lsp",
 	"jsonls",
 	"kotlin_language_server",
+	"laravel_ls",
 	"lemminx",
 	"ltex_ls_plus",
 	"lua_ls",
@@ -42,7 +44,7 @@ local servers = {
 	"phpactor",
 	"prismals",
 	"pylsp",
-	"pyright",
+	-- "pyright",
 	"rubocop",
 	"rust_analyzer",
 	"somesass_ls",
@@ -52,10 +54,11 @@ local servers = {
 	"tailwindcss",
 	"taplo",
 	"terraformls",
-	"ts_ls",
+	-- "ts_ls",
 	"twiggy_language_server",
 	"typos_lsp",
 	"vimls",
+	"vtsls",
 	"vuels",
 	"yamlls",
 	"zls",
@@ -77,7 +80,7 @@ local formatters = {
 }
 
 local linters = {
-  "ansible_lint",
+	"ansible_lint",
 	"codespell",
 	"djlint",
 	"gitlint",
