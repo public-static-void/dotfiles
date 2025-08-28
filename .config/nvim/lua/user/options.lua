@@ -187,6 +187,20 @@ local options = {
 
 	-- Enable spell checking by default.
 	spell = true,
+
+	-- Specify fold method
+	-- foldmethod = "expr",
+
+	-- Use treesitter for folding
+	-- foldexpr = "nvim_treesitter#foldexpr()",
+
+	-- Open folds by default
+	foldlevelstart = 20,
+
+	-- Enable folding
+	foldenable = true,
+
+  -- foldcolumn = "1",
 }
 
 -- Apply all options.

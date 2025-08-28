@@ -45,6 +45,53 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 	end,
 })
 
+-- Delayed fold refresh after file read/buffer enter
+vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufEnter" }, {
+	callback = function()
+		vim.schedule(function()
+			vim.cmd("normal! zx")
+		end)
+	end,
+})
+
+-- Auto-detect fold method per buffer. Use Treesitter folding only if parser is available, otherwise fallback to syntax folding
+vim.api.nvim_create_autocmd({ "FileType" }, {
+	callback = function()
+		if require("nvim-treesitter.parsers").has_parser() then
+			vim.opt.foldmethod = "expr"
+			vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+		else
+			vim.opt.foldmethod = "syntax"
+			vim.opt.foldexpr = ""
+		end
+	end,
+})
+
+-- Show fold column when there are closed folds, else hide it
+local function update_foldcolumn()
+	local win = vim.api.nvim_get_current_win()
+	-- Check for any closed folds in the visible window lines
+	local start_line = vim.fn.line("w0")
+	local end_line = vim.fn.line("w$")
+	local has_closed_fold = false
+	for l = start_line, end_line do
+		if vim.fn.foldclosed(l) ~= -1 then
+			has_closed_fold = true
+			break
+		end
+	end
+	if has_closed_fold then
+		vim.wo.foldcolumn = "1"
+	else
+		vim.wo.foldcolumn = "0"
+	end
+end
+
+vim.api.nvim_create_autocmd(
+	{ "BufWinEnter", "WinScrolled", "CursorMoved", "BufEnter", "WinEnter" },
+	{ callback = update_foldcolumn }
+)
+
 --- Filetype-specific settings
 
 -- Text
