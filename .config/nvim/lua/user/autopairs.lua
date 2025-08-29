@@ -1,6 +1,5 @@
 local utils = require("user.utils")
 
--- Setup nvim-cmp.
 local npairs = utils.safe_require("nvim-autopairs")
 if not npairs then
 	return
@@ -26,15 +25,3 @@ npairs.setup({
 		highlight_grey = "LineNr",
 	},
 })
-
-local cmp_autopairs = utils.safe_require("nvim-autopairs.completion.cmp")
-if not cmp_autopairs then
-	return
-end
-
-local cmp = utils.safe_require("cmp")
-if not cmp then
-	return
-end
-
-cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done({ map_char = { tex = "" } }))

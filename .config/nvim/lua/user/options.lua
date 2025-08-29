@@ -145,7 +145,7 @@ local options = {
 	-- Command line height in lines, allows more message space.
 	cmdheight = 2,
 
-	-- Completion options recommended by the nvim-cmp plugin.
+	-- Completion options.
 	completeopt = { "menu", "menuone", "noselect" },
 
 	-- Enable command-line completion menu.

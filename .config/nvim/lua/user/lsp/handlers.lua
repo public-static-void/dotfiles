@@ -129,14 +129,6 @@ M.on_attach = function(client)
 	lsp_highlight_document(client)
 end
 
--- Create capabilities with cmp_nvim_lsp integration
-local capabilities = vim.lsp.protocol.make_client_capabilities()
-
-local cmp_nvim_lsp = utils.safe_require("cmp_nvim_lsp")
-if cmp_nvim_lsp then
-	M.capabilities = cmp_nvim_lsp.default_capabilities(capabilities)
-else
-	M.capabilities = capabilities -- Fallback to default capabilities if cmp_nvim_lsp is unavailable
-end
+M.capabilities = vim.lsp.protocol.make_client_capabilities()
 
 return M

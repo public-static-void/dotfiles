@@ -56,6 +56,8 @@ vim.keymap.set({ "n", "v" }, "<C-d>", "<C-d>zz", { noremap = true, silent = true
 vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true, desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true, desc = "Indent right and reselect" })
 
+vim.keymap.set({ "i" }, "<S-Tab>", "<BS>", { noremap = true, silent = true, desc = "Un-Tab" })
+
 -- Move text up and down.
 vim.keymap.set("n", "<C-M-j>", ":m .+1<CR>==", { noremap = true, silent = true, desc = "Move line down" })
 vim.keymap.set("n", "<C-M-k>", ":m .-2<CR>==", { noremap = true, silent = true, desc = "Move line up" })
