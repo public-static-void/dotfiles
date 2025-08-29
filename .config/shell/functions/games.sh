@@ -1,19 +1,60 @@
-# Launch a Windows game via Wine, changing to the correct directory first
+# Configuration variables for default Wine prefixes
+readonly WINE_PREFIX_DEFAULT_64="$HOME/.wine/64/default"
+readonly WINE_PREFIX_DEFAULT_PROTON="$HOME/.wine/proton/default"
+readonly WINE_PREFIX_DEFAULT_WINEGE="$HOME/.wine/ge/default"
+
+# Wine launcher
+# $1 - executable path (required)
+# $2 - WINEPREFIX directory (optional)
 launch_wine() {
-	local game_dir="$1"
-	local game_executable="$2"
-	cd "$game_dir" || return
-	wine "$game_executable"
+  local exe="$1"
+  local prefix="${2:-$WINE_PREFIX_DEFAULT_64}"
+  local exe_dir exe_file
+
+  exe_dir=$(dirname -- "$exe")
+  exe_file=$(basename -- "$exe")
+
+  builtin cd "$exe_dir" || return 1
+  WINEPREFIX="$prefix" WINEDEBUG=-all wine "./$exe_file"
 }
 
-# Launch Distant Worlds Universe with the correct Wine prefix and environment
-dwu() {
-	cd "$HOME/.winedwu/drive_c/GOG Games/Distant Worlds Universe" || return
-	WINEARCH=win32 wine-dwu WINEDEBUG=-all wine DistantWorlds.exe
+# Proton launcher
+# $1 - executable path (required)
+# $2 - prefix directory (optional)
+launch_proton() {
+  local exe="$1"
+  local prefix="${2:-$WINE_PREFIX_DEFAULT_PROTON}"
+  local exe_dir exe_file
+
+  exe_dir=$(dirname -- "$exe")
+  exe_file=$(basename -- "$exe")
+
+  if [[ ! -d "$prefix" ]]; then
+    mkdir -p "$prefix"
+    STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam" \
+      STEAM_COMPAT_DATA_PATH="$prefix" \
+      WINEPREFIX="$prefix" \
+      /usr/bin/proton run wineboot
+  fi
+
+  builtin cd "$exe_dir" || return 1
+  STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam" \
+    STEAM_COMPAT_DATA_PATH="$prefix" \
+    WINEPREFIX="$prefix" \
+    /usr/bin/proton run "./$exe_file"
 }
 
-# Function to launch HoI3 Black Ice for a given version (call: hoi3bi 7)
-hoi3bi() {
-	local version="$1"
-	wine-hoi launch_wine "$HOME/.winehoi/drive_c/GOG Games/hoi3bi${version}/" launcher.exe
+# Wine-GE launcher
+# $1 - executable path (required)
+# $2 - WINEPREFIX directory (optional)
+launch_winege() {
+  local exe="$1"
+  local prefix="${2:-$WINE_PREFIX_DEFAULT_WINEGE}"
+  local exe_dir exe_file
+
+  exe_dir=$(dirname -- "$exe")
+  exe_file=$(basename -- "$exe")
+
+  builtin cd "$exe_dir" || return 1
+  WINEPREFIX="$prefix" /opt/wine-ge-custom-opt/bin/wine "./$exe_file"
 }

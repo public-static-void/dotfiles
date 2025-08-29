@@ -1,41 +1,171 @@
-# Wine prefixes for different game environments
-alias wine-64='WINEPREFIX=$HOME/.wine64 WINEDEBUG=-all'
-alias wine-32='WINEPREFIX=$HOME/.wine32 WINEDEBUG=-all'
-alias wine-hoi='WINEPREFIX=$HOME/.winehoi WINEDEBUG=-all'
-alias wine-dwu='WINEPREFIX=$HOME/.winedwu WINEDEBUG=-all'
+# Prefix path variables
+readonly WINE32_PREFIX="$HOME/.wine/32/default"
+readonly WINE64_PREFIX="$HOME/.wine/64/default"
+readonly WINEDWU_PREFIX="$HOME/.wine/32/dwu"
+readonly WINEHOI_PREFIX="$HOME/.wine/32/hoi"
 
-# Game launch aliases using launch_wine function (functions/games.sh)
-alias baldur2='wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/Baldur s Gate II Enhanced Edition v2 5" Baldur.exe'
-alias fallout2='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Fallout 2/" fallout2.exe'
-alias dwarfpack='$HOME/Games/LinuxDwarfPack-0.47.05-r7/startlnp.sh'
-alias dwarfhack='$HOME/.local/share/dwarffortress/dfhack'
-alias sims2='wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/The Sims 2 Ultimate Collection/The Sims 2 Mansion and Garden Stuff/TSBin" Sims2EP9.exe'
-alias cwg2='sudo mount -o loop CivilWarGeneral2.ISO /mnt/disk; wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/SIERRA/CWG2" Cwg2.exe'
-alias hoi2mds='wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/Modern Day Scenario 2" HoI2.exe'
-alias eu3='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Europa Universalis III/" "Launch Europa Universalis III Complete.lnk"'
-alias vic2='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Victoria II/" "Launch Victoria II - Civil War Edition.lnk"'
-alias pjz='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Project Zomboid/" ProjectZomboid64.exe'
-alias metw='wine-64 launch_wine "$HOME/.wine/drive_c/Program Files (x86)/The Creative Assembly/Medieval - Total War - Gold Edition" Medieval_TW.exe'
-alias medy='wine-64 launch_wine "$HOME/.wine/drive_c/Program Files (x86)/Medieval.Dynasty.v0.3.1.4" Medieval_Dynasty.exe'
-alias nwo='wine-64 launch_wine "$HOME/.local/share/Steam/steamapps/common/Cryptic Studios" Neverwinter.exe'
-alias wow1='wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/WoW" WoW.exe'
-alias wow2='wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/TBC" WoW.exe'
-alias wow3='wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/WoTLK" WoW.exe'
-alias arcadia='wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/Chronicles of Arcadia" Launcher.exe'
-alias diablo2='wine-64 launch_wine "$HOME/.wine64/drive_c/Games/Diablo II Complete Edition/Mod PlugY" PlugY.exe'
-alias ksp='wine-64 launch_wine "$HOME/.wine/drive_c/Program Files (x86)/Kerbal Space Program Breaking Ground" Launcher.exe'
-alias subsis='wine-64 launch_wine "$HOME/.wine/drive_c/Program Files (x86)/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Binaries/Win64" UDK.exe'
-alias forest='wine-64 launch_wine "$HOME/.wine64/drive_c/Games/The Forest" TheForest.exe'
-alias revo='wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/Revolution Under Siege Gold Edition" RUS.exe'
-alias mw3='wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/Call of Duty Modern Warfare 3" iw5sp.exe'
-alias factorio='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Factorio" "Launch Factorio.lnk"'
-alias shemp='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Shadow Empire" ShadowEmpire.exe'
-alias cc3='cd "$HOME/.wine32/drive_c/GOG Games/Close Combat 3"; wine-32 wine explorer /desktop=cc3,800x600 CC3.exe'
-alias palworld='wine-64 launch_wine "$HOME/.wine64/drive_c/Games/Palworld" Palworld.exe'
-alias sos='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Songs of Syx" SongsofSyx.exe'
-alias ptcgl='wine-64 launch_wine "$HOME/.wine64/drive_c/Program Files (x86)/PokemonTCG/Pokémon Trading Card Game Live" "Pokemon TCG Live.exe"'
-alias toee='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Temple of Elemental Evil" "Launch Temple of Elemental Evil.lnk"'
-alias iwd1='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Icewind Dale Enhanced Edition" "Launch Icewind Dale - Enhanced Edition.lnk"'
-alias iwd2='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Icewind Dale 2" "Launch Icewind Dale 2.lnk"'
-alias pst='wine-64 launch_wine "$HOME/.wine64/drive_c/GOG Games/Planescape Torment - Enhanced Edition/" "Launch Planescape - Torment Enhanced Edition.lnk"'
-alias rwo='wine-64 launch_wine "$HOME/.wine64/drive_c/Games/RevoWinter" "Run (English).exe"'
+# Wine prefix runner functions with debug flags
+wine_32() {
+  WINEPREFIX="$WINE32_PREFIX" WINEDEBUG=-all wine "$@"
+}
+wine_64() {
+  WINEPREFIX="$WINE64_PREFIX" WINEDEBUG=-all wine "$@"
+}
+wine_dwu() {
+  WINEPREFIX="$WINEDWU_PREFIX" WINEDEBUG=-all wine "$@"
+}
+wine_hoi() {
+  WINEPREFIX="$WINEHOI_PREFIX" WINEDEBUG=-all wine "$@"
+}
+
+# Games Launchers
+arcadia() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Chronicles of Arcadia/Launcher.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+baldur2() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Baldur s Gate II Enhanced Edition v2 5/Baldur.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+diablo2() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Diablo II Complete Edition/Mod PlugY/PlugY.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+dwu() {
+  local prefix="$WINEDWU_PREFIX"
+  local game_executable="$HOME/Games/Distant Worlds Universe/DistantWorlds.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+eu3() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Europa Universalis III/Launch Europa Universalis III Complete.lnk"
+  launch_wine "$game_executable" "$prefix"
+}
+fallout2() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Fallout 2/fallout2.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+forest() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/The Forest/TheForest.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+iwd1() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Icewind Dale Enhanced Edition/Launch Icewind Dale - Enhanced Edition.lnk"
+  launch_wine "$game_executable" "$prefix"
+}
+iwd2() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Icewind Dale 2/Launch Icewind Dale 2.lnk"
+  launch_wine "$game_executable" "$prefix"
+}
+ksp() {
+  local prefix="$WINE32_PREFIX"
+  local game_executable="$HOME/Games/wine/drive_c/Program Files (x86)/Kerbal Space Program Breaking Ground/Launcher.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+medy() {
+  local prefix="$WINE32_PREFIX"
+  local game_executable="$HOME/Games/wine/drive_c/Program Files (x86)/Medieval.Dynasty.v0.3.1.4/Medieval_Dynasty.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+metw() {
+  local prefix="$WINE32_PREFIX"
+  local game_executable="$HOME/Games/wine/drive_c/Program Files (x86)/The Creative Assembly/Medieval - Total War - Gold Edition/Medieval_TW.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+mw3() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/wine64/drive_c/Program Files (x86)/Call of Duty Modern Warfare 3/iw5sp.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+nwo() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/.local/share/Steam/steamapps/common/Cryptic Studios/Neverwinter.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+pjz() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Project Zomboid/ProjectZomboid64.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+pst() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Planescape Torment - Enhanced Edition/Launch Planescape - Torment Enhanced Edition.lnk"
+  launch_wine "$game_executable" "$prefix"
+}
+ptcgl() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/PokemonTCG/Pokémon Trading Card Game Live/Pokemon TCG Live.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+revo() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Revolution Under Siege Gold Edition/RUS.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+rwo() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/RevoWinter/Run (English).exe"
+  launch_wine "$game_executable" "$prefix"
+}
+shemp() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Shadow Empire/ShadowEmpire.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+sims2() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/The Sims 2 Ultimate Collection/The Sims 2 Mansion and Garden Stuff/TSBin/Sims2EP9.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+sos() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Songs of Syx/SongsofSyx.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+subsis() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Subsistence.v30.07.2021/Binaries/Win64/UDK.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+toee() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Temple of Elemental Evil/Launch Temple of Elemental Evil.lnk"
+  launch_wine "$game_executable" "$prefix"
+}
+vic2() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Victoria II/Launch Victoria II - Civil War Edition.lnk"
+  launch_wine "$game_executable" "$prefix"
+}
+wow() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/WoW/WoW.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+
+# Special treatment
+cc3() {
+  cd "$HOME/Games/Close Combat 3" || return
+  WINEPREFIX="$WINE32_PREFIX" wine explorer /desktop=cc3,800x600 CC3.exe
+}
+
+cwg2() {
+  sudo mount -o loop CivilWarGeneral2.ISO /mnt/disk
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/SIERRA/CWG2/Cwg2.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+
+hoi3bi() {
+  local version="$1"
+  local prefix="$WINEHOI_PREFIX"
+  local game_executable="$HOME/Games/hoi3bi${version}/launcher.exe"
+  launch_wine "$game_executable" "$prefix"
+}
