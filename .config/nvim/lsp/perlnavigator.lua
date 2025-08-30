@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "perl" }
+
 -- Root markers used to detect project root for Perl projects.
 local root_markers = { ".git" }
 
@@ -26,9 +28,11 @@ local settings = {
 	perlnavigator = {},
 }
 
+local cmd = { "perlnavigator" }
+
 return {
-	cmd = { "perlnavigator" },
-	filetypes = { "perl" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_dir = root_dir,
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,

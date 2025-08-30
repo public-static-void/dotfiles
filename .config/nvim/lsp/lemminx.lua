@@ -5,6 +5,14 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"xml",
+	"xsd",
+	"xsl",
+	"xslt",
+	"xhtml",
+}
+
 --- Root markers to identify project root
 local root_markers = { ".git" }
 
@@ -22,7 +30,6 @@ local function root_dir(bufnr, on_dir)
 end
 
 local cmd = { "lemminx" }
-local filetypes = { "xml", "xsd", "xsl", "xslt", "xhtml" }
 
 return {
 	cmd = cmd,

@@ -5,6 +5,11 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"terraform",
+	"tf",
+}
+
 --- Markers to detect project root for Terraform
 local root_markers = { ".terraform", ".git" }
 
@@ -21,9 +26,9 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "terraform-ls", "serve" }
-local filetypes = { "terraform", "tf" }
 local single_file_support = true
+
+local cmd = { "terraform-ls", "serve" }
 
 return {
 	cmd = cmd,

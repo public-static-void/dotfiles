@@ -5,6 +5,12 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"css",
+	"scss",
+	"less",
+}
+
 --- Root markers to identify project root directory.
 local root_markers = { "package.json", ".git" }
 
@@ -22,9 +28,6 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "vscode-css-language-server", "--stdio" }
-local filetypes = { "css", "scss", "less" }
-
 -- Settings for enabling validation for CSS, SCSS, and Less.
 -- 'init_options.provideFormatter' enables formatting capability.
 local settings = {
@@ -36,6 +39,8 @@ local settings = {
 local init_options = {
 	provideFormatter = true,
 }
+
+local cmd = { "vscode-css-language-server", "--stdio" }
 
 return {
 	cmd = cmd,

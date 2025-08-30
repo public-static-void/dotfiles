@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "ruby" }
+
 -- Root markers used for Ruby projects.
 local root_markers = { "Gemfile", ".git" }
 
@@ -21,9 +23,11 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
+local cmd = { "rubocop", "--lsp" }
+
 return {
-	cmd = { "rubocop", "--lsp" },
-	filetypes = { "ruby" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_dir = root_dir,
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,

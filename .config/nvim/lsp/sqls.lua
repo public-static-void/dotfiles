@@ -5,6 +5,11 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"sql",
+	"mysql",
+}
+
 --- Root markers for SQL projects.
 --- sqls loads config from `.sqllsrc.json` at project root, otherwise falls back to home config.
 local root_markers = { ".sqllsrc.json", ".git" }
@@ -26,9 +31,11 @@ end
 --- For typical usage, the user supplies `.sqllsrc.json` in the project or home directory.
 local settings = {}
 
+local cmd = { "sqls" }
+
 return {
-	cmd = { "sqls" },
-	filetypes = { "sql", "mysql" }, -- 'mysql' filetype added because sqls supports multiple dialects
+	cmd = cmd,
+	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,
 	settings = settings,

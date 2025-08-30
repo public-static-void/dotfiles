@@ -5,14 +5,16 @@ if not handlers then
 	return
 end
 
+--- Supported filetypes for Go.
+local filetypes = {
+	"go",
+	"gomod",
+	"gowork",
+	"gotemplate",
+}
+
 --- Root markers that indicate Go project root directories.
 local root_markers = { "go.mod", "go.work", ".git" }
-
---- Command to start `gopls`.
-local cmd = { "gopls" }
-
---- Supported filetypes for Go.
-local filetypes = { "go", "gomod", "gowork", "gotemplate" }
 
 -- Cache for Go standard library path and module cache paths.
 local mod_cache = nil
@@ -112,6 +114,9 @@ local function root_dir(bufnr, on_dir)
 		end)
 	end)
 end
+
+--- Command to start `gopls`.
+local cmd = { "gopls" }
 
 return {
 	cmd = cmd,

@@ -5,6 +5,11 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"yaml.ansible",
+	"ansible",
+}
+
 --- Root markers for Ansible projects.
 local root_markers = { "ansible.cfg", ".ansible-lint", ".git" }
 
@@ -43,9 +48,11 @@ local settings = {
 	},
 }
 
+local cmd = { "ansible-language-server", "--stdio" }
+
 return {
-	cmd = { "ansible-language-server", "--stdio" },
-	filetypes = { "yaml.ansible", "ansible" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,
 	settings = settings,

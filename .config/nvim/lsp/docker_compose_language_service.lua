@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "yaml.docker-compose" }
+
 --- Root markers recognize both v1 and v2 docker-compose naming conventions.
 --- Include fallback to .git so the LSP activates in repos with Compose manifests.
 local root_markers = {
@@ -28,11 +30,11 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
--- Final Docker Compose LS configuration
+local cmd = { "docker-compose-langserver", "--stdio" }
+
 return {
-	cmd = { "docker-compose-langserver", "--stdio" },
-	-- Explicitly use yaml.docker-compose so the server always activates correctly
-	filetypes = { "yaml.docker-compose" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,
 	on_attach = handlers.on_attach,

@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "vue" }
+
 --- Markers to identify project root
 local root_markers = { "package.json", "yarn.lock", "pnpm-lock.yaml", "lerna.json", ".git" }
 
@@ -21,8 +23,6 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "vls" }
-local filetypes = { "vue" }
 local single_file_support = true
 
 local init_options = {
@@ -63,6 +63,8 @@ local init_options = {
 		stylusSupremacy = {},
 	},
 }
+
+local cmd = { "vls" }
 
 return {
 	cmd = cmd,

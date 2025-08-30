@@ -5,21 +5,9 @@ if not handlers then
 	return
 end
 
---- Maps Neovim filetypes to corresponding LTeX language IDs.
-local language_id_mapping = {
-	bib = "bibtex",
-	plaintex = "tex",
-	rnoweb = "rsweave",
-	rst = "restructuredtext",
-	tex = "latex",
-	pandoc = "markdown",
-	text = "plaintext",
-}
-
 --- List of supported filetypes for LTeX LS.
 local filetypes = {
 	"bib",
-	"context",
 	"gitcommit",
 	"mail",
 	"markdown",
@@ -32,6 +20,19 @@ local filetypes = {
 	"rst",
 	"tex",
 	"text",
+}
+
+local root_markers = { ".git" }
+
+--- Maps Neovim filetypes to corresponding LTeX language IDs.
+local language_id_mapping = {
+	bib = "bibtex",
+	plaintex = "tex",
+	rnoweb = "rsweave",
+	rst = "restructuredtext",
+	tex = "latex",
+	pandoc = "markdown",
+	text = "plaintext",
 }
 
 --- Maps a Neovim filetype to the corresponding LTeX language ID.
@@ -95,16 +96,6 @@ local version_path = mason_base .. "/" .. version
 -- @return string Classpath string separated by ':'.
 local jars_classpath = utils.build_classpath(version_path .. "/lib")
 
-local cmd = {
-	"java",
-	"-Djdk.xml.totalEntitySizeLimit=1000000",
-	"-cp",
-	jars_classpath,
-	"org.bsplines.ltexls.LtexLanguageServerLauncher",
-}
-
-local root_markers = { ".git" }
-
 --- Asynchronous root directory detection for Neovim native LSP API.
 -- @param bufnr number Buffer number.
 -- @param on_dir function Callback invoked with root directory.
@@ -127,6 +118,21 @@ local function on_attach(client, bufnr)
 	end
 end
 
+local settings = {
+	ltex = {
+		language = "en-US",
+		enabled = enabled_ids,
+	},
+}
+
+local cmd = {
+	"java",
+	"-Djdk.xml.totalEntitySizeLimit=1000000",
+	"-cp",
+	jars_classpath,
+	"org.bsplines.ltexls.LtexLanguageServerLauncher",
+}
+
 return {
 	on_attach = on_attach,
 	capabilities = handlers.capabilities,
@@ -134,11 +140,6 @@ return {
 	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,
+	settings = settings,
 	get_language_id = get_language_id,
-	settings = {
-		ltex = {
-			language = "en-US",
-			enabled = enabled_ids,
-		},
-	},
 }

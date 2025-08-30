@@ -5,6 +5,11 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"markdown",
+	"markdown.mdx",
+}
+
 --- Root markers identifying markdown project root directories.
 --- This includes typical version control plus optional Marksman config files.
 local root_markers = { ".marksman.toml", ".git" }
@@ -24,7 +29,6 @@ local function root_dir(bufnr, on_dir)
 end
 
 local cmd = { "marksman", "server" }
-local filetypes = { "markdown", "markdown.mdx" }
 
 return {
 	cmd = cmd,

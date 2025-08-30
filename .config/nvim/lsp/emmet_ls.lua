@@ -42,9 +42,11 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
+local cmd = { "emmet-ls", "--stdio" }
+
 -- Final Emmet LSP configuration
 return {
-	cmd = { "emmet-ls", "--stdio" },
+	cmd = cmd,
 	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,

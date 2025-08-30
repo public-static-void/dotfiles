@@ -34,9 +34,10 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
--- Final config
+local cmd = { "stimulus-language-server", "--stdio" }
+
 return {
-	cmd = { "stimulus-language-server", "--stdio" },
+	cmd = cmd,
 	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,

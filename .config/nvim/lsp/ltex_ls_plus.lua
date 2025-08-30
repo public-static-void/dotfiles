@@ -5,21 +5,9 @@ if not handlers then
 	return
 end
 
---- Maps Neovim filetypes to corresponding LTeX language IDs.
-local language_id_mapping = {
-	bib = "bibtex",
-	plaintex = "tex",
-	rnoweb = "rsweave",
-	rst = "restructuredtext",
-	tex = "latex",
-	pandoc = "markdown",
-	text = "plaintext",
-}
-
 --- List of supported filetypes for LTeX LS Plus.
 local filetypes = {
 	"bib",
-	"context",
 	"gitcommit",
 	"mail",
 	"markdown",
@@ -32,6 +20,19 @@ local filetypes = {
 	"rst",
 	"tex",
 	"text",
+}
+
+local root_markers = { ".git" }
+
+--- Maps Neovim filetypes to corresponding LTeX language IDs.
+local language_id_mapping = {
+	bib = "bibtex",
+	plaintex = "tex",
+	rnoweb = "rsweave",
+	rst = "restructuredtext",
+	tex = "latex",
+	pandoc = "markdown",
+	text = "plaintext",
 }
 
 --- Maps a Neovim filetype to the corresponding LTeX language ID.
@@ -95,16 +96,6 @@ local lib_dir = mason_base .. "/" .. version .. "/lib"
 -- @return string Classpath string separated by ':'.
 local classpath = utils.build_classpath(lib_dir)
 
-local cmd = {
-	"java",
-	"-Djdk.xml.totalEntitySizeLimit=1000000",
-	"-cp",
-	classpath,
-	"org.bsplines.ltexls.LtexLanguageServerLauncher",
-}
-
-local root_markers = { ".git" }
-
 --- Asynchronous root directory detection for Neovim native LSP API.
 -- @param bufnr number Buffer number.
 -- @param on_dir function Callback invoked with root directory.
@@ -126,6 +117,14 @@ local function on_attach(client, bufnr)
 		handlers.on_attach(client, bufnr)
 	end
 end
+
+local cmd = {
+	"java",
+	"-Djdk.xml.totalEntitySizeLimit=1000000",
+	"-cp",
+	classpath,
+	"org.bsplines.ltexls.LtexLanguageServerLauncher",
+}
 
 return {
 	on_attach = on_attach,

@@ -1,10 +1,11 @@
-
 local utils = require("user.utils")
 
 local handlers = utils.safe_require("user.lsp.handlers")
 if not handlers then
 	return
 end
+
+local filetypes = { "python" }
 
 local root_markers = {
 	"pyproject.toml",
@@ -84,9 +85,11 @@ local settings = {
 	},
 }
 
+local cmd = { "basedpyright-langserver", "--stdio" }
+
 return {
-	cmd = { "basedpyright-langserver", "--stdio" },
-	filetypes = { "python" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_dir = root_dir,
 	on_attach = on_attach,
 	capabilities = handlers.capabilities,

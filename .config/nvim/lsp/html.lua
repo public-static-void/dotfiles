@@ -5,6 +5,11 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"html",
+	"templ",
+}
+
 --- Root markers for HTML projects.
 --- Node-based projects often anchor at package.json, fallback to .git for general repos.
 local root_markers = { "package.json", ".git" }
@@ -32,10 +37,12 @@ local init_options = {
 	configurationSection = { "html", "css", "javascript" },
 }
 
+local cmd = { "vscode-html-language-server", "--stdio" }
+
 -- Final config passed to vim.lsp.start
 return {
-	cmd = { "vscode-html-language-server", "--stdio" },
-	filetypes = { "html", "templ" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,
 	on_attach = handlers.on_attach,

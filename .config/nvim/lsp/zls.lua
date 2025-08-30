@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "zig" }
+
 --- Markers to identify project root directory
 local root_markers = { "zls.json", "build.zig", ".git" }
 
@@ -21,8 +23,6 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd_default = { "zls" }
-
 --- Adjust command dynamically based on presence of zls.json in root
 ---@param new_config table
 ---@param new_root_dir string
@@ -35,11 +35,12 @@ local function on_new_config(new_config, new_root_dir)
 	end
 end
 
-local filetypes = { "zig" }
 local single_file_support = true
 
+local cmd = { "zls" }
+
 return {
-	cmd = cmd_default,
+	cmd = cmd,
 	filetypes = filetypes,
 	root_dir = root_dir,
 	single_file_support = single_file_support,

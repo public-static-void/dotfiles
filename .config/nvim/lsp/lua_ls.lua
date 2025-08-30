@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "lua" }
+
 --- Root markers to detect Lua project root directory.
 local root_markers = {
 	".luarc.json",
@@ -32,9 +34,6 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "lua-language-server" }
-local filetypes = { "lua" }
-
 local settings = {
 	Lua = {
 		runtime = {
@@ -53,6 +52,8 @@ local settings = {
 		},
 	},
 }
+
+local cmd = { "lua-language-server" }
 
 return {
 	cmd = cmd,

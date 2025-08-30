@@ -5,6 +5,12 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"haskell",
+	"lhaskell",
+	"cabal",
+}
+
 --- Root markers used to identify the root directory for Haskell projects.
 local root_markers = { "hie.yaml", "stack.yaml", "cabal.project", "package.yaml", ".git" }
 
@@ -21,17 +27,18 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "haskell-language-server-wrapper", "--lsp" }
-local filetypes = { "haskell", "lhaskell", "cabal" }
 local settings = {
 	haskell = {
 		formattingProvider = "ormolu",
 		cabalFormattingProvider = "cabalfmt",
 	},
 }
+
 local single_file_support = true
 
-local config = {
+local cmd = { "haskell-language-server-wrapper", "--lsp" }
+
+return {
 	cmd = cmd,
 	filetypes = filetypes,
 	root_dir = root_dir,
@@ -40,5 +47,3 @@ local config = {
 	settings = settings,
 	single_file_support = single_file_support,
 }
-
-return config

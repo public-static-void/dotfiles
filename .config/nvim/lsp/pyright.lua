@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "python" }
+
 local root_markers = {
 	"pyproject.toml",
 	"setup.py",
@@ -83,9 +85,11 @@ local settings = {
 	},
 }
 
+local cmd = { "pyright-langserver", "--stdio" }
+
 return {
-	cmd = { "pyright-langserver", "--stdio" },
-	filetypes = { "python" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_dir = root_dir,
 	on_attach = on_attach,
 	capabilities = handlers.capabilities,

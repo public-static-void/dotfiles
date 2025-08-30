@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "svelte" }
+
 --- Root markers to identify the project root
 local root_markers = { "package.json", ".git" }
 
@@ -21,8 +23,6 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "svelteserver", "--stdio" }
-local filetypes = { "svelte" }
 local single_file_support = true
 
 --- Command to migrate to Svelte 5 syntax
@@ -39,6 +39,15 @@ local function migrate_to_svelte_5()
 	end
 end
 
+local commands = {
+	MigrateToSvelte5 = {
+		migrate_to_svelte_5,
+		description = "Migrate Component to Svelte 5 Syntax",
+	},
+}
+
+local cmd = { "svelteserver", "--stdio" }
+
 return {
 	cmd = cmd,
 	filetypes = filetypes,
@@ -46,10 +55,5 @@ return {
 	single_file_support = single_file_support,
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
-	commands = {
-		MigrateToSvelte5 = {
-			migrate_to_svelte_5,
-			description = "Migrate Component to Svelte 5 Syntax",
-		},
-	},
+	command = commands,
 }

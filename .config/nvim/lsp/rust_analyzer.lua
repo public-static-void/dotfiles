@@ -5,6 +5,10 @@ if not handlers then
 	return
 end
 
+local filetypes = { "rust" }
+
+local root_markers = { "Cargo.toml", ".git" }
+
 --- Reloads the Cargo workspace in the Rust analyzer.
 --- This requests the LSP server to recompute workspace information.
 --- Useful after changing dependencies or workspace settings.
@@ -70,21 +74,22 @@ local experimental_capabilities = {
 	},
 }
 
+local before_init = function(init_params, config)
+	if config.settings and config.settings["rust-analyzer"] then
+		init_params.initializationOptions = config.settings["rust-analyzer"]
+	end
+end
+
+local capabilities = vim.tbl_deep_extend("force", handlers.capabilities or {}, experimental_capabilities)
+
 local cmd = { "rust-analyzer" }
-local filetypes = { "rust" }
-local root_markers = { "Cargo.toml", ".git" }
 
 return {
 	cmd = cmd,
 	filetypes = filetypes,
 	root_dir = root_dir,
 	on_attach = on_attach,
-	before_init = function(init_params, config)
-		if config.settings and config.settings["rust-analyzer"] then
-			init_params.initializationOptions = config.settings["rust-analyzer"]
-		end
-	end,
-	capabilities = vim.tbl_deep_extend("force", handlers.capabilities or {}, experimental_capabilities),
+	capabilities = capabilities,
 	settings = rust_analyzer_settings,
 	root_markers = root_markers,
 }

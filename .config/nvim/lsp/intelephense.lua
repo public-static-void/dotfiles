@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "php" }
+
 --- Root markers used to detect the PHP project root.
 --- Include commonly used files for PHP projects plus phpactor config equivalents.
 local root_markers = {
@@ -29,9 +31,6 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "intelephense", "--stdio" }
-local filetypes = { "php" }
-
 -- Important settings to reduce noise from undefined diagnostics except undefined variables.
 local settings = {
 	intelephense = {
@@ -52,6 +51,8 @@ local function on_init(client)
 	-- Disable document formatting to avoid conflicts with other formatters/plugins
 	client.server_capabilities.documentFormattingProvider = false
 end
+
+local cmd = { "intelephense", "--stdio" }
 
 return {
 	cmd = cmd,

@@ -5,6 +5,12 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"sh",
+	"bash",
+	"zsh",
+}
+
 --- Root markers used to identify root directory of bash projects.
 local root_markers = { ".git", ".bashrc" }
 
@@ -23,15 +29,14 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "bash-language-server", "start" }
-local filetypes = { "sh", "bash", "zsh" }
-
 -- Settings to prevent recursive scanning and improve performance.
 local settings = {
 	bashIde = {
 		globPattern = vim.env.GLOB_PATTERN or "*@(.sh|.inc|.bash|.command)",
 	},
 }
+
+local cmd = { "bash-language-server", "start" }
 
 return {
 	cmd = cmd,

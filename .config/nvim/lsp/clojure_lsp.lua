@@ -5,6 +5,12 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"clojure",
+	"clojurescript",
+	"clojurec",
+}
+
 --- Root markers used to identify the root directory for Clojure projects.
 local root_markers = { "deps.edn", "project.clj", "shadow-cljs.edn", ".git" }
 
@@ -21,11 +27,11 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "clojure-lsp" }
-local filetypes = { "clojure", "clojurescript", "clojurec" }
 local single_file_support = true
 
-local config = {
+local cmd = { "clojure-lsp" }
+
+return {
 	cmd = cmd,
 	filetypes = filetypes,
 	root_dir = root_dir,
@@ -33,5 +39,3 @@ local config = {
 	capabilities = handlers.capabilities,
 	single_file_support = single_file_support,
 }
-
-return config

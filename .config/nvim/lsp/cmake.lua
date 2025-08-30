@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "cmake" }
+
 --- Root markers for project detection
 local root_markers = { "CMakePresets.json", "CTestConfig.cmake", "CMakeLists.txt", "build", ".git" }
 
@@ -21,11 +23,11 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "cmake-language-server" }
-local filetypes = { "cmake" }
 local init_options = {
 	buildDirectory = "build",
 }
+
+local cmd = { "cmake-language-server" }
 
 local config = {
 	cmd = cmd,

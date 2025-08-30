@@ -5,6 +5,13 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"json",
+	"jsonc",
+}
+
+local root_markers = { ".git" }
+
 --- Predefined JSON schemas for common config files.
 --- This avoids needing external plugins like SchemaStore.nvim.
 local schemas = {
@@ -124,24 +131,28 @@ local schemas = {
 	},
 }
 
+-- Enable schema-based validation and completions
+local settings = {
+	json = {
+		schemas = schemas,
+		validate = { enable = true },
+	},
+}
+
+-- Init options give server control over formatting
+local init_options = {
+	provideFormatter = true,
+}
+
+local cmd = { "vscode-json-language-server", "--stdio" }
+
 -- Final config for JSON language server
 return {
-	cmd = { "vscode-json-language-server", "--stdio" },
-	filetypes = { "json", "jsonc" },
-	root_markers = { ".git" },
+	cmd = cmd,
+	filetypes = filetypes,
+	root_markers = root_markers,
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
-
-	-- Init options give server control over formatting
-	init_options = {
-		provideFormatter = true,
-	},
-
-	-- Enable schema-based validation and completions
-	settings = {
-		json = {
-			schemas = schemas,
-			validate = { enable = true },
-		},
-	},
+	init_options = init_options,
+	settings = settings,
 }

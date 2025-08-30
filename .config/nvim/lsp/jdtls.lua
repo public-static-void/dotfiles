@@ -15,6 +15,8 @@ if not jdtls_dap then
 	return
 end
 
+local filetypes = { "java" }
+
 --- Markers to find project root for java
 local root_markers = { ".git", "mvnw", "gradlew", "pom.xml", "build.gradle" }
 
@@ -64,31 +66,6 @@ local function on_attach(client, bufnr)
 		end,
 	})
 end
-
---- Command to launch jdtls language server with necessary JVM options and paths
-local cmd = {
-	"java",
-	"-Declipse.application=org.eclipse.jdt.ls.core.id1",
-	"-Dosgi.bundles.defaultStartLevel=4",
-	"-Declipse.product=org.eclipse.jdt.ls.core.product",
-	"-Dlog.protocol=true",
-	"-Dlog.level=ALL",
-	"-Xmx1g",
-	"--add-modules=ALL-SYSTEM",
-	"--add-opens",
-	"java.base/java.util=ALL-UNNAMED",
-	"--add-opens",
-	"java.base/java.lang=ALL-UNNAMED",
-	"-javaagent:" .. lombok_jar,
-	"-Xdiag", -- diagnostic messages about annotation processing
-	"-verbose:class", -- verbose class loading info
-	"-jar",
-	launcher_jar,
-	"-configuration",
-	config_dir,
-	"-data",
-	workspace_dir,
-}
 
 --- Settings for jdtls with code lens, completion, formatting, and debug options
 local settings = {
@@ -156,9 +133,34 @@ local init_options = {
 	extendedClientCapabilities = extendedCapabilities,
 }
 
+--- Command to launch jdtls language server with necessary JVM options and paths
+local cmd = {
+	"java",
+	"-Declipse.application=org.eclipse.jdt.ls.core.id1",
+	"-Dosgi.bundles.defaultStartLevel=4",
+	"-Declipse.product=org.eclipse.jdt.ls.core.product",
+	"-Dlog.protocol=true",
+	"-Dlog.level=ALL",
+	"-Xmx1g",
+	"--add-modules=ALL-SYSTEM",
+	"--add-opens",
+	"java.base/java.util=ALL-UNNAMED",
+	"--add-opens",
+	"java.base/java.lang=ALL-UNNAMED",
+	"-javaagent:" .. lombok_jar,
+	"-Xdiag", -- diagnostic messages about annotation processing
+	"-verbose:class", -- verbose class loading info
+	"-jar",
+	launcher_jar,
+	"-configuration",
+	config_dir,
+	"-data",
+	workspace_dir,
+}
+
 return {
 	cmd = cmd,
-	filetypes = { "java" },
+	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,
 	on_attach = on_attach,

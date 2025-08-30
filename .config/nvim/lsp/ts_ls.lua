@@ -5,6 +5,15 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"javascript",
+	"javascriptreact",
+	"javascript.jsx",
+	"typescript",
+	"typescriptreact",
+	"typescript.tsx",
+}
+
 --- Root markers used to identify the TypeScript project root.
 --- Includes common lock files and config files.
 local root_markers = { "package.json", "tsconfig.json", "jsconfig.json", ".git" }
@@ -22,16 +31,6 @@ local function root_dir(bufnr, on_dir)
 	local root = utils.find_root(filepath, root_markers)
 	on_dir(root or vim.loop.cwd())
 end
-
-local cmd = { "typescript-language-server", "--stdio" }
-local filetypes = {
-	"javascript",
-	"javascriptreact",
-	"javascript.jsx",
-	"typescript",
-	"typescriptreact",
-	"typescript.tsx",
-}
 
 local init_options = { hostInfo = "neovim" }
 
@@ -89,6 +88,8 @@ local function on_attach(client, bufnr)
 		vim.lsp.buf.code_action({ context = { only = source_actions } })
 	end, { desc = "Run TypeScript source actions" })
 end
+
+local cmd = { "typescript-language-server", "--stdio" }
 
 return {
 	cmd = cmd,

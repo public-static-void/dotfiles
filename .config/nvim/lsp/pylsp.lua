@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "python" }
+
 local root_markers = {
 	"pyproject.toml",
 	"setup.py",
@@ -54,9 +56,11 @@ local settings = {
 	},
 }
 
+local cmd = { "pylsp" }
+
 return {
-	cmd = { "pylsp" },
-	filetypes = { "python" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_dir = root_dir,
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,

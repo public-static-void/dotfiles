@@ -5,6 +5,15 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"javascript",
+	"javascriptreact",
+	"javascript.jsx",
+	"typescript",
+	"typescriptreact",
+	"typescript.tsx",
+}
+
 --- Markers to detect project root for TS/JS
 local root_markers = { "tsconfig.json", "package.json", "jsconfig.json", ".git" }
 
@@ -21,16 +30,9 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "vtsls", "--stdio" }
-local filetypes = {
-	"javascript",
-	"javascriptreact",
-	"javascript.jsx",
-	"typescript",
-	"typescriptreact",
-	"typescript.tsx",
-}
 local single_file_support = true
+
+local cmd = { "vtsls", "--stdio" }
 
 return {
 	cmd = cmd,

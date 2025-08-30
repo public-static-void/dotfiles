@@ -5,6 +5,14 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"yaml",
+	"yml",
+	"yaml.docker-compose",
+	"yaml.gitlab",
+	"yaml.helm-values",
+}
+
 --- Root markers used to detect YAML project root.
 local root_markers = { ".git" }
 
@@ -22,10 +30,6 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "yaml-language-server", "--stdio" }
-
-local filetypes = { "yaml", "yml", "yaml.docker-compose", "yaml.gitlab", "yaml.helm-values" }
-
 local settings = {
 	-- Disable Red Hat telemetry for privacy and performance
 	redhat = { telemetry = { enabled = false } },
@@ -40,6 +44,8 @@ local function on_init(client)
 	-- yaml-language-server disables formatting by default, forcibly enable it here
 	client.server_capabilities.documentFormattingProvider = true
 end
+
+local cmd = { "yaml-language-server", "--stdio" }
 
 return {
 	cmd = cmd,

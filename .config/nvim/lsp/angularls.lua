@@ -5,15 +5,6 @@ if not handlers then
 	return
 end
 
--- Root markers for Angular projects
-local root_markers = {
-	"angular.json",
-	"nx.json",
-	"package.json",
-	"tsconfig.json",
-	".git",
-}
-
 -- Filetypes handled by the Angular LSP
 local filetypes = {
 	"typescript",
@@ -21,6 +12,15 @@ local filetypes = {
 	"typescriptreact",
 	"typescript.tsx",
 	"htmlangular",
+}
+
+-- Root markers for Angular projects
+local root_markers = {
+	"angular.json",
+	"nx.json",
+	"package.json",
+	"tsconfig.json",
+	".git",
 }
 
 --- Determine the project root directory by searching for root markers.

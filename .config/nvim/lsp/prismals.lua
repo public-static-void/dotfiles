@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "prisma" }
+
 --- Root markers to identify project root directory
 local root_markers = { ".git" }
 
@@ -21,8 +23,6 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "prisma-language-server", "--stdio" }
-local filetypes = { "prisma" }
 local single_file_support = true
 
 --- Settings for prisma-language-server (empty for now, extend if needed)
@@ -31,6 +31,8 @@ local settings = {
 		prismaFmtBinPath = "",
 	},
 }
+
+local cmd = { "prisma-language-server", "--stdio" }
 
 return {
 	cmd = cmd,

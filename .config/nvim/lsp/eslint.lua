@@ -5,6 +5,20 @@ if not handlers then
 	return
 end
 
+--- Filetypes that this ESLint LSP server will attach to.
+local filetypes = {
+	"javascript",
+	"javascriptreact",
+	"typescript",
+	"typescriptreact",
+	"javascript.jsx",
+	"typescript.tsx",
+	"vue",
+	"svelte",
+	"astro",
+	"htmlangular",
+}
+
 -- Root markers for ESLint config detection. Needed to find project root reliably.
 local root_markers = {
 	".eslintrc",
@@ -37,20 +51,6 @@ local function root_dir(bufnr, on_dir)
 
 	on_dir(root or vim.loop.cwd())
 end
-
---- Filetypes that this ESLint LSP server will attach to.
-local filetypes = {
-	"javascript",
-	"javascriptreact",
-	"typescript",
-	"typescriptreact",
-	"javascript.jsx",
-	"typescript.tsx",
-	"vue",
-	"svelte",
-	"astro",
-	"htmlangular",
-}
 
 --- Specific handlers for ESLint LSP server messages.
 local eslint_handlers = {
@@ -165,10 +165,12 @@ local settings = {
 	nodePath = "",
 }
 
+local cmd = { "vscode-eslint-language-server", "--stdio" }
+
 return {
 	on_attach = on_attach,
 	capabilities = handlers.capabilities,
-	cmd = { "vscode-eslint-language-server", "--stdio" },
+	cmd = cmd,
 	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,

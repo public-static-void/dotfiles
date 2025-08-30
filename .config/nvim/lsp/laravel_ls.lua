@@ -5,6 +5,11 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"php",
+	"blade",
+}
+
 --- Markers to detect project root for Laravel
 local root_markers = { "artisan" }
 
@@ -21,9 +26,9 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "laravel-ls" }
-local filetypes = { "php", "blade" }
 local single_file_support = true
+
+local cmd = { "laravel-ls" }
 
 return {
 	cmd = cmd,

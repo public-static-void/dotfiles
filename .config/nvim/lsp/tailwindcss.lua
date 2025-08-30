@@ -5,6 +5,20 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"css",
+	"scss",
+	"sass",
+	"html",
+	"heex",
+	"javascript",
+	"javascriptreact",
+	"typescript",
+	"typescriptreact",
+	"svelte",
+	"elixir",
+}
+
 --- Root marker files for Tailwind projects including common config files and .git.
 local root_markers = {
 	"tailwind.config.ts",
@@ -29,22 +43,6 @@ local function root_dir(bufnr, on_dir)
 	local root = utils.find_root(fname, root_files)
 	on_dir(root or vim.loop.cwd())
 end
-
-local cmd = { "tailwindcss-language-server", "--stdio" }
-
-local filetypes = {
-	"css",
-	"scss",
-	"sass",
-	"html",
-	"heex",
-	"javascript",
-	"javascriptreact",
-	"typescript",
-	"typescriptreact",
-	"svelte",
-	"elixir",
-}
 
 -- Tailwind CSS language server settings with linting rules, experimental class regexes and merged includeLanguages table
 local settings = {
@@ -92,6 +90,8 @@ local function before_init(_, config)
 		config.settings.editor.tabSize = vim.lsp.util.get_effective_tabstop()
 	end
 end
+
+local cmd = { "tailwindcss-language-server", "--stdio" }
 
 return {
 	cmd = cmd,

@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "php" }
+
 --- List of root marker files/directories to determine the PHP project root.
 local root_markers = { "composer.json", ".git", ".phpactor.json", ".phpactor.yml" }
 
@@ -24,7 +26,6 @@ local function root_dir(bufnr, on_dir)
 end
 
 local cmd = { "phpactor", "language-server" }
-local filetypes = { "php" }
 
 return {
 	cmd = cmd,

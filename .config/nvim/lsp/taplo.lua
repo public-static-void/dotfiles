@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "toml" }
+
 --- Root marker files for Taplo TOML projects, including common Taplo config files and VCS markers.
 local root_markers = { ".taplo.toml", "taplo.toml", "Cargo.toml", "package.json", ".git" }
 
@@ -24,7 +26,6 @@ local function root_dir(bufnr, on_dir)
 end
 
 local cmd = { "taplo", "lsp", "stdio" }
-local filetypes = { "toml" }
 
 return {
 	cmd = cmd,

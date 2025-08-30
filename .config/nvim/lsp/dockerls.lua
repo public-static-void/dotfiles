@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "dockerfile" }
+
 --- Root markers for Docker projects.
 --- Prefer a local Dockerfile if available, else fall back to .git repository root.
 local root_markers = { "Dockerfile", ".git" }
@@ -35,10 +37,12 @@ local settings = {
 	},
 }
 
+local cmd = { "docker-langserver", "--stdio" }
+
 -- Final LSP config for Docker
 return {
-	cmd = { "docker-langserver", "--stdio" },
-	filetypes = { "dockerfile" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,
 	on_attach = handlers.on_attach,

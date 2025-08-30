@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "twig" }
+
 -- Root markers used for Twig projects.
 local root_markers = { "composer.json", ".git" }
 
@@ -21,9 +23,11 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
+local cmd = { "twiggy-language-server", "--stdio" }
+
 return {
-	cmd = { "twiggy-language-server", "--stdio" },
-	filetypes = { "twig" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_dir = root_dir,
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,

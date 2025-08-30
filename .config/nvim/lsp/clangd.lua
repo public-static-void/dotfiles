@@ -5,6 +5,14 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"c",
+	"cpp",
+	"objc",
+	"objcpp",
+	"cuda",
+}
+
 --- Root markers used to anchor the project.
 --- Priority is given to explicit compile databases, but falls back to .git.
 local root_markers = {
@@ -73,47 +81,51 @@ local function symbol_info(bufnr, client)
 	end, bufnr)
 end
 
--- Final clangd configuration
+--- Enhance default on_attach with extra clangd user commands.
+---@param client lsp.Client
+---@param bufnr number
+local on_attach = function(client, bufnr)
+	if handlers.on_attach then
+		handlers.on_attach(client, bufnr)
+	end
+
+	-- Register buffer-local user commands for clangd custom methods
+	vim.api.nvim_buf_create_user_command(bufnr, "LspClangdSwitchSourceHeader", function()
+		switch_source_header(bufnr, client)
+	end, { desc = "Switch between header and source" })
+
+	vim.api.nvim_buf_create_user_command(bufnr, "LspClangdShowSymbolInfo", function()
+		symbol_info(bufnr, client)
+	end, { desc = "Show symbol info at cursor" })
+end
+
+-- Capabilities tuned for clangd
+local capabilities = vim.tbl_deep_extend("force", handlers.capabilities or {}, {
+	textDocument = {
+		completion = {
+			editsNearCursor = true, -- prioritize suggestions near cursor
+		},
+	},
+	offsetEncoding = { "utf-8", "utf-16" }, -- let client/server negotiate
+})
+
+--- Ensure client adopts server's advertised offset encoding
+---@param client lsp.Client
+---@param init_result table
+local on_init = function(client, init_result)
+	if init_result and init_result.offsetEncoding then
+		client.offset_encoding = init_result.offsetEncoding
+	end
+end
+
+local cmd = { "clangd" }
+
 return {
-	cmd = { "clangd" },
-	filetypes = { "c", "cpp", "objc", "objcpp", "cuda" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,
-
-	-- Capabilities tuned for clangd
-	capabilities = vim.tbl_deep_extend("force", handlers.capabilities or {}, {
-		textDocument = {
-			completion = {
-				editsNearCursor = true, -- prioritize suggestions near cursor
-			},
-		},
-		offsetEncoding = { "utf-8", "utf-16" }, -- let client/server negotiate
-	}),
-
-	--- Ensure client adopts server's advertised offset encoding
-	---@param client lsp.Client
-	---@param init_result table
-	on_init = function(client, init_result)
-		if init_result and init_result.offsetEncoding then
-			client.offset_encoding = init_result.offsetEncoding
-		end
-	end,
-
-	--- Enhance default on_attach with extra clangd user commands.
-	---@param client lsp.Client
-	---@param bufnr number
-	on_attach = function(client, bufnr)
-		if handlers.on_attach then
-			handlers.on_attach(client, bufnr)
-		end
-
-		-- Register buffer-local user commands for clangd custom methods
-		vim.api.nvim_buf_create_user_command(bufnr, "LspClangdSwitchSourceHeader", function()
-			switch_source_header(bufnr, client)
-		end, { desc = "Switch between header and source" })
-
-		vim.api.nvim_buf_create_user_command(bufnr, "LspClangdShowSymbolInfo", function()
-			symbol_info(bufnr, client)
-		end, { desc = "Show symbol info at cursor" })
-	end,
+	capabilities = capabilities,
+	on_init = on_init,
+	on_attach = on_attach,
 }

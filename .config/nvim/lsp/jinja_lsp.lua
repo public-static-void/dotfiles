@@ -5,6 +5,12 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"jinja",
+	"html.jinja",
+	"jinja.html",
+}
+
 --- Root marker to identify project root, typically a Git repository.
 local root_markers = { ".git" }
 
@@ -21,11 +27,11 @@ local function root_dir(bufnr, on_dir)
 	on_dir(root or vim.loop.cwd())
 end
 
-local cmd = { "jinja-lsp" }
-local filetypes = { "jinja", "html.jinja", "jinja.html" }
 local single_file_support = true
 
-local config = {
+local cmd = { "jinja-lsp" }
+
+return {
 	cmd = cmd,
 	filetypes = filetypes,
 	root_dir = root_dir,
@@ -33,5 +39,3 @@ local config = {
 	capabilities = handlers.capabilities,
 	single_file_support = single_file_support,
 }
-
-return config

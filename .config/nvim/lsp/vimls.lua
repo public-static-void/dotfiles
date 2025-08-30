@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local filetypes = { "vim" }
+
 --- Root markers used to anchor the project.
 --- `.git` is the primary marker; `.vimrc` is included to cover standalone Vim configs.
 local root_markers = { ".git", ".vimrc" }
@@ -41,11 +43,11 @@ local init_options = {
 		fromRuntimepath = true, -- project-specific runtime files
 	},
 }
+local cmd = { "vim-language-server", "--stdio" }
 
--- Final config passed back to be consumed by vim.lsp.start
 return {
-	cmd = { "vim-language-server", "--stdio" },
-	filetypes = { "vim" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_markers = root_markers,
 	root_dir = root_dir,
 	on_attach = handlers.on_attach,

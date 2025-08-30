@@ -5,6 +5,11 @@ if not handlers then
 	return
 end
 
+local filetypes = {
+	"scss",
+	"sass",
+}
+
 -- Root markers used for Sass/SCSS projects.
 local root_markers = { ".git", "package.json" }
 
@@ -28,9 +33,11 @@ local settings = {
 	},
 }
 
+local cmd = { "some-sass-language-server", "--stdio" }
+
 return {
-	cmd = { "some-sass-language-server", "--stdio" },
-	filetypes = { "scss", "sass" },
+	cmd = cmd,
+	filetypes = filetypes,
 	root_dir = root_dir,
 	on_attach = handlers.on_attach,
 	capabilities = handlers.capabilities,
