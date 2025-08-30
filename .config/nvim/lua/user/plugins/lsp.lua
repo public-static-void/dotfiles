@@ -12,15 +12,6 @@ return {
 			"williamboman/mason-lspconfig.nvim",
 		},
 	},
-	-- Null-LS
-	{
-		"jay-babu/mason-null-ls.nvim",
-		event = { "BufReadPre", "BufNewFile" },
-		dependencies = {
-			"williamboman/mason.nvim",
-			"nvimtools/none-ls.nvim",
-		},
-	},
 	-- Java LSP
 	{
 		"mfussenegger/nvim-jdtls",
@@ -34,5 +25,15 @@ return {
 				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
 			},
 		},
+	},
+	-- Format
+	{
+		"stevearc/conform.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+	},
+	-- Lint
+	{
+		"mfussenegger/nvim-lint",
+		event = { "BufReadPre", "BufNewFile" },
 	},
 }

@@ -1,3 +1,5 @@
+local utils = require("user.utils")
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -15,9 +17,13 @@ vim.cmd([[
   cabbrev qA qa
   cabbrev QA qa
   cabbrev Qa qa
+  cabbrev Q! q!
+  cabbrev Qa! qa!
+  cabbrev qA! qa!
+  cabbrev QA! qa!
 ]])
 
--- Ex Mode is annoying. Use this for formatting instead.
+-- Disable Ex Mode.
 vim.keymap.set("n", "Q", "<Nop>", { noremap = true, silent = true, desc = "Disable Ex mode" })
 
 -- Enable to edit protected files.
@@ -215,18 +221,32 @@ vim.keymap.set("n", "<leader>f", function()
 		vim.notify("Buffer is not modifiable!", vim.log.levels.WARN)
 		return
 	end
+	local has_conform, conform = pcall(require, "conform")
+	if has_conform then
+		-- Try to format using conform.nvim with async and LSP fallback enabled
+		vim.notify("[DEBUG] formatting using conform.nvim", vim.log.levels.WARN)
+		local formatted = conform.format({ async = true, lsp_fallback = false })
+		if formatted then
+			return
+		end
+		-- If conform can't format, continue to try LSP below
+	end
 	local bufnr = vim.api.nvim_get_current_buf()
-	local can_format = false
+	local can_format_lsp = false
 	for _, client in ipairs(vim.lsp.get_clients({ bufnr = bufnr })) do
 		if client.supports_method and client:supports_method("textDocument/formatting") then
-			can_format = true
+			can_format_lsp = true
 			break
 		end
 	end
-	if can_format then
+	if can_format_lsp then
+		-- Use LSP async formatting
+		vim.notify("[DEBUG] formatting using lsp", vim.log.levels.WARN)
 		vim.lsp.buf.format({ async = true })
 	else
+		-- Fallback to native formatting commands if no conform or LSP formatter available
 		local pos = vim.api.nvim_win_get_cursor(0)
+		vim.notify("[DEBUG] formatting using native", vim.log.levels.WARN)
 		vim.cmd("silent normal! gg=G")
 		vim.cmd([[%s/\s\+$//e]])
 		vim.cmd([[%s#\($\n\)\+\%$##e]])
@@ -234,7 +254,7 @@ vim.keymap.set("n", "<leader>f", function()
 		local new_line = math.min(pos[1], last_line)
 		vim.api.nvim_win_set_cursor(0, { new_line, pos[2] })
 	end
-end, { noremap = true, silent = true, desc = "LSP: Format buffer" })
+end, { noremap = true, silent = true, desc = "Format buffer: conform.nvim, LSP, or native fallback" })
 vim.keymap.set(
 	"n",
 	"<leader>n",
