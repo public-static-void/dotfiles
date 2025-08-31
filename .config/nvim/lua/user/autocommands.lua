@@ -78,7 +78,6 @@ vim.api.nvim_create_autocmd({ "FileType" }, {
 
 -- Show fold column when there are closed folds, else hide it
 local function update_foldcolumn()
-	local win = vim.api.nvim_get_current_win()
 	-- Check for any closed folds in the visible window lines
 	local start_line = vim.fn.line("w0")
 	local end_line = vim.fn.line("w$")
