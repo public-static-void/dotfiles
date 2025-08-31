@@ -86,7 +86,7 @@ local formatters = {
 	"shfmt",
 	"sql-formatter",
 	"stylua",
-  "terraform",
+	"terraform",
 	"tex-fmt",
 	"xmlformatter",
 }

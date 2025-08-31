@@ -5,6 +5,11 @@ if not picker then
 	return
 end
 
+local filetree = utils.safe_require("user.filetree")
+if not filetree then
+	return
+end
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -174,8 +179,8 @@ vim.keymap.set(
 	{ noremap = true, silent = true, desc = "Preview hunk (Gitsigns)" }
 )
 
--- Nvimtree --
-vim.keymap.set("n", "<C-n>", ":NvimTreeToggle<cr>", { noremap = true, silent = true, desc = "Toggle NvimTree" })
+-- File Tree --
+vim.keymap.set("n", "<C-n>", filetree.toggle_tree, { noremap = true, silent = true, desc = "Toggle File Tree" })
 
 -- Aerial --
 vim.keymap.set(
