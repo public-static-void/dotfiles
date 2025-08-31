@@ -1,29 +1,17 @@
 return {
-
-	-- Project
-	{
-		"ahmedkhalf/project.nvim",
-		event = "VeryLazy",
-	},
 	-- Git
 	{
 		"lewis6991/gitsigns.nvim",
 		event = { "BufReadPost", "BufNewFile" },
 	},
-	-- Telescope
+	-- Picker
 	{
-		"nvim-telescope/telescope.nvim",
-		tag = "0.1.8",
-		dependencies = { "nvim-lua/plenary.nvim" },
+		"ibhagwan/fzf-lua",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
 	},
-	{
-		"LukasPietzschmann/telescope-tabs",
-		dependencies = { "nvim-telescope/telescope.nvim" },
-	},
-	-- Code Navigation
+	-- Outline
 	{
 		"stevearc/aerial.nvim",
-		opts = {},
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
 			"nvim-tree/nvim-web-devicons",

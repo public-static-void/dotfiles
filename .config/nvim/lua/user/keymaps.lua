@@ -1,5 +1,10 @@
 local utils = require("user.utils")
 
+local picker = utils.safe_require("user.picker")
+if not picker then
+	return
+end
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
@@ -143,35 +148,11 @@ for i = 1, 9 do
 	)
 end
 
--- Telescope --
-vim.keymap.set(
-	"n",
-	"<leader>t",
-	":Telescope find_files<cr>",
-	{ noremap = true, silent = true, desc = "Find files (Telescope)" }
-)
-vim.keymap.set(
-	"n",
-	"<leader>g",
-	":Telescope live_grep<cr>",
-	{ noremap = true, silent = true, desc = "Live grep (Telescope)" }
-)
-vim.keymap.set("n", "<M-z>", function()
-	local ok, telescope = pcall(require, "telescope.builtin")
-	if ok and telescope then
-		telescope.buffers()
-	else
-		vim.cmd("ls")
-	end
-end, { noremap = true, silent = true, desc = "Show Buffers" })
-vim.keymap.set("n", "<leader>z", function()
-	local ok, telescope_tabs = pcall(require, "telescope-tabs")
-	if ok and telescope_tabs then
-		require("telescope-tabs").list_tabs()
-	else
-		vim.cmd("tabs")
-	end
-end, { noremap = true, silent = true, desc = "Show Tabs" })
+-- Picker --
+vim.keymap.set("n", "<leader>t", picker.find_files, { noremap = true, silent = true, desc = "Find files" })
+vim.keymap.set("n", "<leader>g", picker.live_grep, { noremap = true, silent = true, desc = "Live grep" })
+vim.keymap.set("n", "<M-z>", picker.buffers, { noremap = true, silent = true, desc = "Show Buffers" })
+vim.keymap.set("n", "<leader>z", picker.tabs, { noremap = true, silent = true, desc = "Show Tabs" })
 
 -- Gitsigns --
 vim.keymap.set(
@@ -224,7 +205,6 @@ vim.keymap.set("n", "<leader>f", function()
 	local has_conform, conform = pcall(require, "conform")
 	if has_conform then
 		-- Try to format using conform.nvim with async and LSP fallback enabled
-		vim.notify("[DEBUG] formatting using conform.nvim", vim.log.levels.WARN)
 		local formatted = conform.format({ async = true, lsp_fallback = false })
 		if formatted then
 			return
@@ -241,12 +221,10 @@ vim.keymap.set("n", "<leader>f", function()
 	end
 	if can_format_lsp then
 		-- Use LSP async formatting
-		vim.notify("[DEBUG] formatting using lsp", vim.log.levels.WARN)
 		vim.lsp.buf.format({ async = true })
 	else
 		-- Fallback to native formatting commands if no conform or LSP formatter available
 		local pos = vim.api.nvim_win_get_cursor(0)
-		vim.notify("[DEBUG] formatting using native", vim.log.levels.WARN)
 		vim.cmd("silent normal! gg=G")
 		vim.cmd([[%s/\s\+$//e]])
 		vim.cmd([[%s#\($\n\)\+\%$##e]])
