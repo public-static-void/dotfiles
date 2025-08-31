@@ -45,11 +45,20 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 	end,
 })
 
--- Delayed fold refresh after file read/buffer enter
+-- Delayed fold refresh after file read/buffer enter,
+-- but skip terminal/toggleterm buffers
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufEnter" }, {
 	callback = function()
+		-- Skip non-file buffers like terminal, help, quickfix, etc.
+		if vim.bo.buftype ~= "" or vim.bo.filetype == "toggleterm" then
+			return
+		end
+
 		vim.schedule(function()
-			vim.cmd("normal! zx")
+			-- Double check again inside scheduled callback
+			if vim.bo.buftype == "" and vim.bo.filetype ~= "toggleterm" then
+				vim.cmd("normal! zx")
+			end
 		end)
 	end,
 })
