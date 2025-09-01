@@ -51,7 +51,7 @@ conform.setup({
 		sh = { "beautysh", "shfmt" },
 		sql = { "sql_formatter" },
 		svelte = {},
-		terraform = { "terraform" },
+		terraform = { "terraform_fmt" },
 		tex = { "tex-fmt", "latexindent" },
 		toml = { "taplo" },
 		twig = { "djlint" },
