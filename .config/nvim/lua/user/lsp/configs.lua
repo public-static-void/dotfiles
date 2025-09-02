@@ -65,8 +65,10 @@ local servers = {
 }
 
 local formatters = {
+	"beautysh",
 	"black",
 	"blade-formatter",
+	"clang-format",
 	"cljfmt",
 	"csharpier",
 	"gersemi",
@@ -82,6 +84,7 @@ local formatters = {
 	"pint",
 	"prettier",
 	"prettierd",
+	"rustfmt",
 	"shellcheck",
 	"shfmt",
 	"sql-formatter",
