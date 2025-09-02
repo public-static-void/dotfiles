@@ -9,10 +9,26 @@ return {
 		"brenoprata10/nvim-highlight-colors",
 		event = "VeryLazy",
 	},
-	-- Highlight words
+	-- Enhanced (a)round and (i)nside textobject functionality
 	{
-		"RRethy/vim-illuminate",
-		event = "VeryLazy",
+		"nvim-mini/mini.ai",
+		version = "*",
+		config = function()
+			require("mini.ai").setup()
+		end,
+	},
+	-- Highlight word under cursor
+	{
+		"nvim-mini/mini.cursorword",
+		version = "*",
+	},
+	-- Highlight patterns
+	{
+		"nvim-mini/mini.hipatterns",
+		version = "*",
+		config = function()
+			require("mini.hipatterns").setup()
+		end,
 	},
 	-- Buffer deletion
 	{
@@ -21,17 +37,18 @@ return {
 	},
 	-- Autopairs
 	{
-		"windwp/nvim-autopairs",
-		event = "InsertEnter",
-		config = true,
+		"nvim-mini/mini.pairs",
+		version = "*",
+		config = function()
+			require("mini.pairs").setup()
+		end,
 	},
 	-- Surround
 	{
-		"kylechui/nvim-surround",
-		version = "*", -- Use for stability; omit to use `main` branch for the latest features
-		event = "VeryLazy",
+		"nvim-mini/mini.surround",
+		version = "*",
 		config = function()
-			require("nvim-surround").setup({})
+			require("mini.surround").setup()
 		end,
 	},
 	-- Hardtime

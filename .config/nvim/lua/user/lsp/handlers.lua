@@ -74,18 +74,6 @@ M.setup = function()
 	})
 end
 
-local function lsp_highlight_document(client)
-	local illuminate = utils.safe_require("illuminate")
-	if not illuminate then
-		return
-	end
-	illuminate.on_attach(client)
-end
-
-M.on_attach = function(client)
-	lsp_highlight_document(client)
-end
-
 M.capabilities = vim.lsp.protocol.make_client_capabilities()
 
 return M

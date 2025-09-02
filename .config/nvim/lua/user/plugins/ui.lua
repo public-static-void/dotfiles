@@ -40,12 +40,10 @@ return {
 	{
 		"nvim-lua/popup.nvim",
 	},
-	-- Indent Color guide
+	-- Indent Scope
 	{
-		"lukas-reineke/indent-blankline.nvim",
-		main = "ibl",
-		opts = {},
-		event = { "BufReadPost", "BufNewFile" },
+		"nvim-mini/mini.indentscope",
+		version = "*",
 	},
 	-- Dim inactive windows
 	{
