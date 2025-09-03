@@ -124,7 +124,6 @@ vim.api.nvim_create_autocmd("FileType", {
 		vim.opt_local.autoindent = true
 		vim.opt_local.smartindent = true
 		vim.opt_local.colorcolumn = "80"
-		vim.keymap.set("n", "<leader>e", ":sp | term python %<CR>:startinsert<CR>", { buffer = true })
 	end,
 })
 
@@ -138,23 +137,3 @@ vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
 		end
 	end,
 })
-
--- Code runner keymaps for other filetypes
-local runners = {
-	javascript = "node %",
-	java = "java %",
-	go = "go run %",
-	rust = "cargo run %",
-	sh = "bash %",
-	lua = "lua %",
-	php = "php %",
-}
-
-for ft, cmd in pairs(runners) do
-	vim.api.nvim_create_autocmd("FileType", {
-		pattern = ft,
-		callback = function()
-			vim.keymap.set("n", "<leader>e", ":sp | term " .. cmd .. "<CR>:startinsert<CR>", { buffer = true })
-		end,
-	})
-end

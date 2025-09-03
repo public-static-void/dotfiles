@@ -22,4 +22,9 @@ return {
 		"jghauser/mkdir.nvim",
 		event = { "BufWritePre" },
 	},
+	-- Code Runner
+	{
+		"CRAG666/code_runner.nvim",
+		config = true,
+	},
 }

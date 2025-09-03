@@ -10,10 +10,20 @@ if not filetree then
 	return
 end
 
+local flash = utils.safe_require("flash")
+if not flash then
+	return
+end
+
+local runner = utils.safe_require("user.coderunner")
+if not runner then
+	return
+end
+
 vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
--- Commands (cabbrev)
+--- Command Mappings ---
 vim.cmd([[
   cabbrev Q q
   cabbrev W w
@@ -42,12 +52,12 @@ vim.keymap.set("c", "w!!", "w !sudo tee %", { noremap = true, silent = false, de
 -- Remove last search highlighting.
 vim.keymap.set("n", "<ESC>", ":noh<CR><ESC>", { noremap = true, silent = true, desc = "Clear search highlight" })
 
--- Registers --
+--- Registers ---
 vim.keymap.set("v", "p", '"_dP', { noremap = true, silent = true, desc = "Paste without overwriting register" })
 vim.keymap.set("x", "p", "pgvy", { noremap = true, silent = true, desc = "Paste and reselect in visual mode" })
 vim.keymap.set("v", "y", "ygv<Esc>", { noremap = true, silent = true, desc = "Yank and reselect in visual mode" })
 
--- Navigation --
+--- Navigation ---
 vim.keymap.set({ "n", "v", "o" }, "<S-h>", "0", { noremap = true, silent = true, desc = "Go to line start" })
 vim.keymap.set({ "n", "v", "o" }, "<S-l>", "$", { noremap = true, silent = true, desc = "Go to line end" })
 vim.keymap.set({ "n", "v", "o" }, "<S-j>", "G", { noremap = true, silent = true, desc = "Go to file end" })
@@ -68,7 +78,7 @@ vim.keymap.set("i", "<Up>", "<C-o>gk", { noremap = true, silent = true, desc = "
 vim.keymap.set({ "n", "v" }, "<C-u>", "<C-u>zz", { noremap = true, silent = true, desc = "Scroll up and center" })
 vim.keymap.set({ "n", "v" }, "<C-d>", "<C-d>zz", { noremap = true, silent = true, desc = "Scroll down and center" })
 
--- Indentation --
+--- Indentation ---
 vim.keymap.set("v", "<", "<gv", { noremap = true, silent = true, desc = "Indent left and reselect" })
 vim.keymap.set("v", ">", ">gv", { noremap = true, silent = true, desc = "Indent right and reselect" })
 
@@ -82,7 +92,7 @@ vim.keymap.set("v", "<C-M-k>", ":m .-2<CR>==", { noremap = true, silent = true, 
 vim.keymap.set("x", "<C-M-j>", ":m '>+1<CR>gv-gv", { noremap = true, silent = true, desc = "Move block down" })
 vim.keymap.set("x", "<C-M-k>", ":m '<-2<CR>gv-gv", { noremap = true, silent = true, desc = "Move block up" })
 
--- Splits --
+--- Splits ---
 vim.keymap.set("n", "<M-v>", ":vsplit<CR>", { noremap = true, silent = true, desc = "Vertical split" })
 vim.keymap.set("n", "<M-b>", ":split<CR>", { noremap = true, silent = true, desc = "Horizontal split" })
 vim.keymap.set("n", "<M-x>", "<C-w>x", { noremap = true, silent = true, desc = "Swap split" })
@@ -118,7 +128,7 @@ vim.keymap.set(
 )
 vim.keymap.set("n", "<M-s>", "<C-w>c", { noremap = true, silent = true, desc = "Close current split" })
 
--- Tabs --
+--- Tabs ---
 vim.keymap.set("n", "<leader><Tab>", "gt", { noremap = true, silent = true, desc = "Next tab" })
 vim.keymap.set("n", "<leader><S-Tab>", "gT", { noremap = true, silent = true, desc = "Previous tab" })
 vim.keymap.set("n", "<leader>w", ":tabnew<CR>", { noremap = true, silent = true, desc = "New tab" })
@@ -127,7 +137,7 @@ for i = 1, 9 do
 	vim.keymap.set("n", "<leader>" .. i, i .. "gt", { noremap = true, silent = true, desc = "Go to tab " .. i })
 end
 
--- Buffers --
+--- Buffers ---
 vim.keymap.set("n", "<M-Tab>", ":bn<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 vim.keymap.set("n", "<M-S-Tab>", ":bp<CR>", { noremap = true, silent = true, desc = "Previous buffer" })
 vim.keymap.set("n", "<M-w>", ":enew<CR>", { noremap = true, silent = true, desc = "New buffer" })
@@ -153,36 +163,28 @@ for i = 1, 9 do
 	)
 end
 
--- Picker --
+--- Flash ---
+vim.keymap.set({ "n", "x", "o" }, "S", function()
+	if flash then
+		flash.jump()
+	end
+end, { noremap = true, silent = true, desc = "Jump" })
+
+--- Picker ---
 vim.keymap.set("n", "<leader>t", picker.find_files, { noremap = true, silent = true, desc = "Find files" })
 vim.keymap.set("n", "<leader>g", picker.live_grep, { noremap = true, silent = true, desc = "Live grep" })
 vim.keymap.set("n", "<M-z>", picker.buffers, { noremap = true, silent = true, desc = "Show Buffers" })
 vim.keymap.set("n", "<leader>z", picker.tabs, { noremap = true, silent = true, desc = "Show Tabs" })
 
--- Gitsigns --
-vim.keymap.set(
-	"n",
-	"<leader>h",
-	":Gitsigns prev_hunk<cr>",
-	{ noremap = true, silent = true, desc = "Previous hunk (Gitsigns)" }
-)
-vim.keymap.set(
-	"n",
-	"<leader>j",
-	":Gitsigns next_hunk<cr>",
-	{ noremap = true, silent = true, desc = "Next hunk (Gitsigns)" }
-)
-vim.keymap.set(
-	"n",
-	"<leader>k",
-	":Gitsigns preview_hunk<cr>",
-	{ noremap = true, silent = true, desc = "Preview hunk (Gitsigns)" }
-)
+--- Gitsigns ---
+vim.keymap.set("n", "<leader>h", ":Gitsigns prev_hunk<cr>", { noremap = true, silent = true, desc = "Previous hunk" })
+vim.keymap.set("n", "<leader>j", ":Gitsigns next_hunk<cr>", { noremap = true, silent = true, desc = "Next hunk" })
+vim.keymap.set("n", "<leader>k", ":Gitsigns preview_hunk<cr>", { noremap = true, silent = true, desc = "Preview hunk" })
 
--- File Tree --
+--- File Tree ---
 vim.keymap.set("n", "<C-n>", filetree.toggle_tree, { noremap = true, silent = true, desc = "Toggle File Tree" })
 
--- Aerial --
+--- Aerial ---
 vim.keymap.set(
 	"n",
 	"<C-m>",
@@ -190,7 +192,7 @@ vim.keymap.set(
 	{ noremap = true, silent = true, desc = "Toggle Aerial outline" }
 )
 
--- Debugging --
+--- Debugging ---
 vim.keymap.set(
 	"n",
 	"<leader>p",
@@ -201,7 +203,7 @@ vim.keymap.set("n", "<leader>c", ":DapContinue<CR>", { noremap = true, silent = 
 vim.keymap.set("n", "<leader>o", ":DapStepOver<CR>", { noremap = true, silent = true, desc = "DAP: Step over" })
 vim.keymap.set("n", "<leader>i", ":DapStepInto<CR>", { noremap = true, silent = true, desc = "DAP: Step into" })
 
--- LSP --
+--- LSP ---
 vim.keymap.set("n", "<leader>f", function()
 	if not vim.bo.modifiable then
 		vim.notify("Buffer is not modifiable!", vim.log.levels.WARN)
@@ -257,7 +259,7 @@ vim.keymap.set("n", "<leader>v", function()
 	else
 		vim.diagnostic.setloclist()
 	end
-end, { noremap = true, silent = true, desc = "LSP: Diagnostics (Trouble/loclist)" })
+end, { noremap = true, silent = true, desc = "LSP: Diagnostics" })
 vim.keymap.set("n", "K", vim.lsp.buf.hover, { noremap = true, silent = true, desc = "LSP: Hover" })
 vim.keymap.set("n", "gD", vim.lsp.buf.declaration, { noremap = true, silent = true, desc = "LSP: Go to declaration" })
 vim.keymap.set("n", "gd", function()
@@ -267,7 +269,7 @@ vim.keymap.set("n", "gd", function()
 	else
 		vim.lsp.buf.definition()
 	end
-end, { noremap = true, silent = true, desc = "LSP: Go to definition (Trouble)" })
+end, { noremap = true, silent = true, desc = "LSP: Go to definition" })
 vim.keymap.set("n", "gi", function()
 	local ok, trouble = pcall(require, "trouble")
 	if ok and trouble then
@@ -283,7 +285,7 @@ vim.keymap.set("n", "gr", function()
 	else
 		vim.lsp.buf.references()
 	end
-end, { noremap = true, silent = true, desc = "LSP: References (Trouble)" })
+end, { noremap = true, silent = true, desc = "LSP: References" })
 vim.keymap.set("n", "<leader>x", function()
 	local ok, trouble = pcall(require, "trouble")
 	if ok and trouble then
@@ -291,7 +293,7 @@ vim.keymap.set("n", "<leader>x", function()
 	else
 		vim.cmd("copen")
 	end
-end, { noremap = true, silent = true, desc = "Quickfix list (Trouble)" })
+end, { noremap = true, silent = true, desc = "Quickfix list" })
 vim.keymap.set("n", "gs", vim.lsp.buf.signature_help, { noremap = true, silent = true, desc = "LSP: Signature help" })
 vim.keymap.set("n", "<leader>r", vim.lsp.buf.rename, { noremap = true, silent = true, desc = "LSP: Rename symbol" })
 vim.keymap.set("n", "<leader>a", vim.lsp.buf.code_action, { noremap = true, silent = true, desc = "LSP: Code action" })
@@ -308,9 +310,9 @@ vim.keymap.set("n", "<Leader>s", function()
 	else
 		vim.notify("Neogen not found!", vim.log.levels.WARN)
 	end
-end, { noremap = true, silent = true, desc = "Generate docstring (Neogen)" })
+end, { noremap = true, silent = true, desc = "Generate docstring" })
 
--- Terminal --
+--- Terminal ---
 vim.keymap.set("n", "<C-t>", ":ToggleTerm<CR>", { noremap = true, silent = true, desc = "Toggle terminal" })
 vim.keymap.set("t", "<C-t>", [[<C-\><C-n>:ToggleTerm<CR>]], { noremap = true, silent = true, desc = "Toggle terminal" })
 vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], { noremap = true, silent = true, desc = "Terminal normal mode" })
@@ -363,7 +365,7 @@ vim.keymap.set(
 	{ noremap = true, silent = true, desc = "Terminal: Move to right window" }
 )
 
--- Undotree --
+--- Undotree ---
 vim.keymap.set("n", "<leader>u", function()
 	local ok, undotree = pcall(require, "undotree")
 	if ok and undotree then
@@ -373,7 +375,7 @@ vim.keymap.set("n", "<leader>u", function()
 	end
 end, { noremap = true, silent = true, desc = "Toggle UndoTree" })
 
--- Other --
+--- Other ---
 local datetime = tostring(os.date("%a %b %d %H:%M:%S %Y %z"))
 vim.keymap.set("n", "<leader>d", function()
 	vim.api.nvim_put({ datetime }, "c", false, true)
@@ -381,3 +383,5 @@ end, { noremap = true, silent = false, desc = "Insert current datetime" })
 vim.keymap.set("v", "<leader>d", function()
 	vim.api.nvim_put({ datetime }, "c", true, true)
 end, { noremap = true, silent = false, desc = "Insert current datetime" })
+
+vim.keymap.set("n", "<leader>e", runner.run_file, { noremap = true, silent = false, desc = "Run curernt File" })
