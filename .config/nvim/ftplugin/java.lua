@@ -32,6 +32,7 @@ local home = os.getenv("HOME")
 local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
 local workspace_dir = home .. "/workspace/" .. project_name
 local mason_path = vim.fn.stdpath("data") .. "/mason/packages"
+vim.fn.mkdir(workspace_dir, "p")
 
 --- Search for debug and test bundles installed by mason
 local bundles = utils.find_bundles({
@@ -49,10 +50,9 @@ local config_dir = mason_path
 --- Custom on_attach to setup nvim-jdtls dap integration for Java debugging
 local function on_attach(client, bufnr)
 	if client.name == "jdtls" then
-		jdtls.setup_dap()
+		jdtls.setup_dap({ hotcodereplace = "auto" })
 		jdtls_dap.setup_dap_main_class_configs()
 	end
-	handlers.on_attach(client, bufnr)
 	-- refresh codelens after attaching
 	vim.lsp.codelens.refresh()
 	-- auto refresh codelens on each save of a Java file
@@ -148,8 +148,6 @@ local cmd = {
 	"--add-opens",
 	"java.base/java.lang=ALL-UNNAMED",
 	"-javaagent:" .. lombok_jar,
-	"-Xdiag", -- diagnostic messages about annotation processing
-	"-verbose:class", -- verbose class loading info
 	"-jar",
 	launcher_jar,
 	"-configuration",
@@ -158,7 +156,7 @@ local cmd = {
 	workspace_dir,
 }
 
-return {
+local config = {
 	cmd = cmd,
 	filetypes = filetypes,
 	root_markers = root_markers,
@@ -171,3 +169,5 @@ return {
 	},
 	init_options = init_options,
 }
+
+jdtls.start_or_attach(config)
