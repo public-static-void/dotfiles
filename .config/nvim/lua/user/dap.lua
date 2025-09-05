@@ -98,6 +98,7 @@ dap.configurations.java = {
 		type = "java",
 		request = "launch",
 		name = "Launch Java Main Class",
+		program = "${file}",
 		cwd = vim.fn.getcwd(),
 		console = "internalConsole",
 	},

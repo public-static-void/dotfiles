@@ -1,26 +1,28 @@
+--- User interface plugins
+--- Startup screen, tabline, statusline, file tree, terminal, etc.
+--- @type Plugin[]
 return {
-	-- Startup screen
 	{
 		"goolord/alpha-nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+		--- Customizable startup screen/dashboard.
 	},
-	-- Tabline
 	{
 		"akinsho/bufferline.nvim",
 		version = "*",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+		--- Modern tabline with buffer indicators and icons.
 	},
-	-- Statusline
 	{
 		"nvim-lualine/lualine.nvim",
 		event = "UIEnter",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+		--- Statusline framework with icons and LSP indicators.
 	},
-	-- Scrollbar
 	{
 		"dstein64/nvim-scrollview",
+		--- Scrollbar showing diff markers and diagnostics.
 	},
-	-- Filetree
 	{
 		"nvim-neo-tree/neo-tree.nvim",
 		branch = "v3.x",
@@ -29,43 +31,44 @@ return {
 			"MunifTanjim/nui.nvim",
 			"nvim-tree/nvim-web-devicons",
 		},
+		--- File explorer sidebar with git and diagnostics support.
 	},
-	-- Terminal
 	{
 		"akinsho/toggleterm.nvim",
 		version = "*",
 		config = true,
+		--- Integrated floating terminal with multiple layout modes.
 	},
-	-- Popup API from vim in Neovim
 	{
 		"nvim-lua/popup.nvim",
+		--- Backport of vim’s popup API for Lua plugins.
 	},
-	-- Indent Scope
 	{
 		"nvim-mini/mini.indentscope",
 		version = "*",
+		--- Visual indication of current scope indentation block.
 	},
-	-- Dim inactive windows
 	{
 		"miversen33/sunglasses.nvim",
 		event = "UIEnter",
+		--- Dims inactive windows to emphasize active buffer.
 		config = function()
 			require("sunglasses").setup({
 				filter_percent = 0.25,
 			})
 		end,
 	},
-	-- Keymaps
 	{
 		"folke/which-key.nvim",
 		event = "VeryLazy",
+		--- Displays keybinding hints on partial leader input.
 	},
-	-- Error handling
 	{
 		"folke/trouble.nvim",
-		branch = "main", -- or "v3.x" for the latest version
+		branch = "main",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
-		opts = {}, -- you can add custom settings here if desired
-		cmd = { "Trouble", "TroubleToggle", "TroubleClose", "TroubleRefresh" }, -- lazy-load on command
+		cmd = { "Trouble", "TroubleToggle", "TroubleClose", "TroubleRefresh" },
+		--- Centralized list of diagnostics, references, and quickfixes.
+		opts = {},
 	},
 }

@@ -1,30 +1,41 @@
+--- Project-level utilities
+--- Git, pickers, outline, code running, SSH editing etc.
+--- @type Plugin[]
 return {
-	-- Git
 	{
 		"lewis6991/gitsigns.nvim",
 		event = { "BufReadPost", "BufNewFile" },
+		--- Git hunk signs, blame, and inline actions.
 	},
-	-- Picker
 	{
 		"ibhagwan/fzf-lua",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+		--- Fuzzy finder built on fzf with Lua integration.
 	},
-	-- Outline
 	{
 		"stevearc/aerial.nvim",
 		dependencies = {
 			"nvim-treesitter/nvim-treesitter",
 			"nvim-tree/nvim-web-devicons",
 		},
+		--- Symbol outline sidebar synced with LSP/TS.
 	},
-	-- Autocreate Directories on Save
 	{
 		"jghauser/mkdir.nvim",
 		event = { "BufWritePre" },
+		--- Auto-create missing directories on write.
 	},
-	-- Code Runner
 	{
 		"CRAG666/code_runner.nvim",
 		config = true,
+		--- Execute code snippets or files within terminal buffers.
+	},
+	{
+		"chipsenkbeil/distant.nvim",
+		branch = "v0.3",
+		--- Remote file editing and execution over SSH.
+		config = function()
+			require("distant"):setup()
+		end,
 	},
 }

@@ -1,0 +1,41 @@
+--- Type definitions for plugin specs and Lazy.nvim
+-- This file is typically located at `lua/user/types.lua`.
+-- It is usually discovered automatically by LuaLS, so requiring it
+-- explicitly is not considered necessary.
+-- In some setups, an annotation such as `---@module "user.types"`
+-- may be added at the top of other files when an explicit link
+-- to this namespace in IntelliSense is desired.
+
+-- Lazy.nvim core API (simplified)
+--- @class Lazy
+--- @field setup fun(plugins: Plugin[]|string[], opts?: table) Initialize Lazy.nvim with plugin specs
+
+-- Main plugin specification type for lazy.nvim
+--- Mirrors the lazy.nvim PluginSpec interface.
+--- @class Plugin
+--- @field [1] string GitHub-style repo string, e.g. "owner/repo"
+--- @field name? string Optional override name used in lazy’s plugin registry
+--- @field branch? string Git branch (defaults to repo default branch)
+--- @field version? string Semver, git tag, or "*" to lock version
+--- @field commit? string Specific git commit hash
+--- @field tag? string Git tag name
+--- @field pin? boolean Prevents this plugin from being updated
+--- @field cond? boolean|fun():boolean Conditional load
+--- @field priority? number Load priority (higher = earlier)
+--- @field enabled? boolean If false, disables this plugin
+--- @field lazy? boolean If true, loads lazily (default true for most plugins)
+--- @field event? string|string[] Events that trigger lazy loading
+--- @field ft? string|string[] Filetypes that trigger loading
+--- @field cmd? string|string[] Commands that trigger loading
+--- @field keys? table[]|string[] Key mappings that trigger loading
+--- @field build? string|fun(self:Plugin) Build command or setup function
+--- @field opts? table|fun():table Options passed to plugin’s config
+--- @field opts_extend? string[] Keys where opts tables should be merged instead of replaced
+--- @field config? boolean|fun(self:Plugin, opts:table) If `true` runs default setup, else custom setup function
+--- @field init? fun(self:Plugin) Init function that runs before loading
+--- @field dependencies? string[]|Plugin[] List of dependent plugins
+--- @field dev? boolean If true, plugin is in development mode (local)
+--- @field dir? string Local directory path if using a local plugin
+--- @field url? string Full git URL instead of "owner/repo" shorthand
+
+return {}

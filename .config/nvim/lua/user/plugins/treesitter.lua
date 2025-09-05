@@ -1,24 +1,26 @@
+--- Treesitter-based language enhancements
+--- Provides parsing, highlighting, and companion utilities.
+--- @type Plugin[]
 return {
 	{
-		-- Treesitter
 		"nvim-treesitter/nvim-treesitter",
-		-- build = ":TSUpdateSync",
 		build = ":TSUpdate",
 		event = { "BufReadPost", "BufNewFile" },
+		--- Core Treesitter plugin for highlighting and parsing.
 	},
-	-- Context Commentstring
 	{
 		"JoosepAlviste/nvim-ts-context-commentstring",
+		--- Context-aware `commentstring` adjustment for mixed syntaxes.
 	},
-	-- Autotag
 	{
 		"windwp/nvim-ts-autotag",
 		event = { "BufReadPost", "BufNewFile" },
+		--- Auto-close and rename HTML/JSX tags.
 	},
-	-- Rainbow Delimiters
 	{
 		"HiPhish/rainbow-delimiters.nvim",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		event = { "BufReadPost", "BufNewFile" },
+		--- Rainbow highlight for nested brackets and delimiters.
 	},
 }

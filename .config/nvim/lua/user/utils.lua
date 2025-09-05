@@ -1,5 +1,4 @@
 local M = {}
-
 local uv = vim.loop
 
 --- Safely require a module and handle errors gracefully.
@@ -38,9 +37,13 @@ local function path_exists(path)
 end
 
 --- Join multiple path parts respecting OS separator.
+-- Uses native vim.fs.joinpath if available (Neovim 0.9+), otherwise falls back.
 -- @param ... string Path parts
 -- @return string Joined path
 local function path_join(...)
+	if vim.fs and vim.fs.joinpath then
+		return vim.fs.joinpath(...)
+	end
 	local sep = package.config:sub(1, 1)
 	return table.concat({ ... }, sep)
 end
@@ -112,16 +115,15 @@ end
 
 --- Find the root directory starting from start_path by walking up
 -- until a directory with a root marker is found, or returns cwd.
+-- Uses improved path_join and normalization.
 -- @param start_path string File or directory path
 -- @param root_markers table Non-empty list of markers
 -- @return string Root path or cwd fallback
 function M.find_root(start_path, root_markers)
 	assert(type(root_markers) == "table" and #root_markers > 0, "root_markers must be non-empty table")
-
 	if type(start_path) ~= "string" or start_path == "" or not path_exists(start_path) then
 		return uv.cwd()
 	end
-
 	local stat = uv.fs_stat(start_path)
 	local current
 	if stat and stat.type ~= "directory" then
@@ -132,7 +134,6 @@ function M.find_root(start_path, root_markers)
 	else
 		current = normalize_path(start_path)
 	end
-
 	while current do
 		if contains_root_marker(current, root_markers) then
 			return current
@@ -146,7 +147,6 @@ function M.find_root(start_path, root_markers)
 		end
 		current = parent
 	end
-
 	return uv.cwd()
 end
 
@@ -163,7 +163,7 @@ function M.build_classpath(jar_dir)
 				break
 			end
 			if name:match("%.jar$") then
-				table.insert(jars, jar_dir .. "/" .. name)
+				table.insert(jars, path_join(jar_dir, name))
 			end
 		end
 	end
