@@ -83,7 +83,6 @@ local formatters = {
 	"pint",
 	"prettier",
 	"prettierd",
-	"rustfmt",
 	"shellcheck",
 	"shfmt",
 	"sql-formatter",

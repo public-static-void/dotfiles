@@ -45,7 +45,7 @@ conform.setup({
 		plaintex = { "tex-fmt", "latexindent" },
 		python = { "isort", "black" },
 		ruby = { "rubocop" },
-		rust = { "rustfmt" },
+		rust = {},
 		sass = {},
 		scss = { "prettierd", "prettier", stop_after_first = true },
 		sh = { "beautysh", "shfmt" },
