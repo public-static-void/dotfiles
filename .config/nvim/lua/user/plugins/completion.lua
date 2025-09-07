@@ -1,6 +1,5 @@
 --- Autocompletion engines and AI assistance
 --- @type Plugin[]
-local sep = package.config:sub(1, 1)
 return {
 	{
 		"saghen/blink.cmp",
@@ -19,11 +18,5 @@ return {
 		--- Disabled cmp source to avoid duplicating with blink.cmp.
 		dependencies = { "nvim-lua/plenary.nvim" },
 		event = "VeryLazy",
-		config = function()
-			require("codeium").setup({
-				enable_cmp_source = false,
-				config_path = vim.fn.stdpath("data") .. sep .. "codeium" .. sep .. "config.json",
-			})
-		end,
 	},
 }

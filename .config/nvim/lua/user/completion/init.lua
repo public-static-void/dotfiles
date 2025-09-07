@@ -1,0 +1,13 @@
+-- Central Completion module aggregating various Completion related components.
+-- Usage: require("user.completion") loads all editing-related configs.
+
+local utils = require("user.utils")
+
+-- Safe require to avoid config breakage if a module is missing or fails.
+local blink = utils.safe_require("user.completion.blink") or {}
+local codeium = utils.safe_require("user.completion.codeium") or {}
+
+return {
+	blink = blink,
+	codeium = codeium,
+}

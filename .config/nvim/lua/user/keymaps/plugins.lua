@@ -4,9 +4,9 @@
 local utils = require("user.utils")
 local modules = {
 	flash = utils.safe_require("flash"),
-	picker = utils.safe_require("user.picker"),
-	filetree = utils.safe_require("user.filetree"),
-	runner = utils.safe_require("user.coderunner"),
+	picker = utils.safe_require("user.ui.picker"),
+	filetree = utils.safe_require("user.ui.filetree"),
+	runner = utils.safe_require("user.project.coderunner"),
 	undotree = utils.safe_require("undotree"),
 }
 
