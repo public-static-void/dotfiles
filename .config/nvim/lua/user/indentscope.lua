@@ -1,8 +1,34 @@
 local utils = require("user.utils")
+
 local indentscope = utils.safe_require("mini.indentscope")
 if not indentscope then
 	return
 end
+
+-- List of filetypes to disable mini.indentscope in
+local disabled_filetypes = {
+	"NvimTree",
+	"Trouble",
+	"alpha",
+	"dashboard",
+	"help",
+	"lazy",
+	"lazygit",
+	"mason",
+	"neo-tree",
+	"text",
+	"trouble",
+}
+
+local group = vim.api.nvim_create_augroup("MiniIndentscopeDisable", { clear = true })
+
+vim.api.nvim_create_autocmd("FileType", {
+	group = group,
+	pattern = disabled_filetypes,
+	callback = function()
+		vim.b.miniindentscope_disable = true
+	end,
+})
 
 local rainbow_hl_groups = {
 	"RainbowDelimiterCyan",
