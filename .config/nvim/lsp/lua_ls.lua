@@ -48,6 +48,8 @@ local settings = {
 				vim.env.VIMRUNTIME,
 				vim.fn.stdpath("config"),
 			},
+			maxPreload = 2000,
+			preloadFileSize = 1000,
 			checkThirdParty = false,
 		},
 		telemetry = {
