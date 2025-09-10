@@ -3,8 +3,6 @@
 
 vim.keymap.set({ "n", "v", "o" }, "<S-h>", "0", { noremap = true, silent = true, desc = "Go to line start" })
 vim.keymap.set({ "n", "v", "o" }, "<S-l>", "$", { noremap = true, silent = true, desc = "Go to line end" })
-vim.keymap.set({ "n", "v", "o" }, "<S-j>", "G", { noremap = true, silent = true, desc = "Go to file end" })
-vim.keymap.set({ "n", "v", "o" }, "<S-k>", "gg", { noremap = true, silent = true, desc = "Go to file start" })
 vim.keymap.set({ "n", "v", "o" }, "<S-Left>", "0", { noremap = true, silent = true, desc = "Go to line start" })
 vim.keymap.set({ "n", "v", "o" }, "<S-Right>", "$", { noremap = true, silent = true, desc = "Go to line end" })
 vim.keymap.set({ "n", "v", "o" }, "<S-Down>", "G", { noremap = true, silent = true, desc = "Go to file end" })
