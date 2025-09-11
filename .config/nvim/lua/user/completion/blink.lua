@@ -1,28 +1,52 @@
 local utils = require("user.utils")
-
 local blink = utils.safe_require("blink.cmp")
 if not blink then
 	vim.notify("blink.cmp not found! Check your plugin setup.", vim.log.levels.ERROR)
 	return
 end
 
+--- Returns whether the cursor is at the beginning of the line or the immediate
+--- left-hand character is whitespace.
+--- This helps determine if a completion menu should be triggered on <Tab>.
+--- @return boolean True if cursor at line start or left char is whitespace; else false.
+local function cursor_at_line_start_or_immediate_left_whitespace()
+	local col = vim.fn.col(".") - 1
+	if col == 0 then
+		return true
+	end
+	local line = vim.fn.getline(".")
+	local char = line:sub(col, col)
+	return char:match("%s") ~= nil
+end
+
+--- Handles <Tab> keypress for blink.cmp behavior.
+--- Shows completion menu only if the cursor is not at line start or
+--- immediate left char is not whitespace.
+--- @return nil|any Result of blink.show() when completion is triggered.
+local function handle_tab()
+	if cursor_at_line_start_or_immediate_left_whitespace() then
+		return
+	else
+		return blink.show()
+	end
+end
+
+--- Configures blink.cmp completion plugin with keymaps, appearance,
+--- completion behavior, signature help, sources, and fuzzy-matching.
+--- Designed for efficient, context-aware completion in Neovim.
 blink.setup({
 	keymap = {
 		preset = "enter",
 		["<S-Tab>"] = { "snippet_backward", "select_prev", "fallback" },
-		["<Tab>"] = { "snippet_forward", "select_next", "fallback" },
+		["<Tab>"] = { "snippet_forward", "select_next", handle_tab, "fallback" },
 		["<Esc>"] = { "hide", "fallback" },
 	},
 	appearance = {
 		nerd_font_variant = "Nerd Font Mono",
 	},
 	completion = {
-		documentation = {
-			auto_show = true,
-		},
-		ghost_text = {
-			enabled = true,
-		},
+		documentation = { auto_show = true },
+		ghost_text = { enabled = true },
 		menu = {
 			auto_show = false,
 			draw = {
@@ -42,18 +66,10 @@ blink.setup({
 				},
 			},
 		},
-		trigger = {
-			show_in_snippet = false,
-		},
-		list = {
-			selection = {
-				preselect = false,
-			},
-		},
+		trigger = { show_in_snippet = false },
+		list = { selection = { preselect = false } },
 	},
-	signature = {
-		enabled = true,
-	},
+	signature = { enabled = true },
 	sources = {
 		default = { "lsp", "path", "snippets", "buffer", "codeium" },
 		providers = {
