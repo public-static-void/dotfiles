@@ -60,6 +60,7 @@ local cmd = { "typos-lsp" }
 return {
 	cmd = cmd,
 	filetypes = filetypes,
+	single_file_support = true,
 	root_dir = root_dir,
 	root_markers = root_markers,
 	on_attach = handlers.on_attach,

@@ -55,13 +55,7 @@ blink.setup({
 		enabled = true,
 	},
 	sources = {
-		default = {
-			"lsp",
-			"path",
-			"snippets",
-			"buffer",
-			"codeium",
-		},
+		default = { "lsp", "path", "snippets", "buffer", "codeium" },
 		providers = {
 			codeium = {
 				name = "Codeium",

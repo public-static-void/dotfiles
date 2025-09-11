@@ -1,6 +1,5 @@
 --- Spellfile Autocommands
 -- Automatically regenerates Vim spellfiles if the .add file
--- was modified since the last compiled version.
 
 local group = vim.api.nvim_create_augroup("GeneralSettings", { clear = false })
 

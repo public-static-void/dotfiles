@@ -55,14 +55,14 @@ opt.directory = swapdir
 opt.backup = false
 opt.writebackup = false
 
--- Enable spell checking for specified languages.
-opt.spelllang = { "de", "en" }
+-- Set default language for spell checking.
+opt.spelllang = { "en" }
 
 -- Use custom spell additions file path.
 opt.spellfile = join_path(spell_dir, "de.utf-8.add")
 
--- Enable spell checking by default.
-opt.spell = true
+-- Disable spell checking by default.
+opt.spell = false
 
 -- Append file patterns to ignore during completion for performance.
 opt.wildignore:append({

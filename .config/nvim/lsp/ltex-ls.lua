@@ -1,5 +1,7 @@
+--- LTeX LS language server configuration for Neovim LSP client.
+--- Provides spellchecking, grammar checking, and dictionary completion.
+--- Configured for LaTeX, Markdown, and other supported text filetypes.
 local utils = require("user.utils")
-
 local handlers = utils.safe_require("user.lsp.handlers")
 if not handlers then
 	return
@@ -22,6 +24,7 @@ local filetypes = {
 	"text",
 }
 
+--- Root markers used to identify project root.
 local root_markers = { ".git" }
 
 --- Maps Neovim filetypes to corresponding LTeX language IDs.
@@ -36,10 +39,10 @@ local language_id_mapping = {
 }
 
 --- Maps a Neovim filetype to the corresponding LTeX language ID.
--- Falls back to the original filetype if there is no mapping.
--- @param _ table Unused first parameter for API compatibility.
--- @param filetype string Neovim buffer filetype.
--- @return string Language ID for LTeX or original filetype.
+--- Falls back to the original filetype if there is no mapping.
+--- @param _ table Unused first parameter for API compatibility.
+--- @param filetype string Neovim buffer filetype.
+--- @return string Language ID for LTeX or original filetype.
 local function get_language_id(_, filetype)
 	return language_id_mapping[filetype] or filetype
 end
@@ -61,7 +64,7 @@ local uv = vim.loop
 local mason_base = vim.fn.stdpath("data") .. "/mason/packages/ltex-ls"
 
 --- Retrieves the latest installed version of ltex-ls from Mason packages.
--- @return string|nil Version folder name or nil if none found.
+--- @return string|nil Version folder name or nil if none found.
 local function get_latest_version()
 	local versions = {}
 	local iter = uv.fs_scandir(mason_base)
@@ -92,13 +95,13 @@ end
 local version_path = mason_base .. "/" .. version
 
 --- Builds Java classpath string from all jars in the lib directory.
--- @param jar_dir string Directory containing jar files.
--- @return string Classpath string separated by ':'.
+--- @param jar_dir string Directory containing jar files.
+--- @return string Classpath string separated by ':'.
 local jars_classpath = utils.build_classpath(version_path .. "/lib")
 
 --- Asynchronous root directory detection for Neovim native LSP API.
--- @param bufnr number Buffer number.
--- @param on_dir function Callback invoked with root directory.
+--- @param bufnr number Buffer number.
+--- @param on_dir function Callback invoked with root directory.
 local root_dir = function(bufnr, on_dir)
 	local fname = vim.api.nvim_buf_get_name(bufnr)
 	if not fname or fname == "" then
@@ -110,8 +113,8 @@ local root_dir = function(bufnr, on_dir)
 end
 
 --- LSP attach callback delegating to user-defined handler if present.
--- @param client table LSP client.
--- @param bufnr number Buffer number.
+--- @param client table LSP client.
+--- @param bufnr number Buffer number.
 local function on_attach(client, bufnr)
 	if handlers.on_attach then
 		handlers.on_attach(client, bufnr)
