@@ -27,6 +27,8 @@ vim.keymap.set("n", "<leader>t", picker.find_files, { noremap = true, silent = t
 vim.keymap.set("n", "<leader>g", picker.live_grep, { noremap = true, silent = true, desc = "Live grep" })
 vim.keymap.set("n", "<M-z>", picker.buffers, { noremap = true, silent = true, desc = "Show Buffers" })
 vim.keymap.set("n", "<leader>z", picker.tabs, { noremap = true, silent = true, desc = "Show Tabs" })
+vim.keymap.set("n", "<leader>'", picker.marks, { noremap = true, silent = true, desc = "Show Marks" })
+vim.keymap.set("n", '<leader>"', picker.registers, { noremap = true, silent = true, desc = "Show Registers" })
 
 vim.keymap.set("n", "<C-n>", filetree.toggle_tree, { noremap = true, silent = true, desc = "Toggle File Tree" })
 

@@ -29,4 +29,12 @@ function M.tabs()
 	picker.tabs()
 end
 
+function M.marks()
+	picker.marks()
+end
+
+function M.registers()
+	picker.registers()
+end
+
 return M
