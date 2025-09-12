@@ -83,7 +83,6 @@ local formatters = {
 	"pint",
 	"prettier",
 	"prettierd",
-	"shellcheck",
 	"shfmt",
 	"sql-formatter",
 	"stylua",
@@ -97,9 +96,12 @@ local linters = {
 	"codespell",
 	"djlint",
 	"gitlint",
+	"jsonlint",
 	"markuplint",
 	"mypy",
+	"shellcheck",
 	"stylelint",
+	"yamllint",
 }
 
 local debuggers = {
