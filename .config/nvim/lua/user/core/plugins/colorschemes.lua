@@ -40,6 +40,7 @@ return {
 	{
 		"AlphaTechnolog/pywal.nvim",
 		name = "pywal",
+		lazy = true,
 		--- Integrates pywal-generated colors into Neovim.
 		--- Useful for matching dynamic system color schemes.
 	},

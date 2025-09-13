@@ -14,6 +14,7 @@
 ---
 --- @module user.coderunner
 local utils = require("user.utils")
+
 local runner = utils.safe_require("code_runner")
 local cmds = utils.safe_require("code_runner.commands")
 if not runner or not cmds then
@@ -33,20 +34,6 @@ local function chain_cmds(cmds)
 		return cmds
 	end
 	return table.concat(cmds, " " .. shell_and .. " ")
-end
-
---- Run build-execute-clean command phases in sequence.
---- @param build_cmds string[] Commands to set up or build
---- @param exec_cmds string[] Commands to execute
---- @param clean_cmds string[]|function[]? Optional cleanup commands or functions
-local function run_build_exec_clean(build_cmds, exec_cmds, clean_cmds)
-	local full_cmds = {}
-	vim.list_extend(full_cmds, build_cmds)
-	vim.list_extend(full_cmds, exec_cmds)
-	if clean_cmds then
-		vim.list_extend(full_cmds, clean_cmds)
-	end
-	cmds.run_from_fn(full_cmds)
 end
 
 --- Filetype specific runners.

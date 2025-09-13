@@ -5,6 +5,17 @@ if not handlers then
 	return
 end
 
+local lazydev = utils.safe_require("lazydev")
+if not lazydev then
+	return
+end
+
+lazydev.setup({
+	library = {
+		{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
+	},
+})
+
 local filetypes = { "lua" }
 
 --- Root markers to detect Lua project root directory.

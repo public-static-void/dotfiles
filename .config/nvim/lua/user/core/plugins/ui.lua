@@ -40,10 +40,6 @@ return {
 		--- Integrated floating terminal with multiple layout modes.
 	},
 	{
-		"nvim-lua/popup.nvim",
-		--- Backport of vim’s popup API for Lua plugins.
-	},
-	{
 		"nvim-mini/mini.indentscope",
 		version = "*",
 		--- Visual indication of current scope indentation block.
@@ -52,11 +48,6 @@ return {
 		"miversen33/sunglasses.nvim",
 		event = "UIEnter",
 		--- Dims inactive windows to emphasize active buffer.
-		config = function()
-			require("sunglasses").setup({
-				filter_percent = 0.25,
-			})
-		end,
 	},
 	{
 		"folke/which-key.nvim",
@@ -69,6 +60,34 @@ return {
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		cmd = { "Trouble", "TroubleToggle", "TroubleClose", "TroubleRefresh" },
 		--- Centralized list of diagnostics, references, and quickfixes.
-		opts = {},
+	},
+	{
+		"lewis6991/gitsigns.nvim",
+		event = { "BufReadPost", "BufNewFile" },
+		--- Git hunk signs, blame, and inline actions.
+	},
+	{
+		"ibhagwan/fzf-lua",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		--- Fuzzy finder built on fzf with Lua integration.
+	},
+	{
+		"stevearc/aerial.nvim",
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
+		--- Symbol outline sidebar synced with LSP/TS.
+	},
+	{
+		"HiPhish/rainbow-delimiters.nvim",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		event = { "BufReadPost", "BufNewFile" },
+		--- Rainbow highlight for nested brackets and delimiters.
+	},
+	{
+		"jiaoshijie/undotree",
+		dependencies = "nvim-lua/plenary.nvim",
+		--- Provides a tree-like history of undos for branching timelines.
 	},
 }

@@ -14,7 +14,12 @@ local gitsigns = utils.safe_require("user.configs.ui.gitsigns") or {}
 local indentscope = utils.safe_require("user.configs.ui.indentscope") or {}
 local lualine = utils.safe_require("user.configs.ui.lualine") or {}
 local picker = utils.safe_require("user.configs.ui.picker") or {}
+local rainbow_delimiters = utils.safe_require("user.configs.ui.rainbow_delimiters") or {}
+local scrollbar = utils.safe_require("user.configs.ui.scrollbar") or {}
+local sunglasses = utils.safe_require("user.configs.ui.sunglasses") or {}
 local toggleterm = utils.safe_require("user.configs.ui.toggleterm") or {}
+local trouble = utils.safe_require("user.configs.ui.trouble") or {}
+local undotree = utils.safe_require("user.configs.ui.undotree") or {}
 local whichkey = utils.safe_require("user.configs.ui.whichkey") or {}
 
 return {
@@ -28,6 +33,11 @@ return {
 	indentscope = indentscope,
 	lualine = lualine,
 	picker = picker,
+	rainbow_delimiters = rainbow_delimiters,
+	scrollbar = scrollbar,
+	sunglasses = sunglasses,
 	toggleterm = toggleterm,
+	trouble = trouble,
+	undotree = undotree,
 	whichkey = whichkey,
 }

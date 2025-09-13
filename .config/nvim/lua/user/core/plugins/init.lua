@@ -58,7 +58,6 @@ local plugins = {}
 
 vim.list_extend(plugins, require("user.core.plugins.colorschemes"))
 vim.list_extend(plugins, require("user.core.plugins.ui"))
-vim.list_extend(plugins, require("user.core.plugins.treesitter"))
 vim.list_extend(plugins, require("user.core.plugins.lsp"))
 vim.list_extend(plugins, require("user.core.plugins.completion"))
 vim.list_extend(plugins, require("user.core.plugins.dap"))

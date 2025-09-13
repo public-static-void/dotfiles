@@ -26,9 +26,6 @@ return {
 		},
 		--- CSV/TSV highlighting for better data readability.
 		--- Highlights columns in alternating colors.
-		config = function()
-			require("rainbow_csv").setup()
-		end,
 	},
 	{
 		"jwalton512/vim-blade",

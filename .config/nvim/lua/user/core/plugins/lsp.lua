@@ -23,11 +23,6 @@ return {
 		"folke/lazydev.nvim",
 		ft = "lua",
 		--- Adds completion + API docs for Neovim Lua.
-		opts = {
-			library = {
-				{ path = "${3rd}/luv/library", words = { "vim%.uv" } },
-			},
-		},
 	},
 	{
 		"stevearc/conform.nvim",
