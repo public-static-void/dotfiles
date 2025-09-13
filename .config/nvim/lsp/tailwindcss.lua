@@ -1,6 +1,6 @@
 local utils = require("user.utils")
 
-local handlers = utils.safe_require("user.lsp.handlers")
+local handlers = utils.safe_require("user.configs.lsp.handlers")
 if not handlers then
 	return
 end

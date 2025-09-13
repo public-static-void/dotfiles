@@ -56,15 +56,15 @@ end
 --- @type Plugin[]
 local plugins = {}
 
-vim.list_extend(plugins, require("user.plugins.colorschemes"))
-vim.list_extend(plugins, require("user.plugins.ui"))
-vim.list_extend(plugins, require("user.plugins.treesitter"))
-vim.list_extend(plugins, require("user.plugins.lsp"))
-vim.list_extend(plugins, require("user.plugins.completion"))
-vim.list_extend(plugins, require("user.plugins.dap"))
-vim.list_extend(plugins, require("user.plugins.filetypes"))
-vim.list_extend(plugins, require("user.plugins.editing"))
-vim.list_extend(plugins, require("user.plugins.project"))
+vim.list_extend(plugins, require("user.core.plugins.colorschemes"))
+vim.list_extend(plugins, require("user.core.plugins.ui"))
+vim.list_extend(plugins, require("user.core.plugins.treesitter"))
+vim.list_extend(plugins, require("user.core.plugins.lsp"))
+vim.list_extend(plugins, require("user.core.plugins.completion"))
+vim.list_extend(plugins, require("user.core.plugins.dap"))
+vim.list_extend(plugins, require("user.core.plugins.filetypes"))
+vim.list_extend(plugins, require("user.core.plugins.editing"))
+vim.list_extend(plugins, require("user.core.plugins.project"))
 
 --- Initialize lazy.nvim plugin manager with all specs
 lazy.setup(plugins)

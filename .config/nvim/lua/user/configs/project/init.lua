@@ -4,7 +4,7 @@
 local utils = require("user.utils")
 
 -- Safe require to avoid config breakage if a module is missing or fails.
-local coderunner = utils.safe_require("user.project.coderunner") or {}
+local coderunner = utils.safe_require("user.configs.project.coderunner") or {}
 
 return {
 	coderunner = coderunner,

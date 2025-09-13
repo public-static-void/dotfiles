@@ -3,10 +3,10 @@
 local utils = require("user.utils")
 
 -- Safe require each autocmd submodule so errors won't break startup
-local general = utils.safe_require("user.autocommands.general") or {}
-local folding = utils.safe_require("user.autocommands.folding") or {}
-local spell = utils.safe_require("user.autocommands.spell") or {}
-local filetypes = utils.safe_require("user.autocommands.filetypes") or {}
+local general = utils.safe_require("user.core.autocommands.general") or {}
+local folding = utils.safe_require("user.core.autocommands.folding") or {}
+local spell = utils.safe_require("user.core.autocommands.spell") or {}
+local filetypes = utils.safe_require("user.core.autocommands.filetypes") or {}
 
 return {
 	general = general,

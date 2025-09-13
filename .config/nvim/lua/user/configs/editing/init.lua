@@ -4,10 +4,10 @@
 local utils = require("user.utils")
 
 -- Safe require to avoid config breakage if a module is missing or fails.
-local autotags = utils.safe_require("user.editing.autotags") or {}
-local comment = utils.safe_require("user.editing.comment") or {}
-local neogen = utils.safe_require("user.editing.neogen") or {}
-local treesitter = utils.safe_require("user.editing.treesitter") or {}
+local autotags = utils.safe_require("user.configs.editing.autotags") or {}
+local comment = utils.safe_require("user.configs.editing.comment") or {}
+local neogen = utils.safe_require("user.configs.editing.neogen") or {}
+local treesitter = utils.safe_require("user.configs.editing.treesitter") or {}
 
 return {
 	autotags = autotags,

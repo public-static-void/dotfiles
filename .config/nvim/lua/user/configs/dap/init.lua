@@ -8,9 +8,9 @@ if not dap then
 end
 
 -- Safe require submodules to make sure errors do not break Neovim config loading.
-local adapters = utils.safe_require("user.dap.adapters") or {}
-local configs = utils.safe_require("user.dap.configs") or {}
-local ui = utils.safe_require("user.dap.ui") or {}
+local adapters = utils.safe_require("user.configs.dap.adapters") or {}
+local configs = utils.safe_require("user.configs.dap.configs") or {}
+local ui = utils.safe_require("user.configs.dap.ui") or {}
 
 return {
 	dap = dap,
