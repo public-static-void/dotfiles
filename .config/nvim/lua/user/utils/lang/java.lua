@@ -14,7 +14,7 @@ function M.find_bundles(patterns)
 	local acc = {}
 	for _, pat in ipairs(patterns) do
 		for _, f in ipairs(vim.fn.glob(pat, true, true)) do
-			if not f:match("jacocoagent%.jar") and not f:match("test%.runner%-jar%-with%-dependencies%.jar") then
+			if not f:match("jacocoagent%.jar") then
 				table.insert(acc, f)
 			end
 		end

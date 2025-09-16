@@ -30,6 +30,7 @@ local servers = {
 	"html",
 	"htmx",
 	"intelephense",
+	"jdtls",
 	"jinja_lsp",
 	"jsonls",
 	"kotlin_language_server",
@@ -43,7 +44,6 @@ local servers = {
 	"phpactor",
 	"prismals",
 	"pylsp",
-	-- "pyright",
 	"rubocop",
 	"rust_analyzer",
 	"somesass_ls",
@@ -53,7 +53,6 @@ local servers = {
 	"tailwindcss",
 	"taplo",
 	"terraformls",
-	-- "ts_ls",
 	"twiggy_language_server",
 	-- "typos_lsp",
 	"vimls",
@@ -115,10 +114,6 @@ local debuggers = {
 	"python",
 }
 
-local special = {
-	"jdtls",
-}
-
 local mason_tool_installer = utils.safe_require("mason-tool-installer")
 if not mason_tool_installer then
 	vim.notify("mason-tool-installer.nvim not available", vim.log.levels.WARN)
@@ -130,7 +125,6 @@ vim.list_extend(ensure_installed, servers)
 vim.list_extend(ensure_installed, linters)
 vim.list_extend(ensure_installed, formatters)
 vim.list_extend(ensure_installed, debuggers)
-vim.list_extend(ensure_installed, special)
 
 mason_tool_installer.setup({
 	ensure_installed = ensure_installed,

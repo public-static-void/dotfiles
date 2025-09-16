@@ -35,10 +35,26 @@ local mason_path = vim.fn.stdpath("data") .. "/mason/packages"
 vim.fn.mkdir(workspace_dir, "p")
 
 --- Search for debug and test bundles installed by mason
-local bundles = utils.find_bundles({
-	mason_path .. "/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar",
-	mason_path .. "/java-test/extension/server/com.microsoft.java.test.plugin-*.jar",
-})
+local bundles = {}
+
+-- Get java-debug jars
+local java_debug_jars = vim.split(vim.fn.glob(mason_path .. "/java-debug-adapter/extension/server/*.jar", 1), "\n")
+vim.list_extend(bundles, java_debug_jars)
+
+-- Get java-test jars
+local java_test_jars = vim.split(vim.fn.glob(mason_path .. "/java-test/extension/server/*.jar", 1), "\n")
+
+local exclude = {
+	"com.microsoft.java.test.runner-jar-with-dependencies.jar",
+	"jacocoagent.jar",
+}
+
+for _, jar_path in ipairs(java_test_jars) do
+	local jar_name = vim.fn.fnamemodify(jar_path, ":t")
+	if not vim.tbl_contains(exclude, jar_name) then
+		table.insert(bundles, jar_path)
+	end
+end
 
 --- Launcher jar and config dir adjusted per platform
 local launcher_jar = vim.fn.glob(mason_path .. "/jdtls/plugins/org.eclipse.equinox.launcher_*.jar")
@@ -66,6 +82,9 @@ local function on_attach(client, bufnr)
 		end,
 	})
 end
+
+local extendedClientCapabilities = jdtls.extendedClientCapabilities
+extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 
 --- Settings for jdtls with code lens, completion, formatting, and debug options
 local settings = {
@@ -107,7 +126,7 @@ local settings = {
 		},
 	},
 	contentProvider = { preferred = "fernflower" },
-	extendedClientCapabilities = jdtls.extendedClientCapabilities,
+	extendedClientCapabilities = extendedClientCapabilities,
 	sources = {
 		organizeImports = {
 			starThreshold = 9999,
@@ -125,12 +144,9 @@ local settings = {
 	},
 }
 
-local extendedCapabilities = jdtls.extendedClientCapabilities
-extendedCapabilities.resolveAdditionalTextEditsSupport = true
-
 local init_options = {
 	bundles = bundles,
-	extendedClientCapabilities = extendedCapabilities,
+	extendedClientCapabilities = extendedClientCapabilities,
 }
 
 --- Command to launch jdtls language server with necessary JVM options and paths
@@ -170,4 +186,4 @@ local config = {
 	init_options = init_options,
 }
 
-jdtls.start_or_attach(config)
+return config
