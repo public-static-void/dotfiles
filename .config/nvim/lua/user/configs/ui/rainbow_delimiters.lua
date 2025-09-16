@@ -5,4 +5,4 @@ if not rainbow then
 	return
 end
 
-rainbow.setup({})
+rainbow.setup()
