@@ -37,4 +37,6 @@ function M.registers()
 	picker.registers()
 end
 
+picker.register_ui_select()
+
 return M
