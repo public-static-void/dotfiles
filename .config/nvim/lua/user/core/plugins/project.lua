@@ -12,4 +12,9 @@ return {
 		config = true,
 		--- Execute code snippets or files within terminal buffers.
 	},
+	{
+		"echasnovski/mini.misc",
+		version = "*",
+		--- Utility functions for working with buffers, windows, and tabs.
+	},
 }

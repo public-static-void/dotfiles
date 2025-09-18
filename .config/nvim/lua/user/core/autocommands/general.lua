@@ -24,20 +24,6 @@ vim.api.nvim_create_autocmd("BufWritePre", {
 	end,
 })
 
---- Restore cursor to the last known position when reopening a file
-vim.api.nvim_create_autocmd("BufReadPost", {
-	group = group,
-	callback = function()
-		if
-			vim.fn.line([['"]]) >= 1
-			and vim.fn.line([['"]]) <= vim.fn.line("$")
-			and not vim.bo.filetype:match("commit")
-		then
-			vim.cmd([[normal! g`"]])
-		end
-	end,
-})
-
 --- Auto-insert template skeleton files on creation, if available
 vim.api.nvim_create_autocmd("BufNewFile", {
 	group = group,
