@@ -1,5 +1,3 @@
-local utils = require("user.utils")
-
 local M = {}
 
 -- Helper function: diagnostic sign and color template
@@ -59,8 +57,8 @@ M.setup = function()
 				[vim.diagnostic.severity.INFO] = signs[vim.diagnostic.severity.INFO].text,
 			},
 		},
-		virtual_text = false, -- Disable virtual text
-		virtual_lines = false, -- Disable virtual lines
+		virtual_text = false,
+		virtual_lines = false,
 		update_in_insert = false,
 		severity_sort = true,
 		float = {
