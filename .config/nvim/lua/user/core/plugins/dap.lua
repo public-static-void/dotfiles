@@ -11,9 +11,6 @@ return {
 			"nvim-neotest/nvim-nio", -- Async primitives for debugging
 			"jay-babu/mason-nvim-dap.nvim", -- Automatic adapter installation
 			"theHamsta/nvim-dap-virtual-text", -- Inline values during debugging
-			"leoluz/nvim-dap-go", -- Go DAP adapter integration
-			"mfussenegger/nvim-dap-python", -- Python debug setup
-			"simrat39/rust-tools.nvim", -- Rust debugging utilities
 		},
 	},
 }
