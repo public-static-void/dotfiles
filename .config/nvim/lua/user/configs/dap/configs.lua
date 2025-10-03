@@ -72,7 +72,7 @@ dap.configurations.rust = {
 			if is_windows then
 				return "dir /b ..\\target\\debug\\*.exe"
 			else
-				return string.format("find ..%starget%sdebug -maxdepth 1 -type f -executable", sep, sep)
+				return string.format("find .%starget%sdebug -maxdepth 1 -type f -executable", sep, sep)
 			end
 		end),
 		cwd = "${workspaceFolder}",
