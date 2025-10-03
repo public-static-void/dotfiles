@@ -21,9 +21,6 @@ vim.cmd([[
   cabbrev QA! qa!
 ]])
 
--- Disable Ex mode
-vim.keymap.set("n", "Q", "<Nop>", { noremap = true, silent = true, desc = "Disable Ex mode" })
-
 -- Write with sudo (for protected files)
 vim.keymap.set("c", "w!!", "w !sudo tee %", { noremap = true, silent = false, desc = "Write with sudo" })
 
