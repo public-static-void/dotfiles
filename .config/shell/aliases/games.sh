@@ -165,7 +165,7 @@ cwg2() {
 
 hoi3bi() {
   local version="$1"
-  local prefix="$WINEHOI_PREFIX"
+  local prefix="$WINE64_PREFIX"
   local game_executable="$HOME/Games/hoi3bi${version}/launcher.exe"
   launch_wine "$game_executable" "$prefix"
 }
