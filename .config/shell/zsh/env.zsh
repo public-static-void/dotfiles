@@ -23,9 +23,7 @@ export PATH
 export PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB+:$PERL5LIB}"
 eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/perl5)"
 
-# NVM, pyenv, direnv, Java
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" 2>/dev/null
+# pyenv, direnv, Java
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv &>/dev/null && eval "$(pyenv init --path)"
 command -v pyenv &>/dev/null && eval "$(pyenv init -)"

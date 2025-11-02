@@ -3,5 +3,6 @@ zsh-users/zsh-syntax-highlighting
 zsh-users/zsh-completions
 zsh-users/zsh-history-substring-search
 romkatv/powerlevel10k
+lukechilds/zsh-nvm
 ohmyzsh/ohmyzsh path:plugins/git
 ohmyzsh/ohmyzsh path:plugins/sudo
