@@ -3,6 +3,7 @@ readonly WINE32_PREFIX="$HOME/.wine/32/default"
 readonly WINE64_PREFIX="$HOME/.wine/64/default"
 readonly WINEDWU_PREFIX="$HOME/.wine/32/dwu"
 readonly WINEHOI_PREFIX="$HOME/.wine/32/hoi"
+readonly REASON_PREFIX="$HOME/.wine/64/reason"
 
 # Wine prefix runner functions with debug flags
 wine_32() {
@@ -167,5 +168,27 @@ hoi3bi() {
   local version="$1"
   local prefix="$WINE64_PREFIX"
   local game_executable="$HOME/Games/hoi3bi${version}/launcher.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+
+reason4() {
+  sudo mount "$HOME"/ISOS/Propellerheads.Reason.v4.0.HYBRID.DVDR-AiRISO/Reason\ 4.iso /mnt/disk -o loop
+  local version="$1"
+  local prefix="$REASON_PREFIX"
+  local game_executable="$HOME/Games/Propellerhead/Reason4/Reason.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+
+reason5() {
+  local version="$1"
+  local prefix="$REASON_PREFIX"
+  local game_executable="$HOME/Games/Propellerhead/Reason5/Reason.exe"
+  launch_wine "$game_executable" "$prefix"
+}
+
+gtasa() {
+  local version="$1"
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/Grand Theft Auto San Andreas/gta_sa.exe"
   launch_wine "$game_executable" "$prefix"
 }
