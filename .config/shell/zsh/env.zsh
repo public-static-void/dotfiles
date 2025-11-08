@@ -19,6 +19,9 @@ path=(
 )
 export PATH
 
+# nvm
+export NVM_LAZY_LOAD=true
+
 # Perl local::lib setup for Neovim provider support
 export PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB+:$PERL5LIB}"
 eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/perl5)"
