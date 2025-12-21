@@ -18,7 +18,7 @@ font pango:MesloLGSDZNerdFont Mono 13
 #############
 
 # Start compositor. Kill existing Picom before starting new instance.
-exec --no-startup-id "pkill -x picom; sleep 0.5; picom --backend glx --vsync -b"
+exec --no-startup-id "pkill -x picom; sleep 0.5; picom --backend xrender -b"
 
 # Start URxvt daemon.
 exec_always --no-startup-id urxvtd -q -o -f &
