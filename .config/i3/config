@@ -42,6 +42,10 @@ exec --no-startup-id dunst
 # Names of applications and keywords are replaced with icons from FontAwesome.
 exec_always --no-startup-id i3-workspace-names-daemon
 
+# Bluetooth.
+exec_always --no-startup-id bluetoothctl power on
+exec_always --no-startup-id blueman-applet
+
 # Wifi applet.
 # exec_always --no-startup-id nm-applet
 
