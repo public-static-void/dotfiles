@@ -12,18 +12,35 @@ fi
 # Source the Antidote plugin manager
 source ${ZDOTDIR:-$HOME}/.antidote/antidote.zsh
 
-# Rebuild the static plugins bundle if the list is newer or the bundle is missing
-if [[ ! ${zsh_plugins_file}.zsh -nt ${zsh_plugins_file}.txt ]]; then
+# Auto-regenerate cache if missing
+if [[ ! -d ~/.cache/antidote ]]; then
+  antidote bundle <${zsh_plugins_file}.txt
+fi
+
+# Always regenerate bundle if cache newer OR missing/outdated
+if [[ ! -f ${zsh_plugins_file}.zsh || ${zsh_plugins_file}.zsh -ot ~/.cache/antidote ||
+  ! ${zsh_plugins_file}.zsh -nt ${zsh_plugins_file}.txt ]]; then
   antidote bundle <${zsh_plugins_file}.txt >|${zsh_plugins_file}.zsh
 fi
 
-# Source the compiled static plugins bundle
-source ${zsh_plugins_file}.zsh
+# Verify bundle works before sourcing (fail-safe)
+if [[ -f ${zsh_plugins_file}.zsh ]]; then
+  # Test source without errors
+  if { source ${zsh_plugins_file}.zsh 2>/dev/null; }; then
+    true
+  else
+    # Bundle broken, regenerate
+    antidote bundle <${zsh_plugins_file}.txt >|${zsh_plugins_file}.zsh
+    source ${zsh_plugins_file}.zsh
+  fi
+else
+  # Emergency: source plugins.txt directly via antidote load
+  antidote load ${zsh_plugins_file}.txt
+fi
 
-# Auto-update Antidote plugins once a week in the background
+# Auto-update Antidote plugins once a week
 ANTIDOTE_LAST_UPDATE_FILE="${ZDOTDIR:-$HOME}/.antidote/.last_update"
-ANTIDOTE_UPDATE_INTERVAL=$((60*60*24*7))  # 1 week
-
-if [[ ! -f $ANTIDOTE_LAST_UPDATE_FILE ]] || (( $(date +%s) - $(< $ANTIDOTE_LAST_UPDATE_FILE) > ANTIDOTE_UPDATE_INTERVAL )); then
-  (antidote update && date +%s >| $ANTIDOTE_LAST_UPDATE_FILE) &> /dev/null &!
+ANTIDOTE_UPDATE_INTERVAL=$((60 * 60 * 24 * 7))
+if [[ ! -f $ANTIDOTE_LAST_UPDATE_FILE ]] || (($(date +%s) - $(<$ANTIDOTE_LAST_UPDATE_FILE) > ANTIDOTE_UPDATE_INTERVAL)); then
+  (antidote update && date +%s >|$ANTIDOTE_LAST_UPDATE_FILE) &>/dev/null &
 fi

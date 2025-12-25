@@ -29,7 +29,7 @@ launch_proton() {
   exe_dir=$(dirname -- "$exe")
   exe_file=$(basename -- "$exe")
 
-  if [[ ! -d "$prefix" ]]; then
+  if [[ ! -d $prefix ]]; then
     mkdir -p "$prefix"
     STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.steam/steam" \
       STEAM_COMPAT_DATA_PATH="$prefix" \

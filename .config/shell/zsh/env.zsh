@@ -13,7 +13,7 @@ path=(
   $HOME/.cargo/bin
   $HOME/go/bin
   $HOME/.config/composer/vendor/bin
-  $HOME/.gem/ruby/*/bin(N)
+  $HOME/.gem/ruby/*/bin
   $HOME/.local/share/gem/ruby/3.4.0/bin
   ${path}
 )
@@ -37,7 +37,7 @@ command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
 [ -f "$HOME/.ghcup/env" ] && . "$HOME/.ghcup/env"
 
 # Editor and colors
-if [[ -n "$SSH_CONNECTION" ]]; then
+if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR="vim"
   export VISUAL="vim"
   export MANPAGER="vim -c 'set ft=man' -"
