@@ -64,7 +64,7 @@ conform.setup({
 		xsd = { "xmlformatter" },
 		yaml = { "prettierd", "prettier", stop_after_first = true },
 		zig = {},
-		zsh = { "beautysh" },
+		zsh = { "shfmt" },
 	},
 	formatters = {
 		shfmt = {
