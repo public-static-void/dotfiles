@@ -47,7 +47,7 @@ local servers = {
 	"rubocop",
 	"rust_analyzer",
 	"somesass_ls",
-	"sqls",
+	"sqlls",
 	"stimulus_ls",
 	"svelte",
 	"tailwindcss",
