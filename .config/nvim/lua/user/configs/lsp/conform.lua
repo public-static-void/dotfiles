@@ -78,7 +78,6 @@ conform.setup({
 				"--preview",
 				"--line-length=79",
 				"--enable-unstable-feature=string_processing",
-				"--enable-unstable-feature=multiline_string_handling",
 			},
 		},
 		php_cs_fixer = {},
