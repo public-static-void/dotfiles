@@ -30,6 +30,11 @@ baldur2() {
   local game_executable="$HOME/Games/Baldur s Gate II Enhanced Edition v2 5/Baldur.exe"
   launch_wine "$game_executable" "$prefix"
 }
+coinpoker() {
+  local prefix="$WINE64_PREFIX"
+  local game_executable="$HOME/Games/CoinPoker/Lobby.exe"
+  launch_wine "$game_executable" "$prefix"
+}
 diablo2() {
   local prefix="$WINE64_PREFIX"
   local game_executable="$HOME/Games/Diablo II Complete Edition/Mod PlugY/PlugY.exe"
