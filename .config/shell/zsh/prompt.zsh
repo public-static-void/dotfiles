@@ -1,16 +1,3 @@
-autoload -Uz vcs_info
-precmd_vcs_info() { vcs_info }
-precmd_functions+=( precmd_vcs_info )
-setopt prompt_subst
-PROMPT='%F{red}%n@%m:%F{cyan}%2~%f${vcs_info_msg_0_}%# '
-zstyle ':vcs_info:*' check-for-changes true
-zstyle ':vcs_info:*' unstagedstr ' *'
-zstyle ':vcs_info:*' stagedstr ' +'
-zstyle ':vcs_info:git:*' formats '(%b%u%c)'
-zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
-
-[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
-
 # Cursor shape for vi mode
 set_beam_cursor() { echo -ne "\e[5 q"; }
 zle-keymap-select() {
@@ -24,3 +11,20 @@ zle -N zle-keymap-select
 zle -N zle-line-init
 set_beam_cursor
 preexec() { set_beam_cursor; }
+
+# Load p10k config first (safe)
+[[ -f ~/.p10k.zsh ]] && source ~/.p10k.zsh
+
+# Only activate custom prompt if p10k function doesn't exist
+if (( ! $+functions[p10k] )); then
+  autoload -Uz vcs_info
+  precmd_vcs_info() { vcs_info }
+  precmd_functions+=(precmd_vcs_info)
+  setopt prompt_subst
+  PROMPT='%F{red}%n@%m:%F{cyan}%2~%f${vcs_info_msg_0_}%# '
+  zstyle ':vcs_info:*' check-for-changes true
+  zstyle ':vcs_info:*' unstagedstr ' *'
+  zstyle ':vcs_info:*' stagedstr ' +'
+  zstyle ':vcs_info:git:*' formats '(%b%u%c)'
+  zstyle ':vcs_info:git:*' actionformats '(%b|%a%u%c)'
+fi
