@@ -63,7 +63,6 @@ local servers = {
 }
 
 local formatters = {
-	"beautysh",
 	"black",
 	"blade-formatter",
 	"clang-format",

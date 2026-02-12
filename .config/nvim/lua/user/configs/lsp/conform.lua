@@ -48,7 +48,7 @@ conform.setup({
 		rust = {},
 		sass = {},
 		scss = { "prettierd", "prettier", stop_after_first = true },
-		sh = { "beautysh", "shfmt" },
+		sh = { "shfmt" },
 		sql = { "sql_formatter" },
 		svelte = {},
 		terraform = { "terraform_fmt" },
