@@ -23,46 +23,52 @@ PROMPT_COMMAND='history -a; history -n'
 
 # Prompt with Git branch
 parse_git_branch() {
-	git rev-parse --is-inside-work-tree &>/dev/null || return
-	git branch 2>/dev/null | sed -e '/^[^*]/d' -e 's/* \(.*\)/ (\1)/'
+  [ ! -d .git ] && return
+  local head
+  head=$(awk 'NR==1 {print $2; exit}' .git/HEAD 2>/dev/null) || return
+  if [[ $head == refs/heads/* ]]; then
+    echo " ($(basename "$head"))"
+  elif [[ -n $head ]]; then
+    echo " ($head)"
+  fi
 }
 if [ "$(id -u)" -eq 0 ]; then
-	PS1='\[\e[31m\]\u@\h:\[\e[36m\]\w\[\e[33m\]$(parse_git_branch)\[\e[0m\] # '
+  PS1='\[\e[31m\]\u@\h:\[\e[36m\]\w\[\e[33m\]$(parse_git_branch)\[\e[0m\] # '
 else
-	PS1='\[\e[32m\]\u@\h:\[\e[36m\]\w\[\e[33m\]$(parse_git_branch)\[\e[0m\] $ '
+  PS1='\[\e[32m\]\u@\h:\[\e[36m\]\w\[\e[33m\]$(parse_git_branch)\[\e[0m\] $ '
 fi
 
 # Editor and colors
-if [[ -n "$SSH_CONNECTION" ]]; then
-	export EDITOR="vim"
-	export VISUAL="vim"
-	export MANPAGER="vim -c 'set ft=man' -"
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR="vim"
+  export VISUAL="vim"
+  export MANPAGER="vim -c 'set ft=man' -"
 elif command -v nvim >/dev/null 2>&1; then
-	export EDITOR="nvim"
-	export VISUAL="nvim"
-	export MANPAGER="nvim +Man!"
+  export EDITOR="nvim"
+  export VISUAL="nvim"
+  export MANPAGER="nvim +Man!"
 else
-	export EDITOR="vim"
-	export VISUAL="vim"
-	export MANPAGER="vim -c 'set ft=man' -"
+  export EDITOR="vim"
+  export VISUAL="vim"
+  export MANPAGER="vim -c 'set ft=man' -"
 fi
 export LS_COLORS="${LS_COLORS}:di=0;36:"
 
 # PATH additions (preserve order and uniqueness)
 add_to_path() {
-	for dir in "$@"; do
-		case ":$PATH:" in
-		*":$dir:"*) ;; # already in PATH
-		*) PATH="$dir:$PATH" ;;
-		esac
-	done
+  for dir in "$@"; do
+    case ":$PATH:" in
+      *":$dir:"*) ;; # already in PATH
+      *) PATH="$dir:$PATH" ;;
+    esac
+  done
 }
 add_to_path "$HOME/.pyenv/bin" "$HOME/perl5/bin" "$HOME/.local/bin" "$HOME/scripts" "$HOME/.cargo/bin" "$HOME/go/bin" "$HOME/.config/composer/vendor/bin"
 export PATH
 
 # Autostart (fastfetch)
 if command -v fastfetch &>/dev/null; then
-	fastfetch --logo-color-2 "22"
+  fastfetch --logo-color-2 "22"
 fi
 
 # --- Aliases (universal/common) ---
@@ -75,7 +81,7 @@ fi
 
 # --- Functions (all) ---
 for f in "$HOME/.config/shell/functions/"*.sh; do
-	[ -f "$f" ] && . "$f"
+  [ -f "$f" ] && . "$f"
 done
 
 # Bash completion
