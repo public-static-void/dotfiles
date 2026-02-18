@@ -28,7 +28,7 @@ if root_dir == "" then
 end
 
 --- Base directories used for workspace and mason packages
-local home = os.getenv("HOME")
+local home = os.getenv("HOME") or os.getenv("USERPROFILE") or vim.fn.expand("~")
 local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
 local workspace_dir = home .. "/workspace/" .. project_name
 local mason_path = vim.fn.stdpath("data") .. "/mason/packages"
