@@ -48,7 +48,13 @@ local settings = {
 			pycodestyle = { enabled = false },
 			pydocstyle = { enabled = true },
 			pyflakes = { enabled = false },
-			pylint = { enabled = true, args = { "--max-line-length=79" } },
+			pylint = {
+				enabled = true,
+				args = {
+					"--max-line-length=79",
+					"--disable=too-few-public-methods",
+				},
+			},
 			rope_autoimport = { enabled = true },
 			rope_completion = { enabled = false },
 			yapf = { enabled = false },
