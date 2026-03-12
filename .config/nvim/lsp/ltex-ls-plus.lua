@@ -145,7 +145,7 @@ local function update_ltex_language(client, bufnr)
 	client.config.settings.ltex = client.config.settings.ltex or {}
 	-- LTeX expects a single string for language; use the first detected language only
 	client.config.settings.ltex.language = langs[1] or "en-US"
-	client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
+	client:notify("workspace/didChangeConfiguration", { settings = client.config.settings })
 end
 
 --- LSP attach handler executes user-defined attach routine if defined.
