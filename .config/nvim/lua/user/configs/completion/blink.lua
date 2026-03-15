@@ -66,17 +66,27 @@ blink.setup({
 				},
 			},
 		},
-		trigger = { show_in_snippet = false },
+		trigger = {
+			show_in_snippet = false,
+			prefetch_on_insert = false,
+		},
 		list = { selection = { preselect = false } },
 	},
 	signature = { enabled = true },
 	sources = {
-		default = { "lsp", "path", "snippets", "buffer", "codeium" },
+		default = { "lsp", "path", "snippets", "buffer", "codeium", "minuet" },
 		providers = {
 			codeium = {
 				name = "Codeium",
 				module = "codeium.blink",
 				async = true,
+			},
+			minuet = {
+				name = "minuet",
+				module = "minuet.blink",
+				async = true,
+				timeout_ms = 30000,
+				score_offset = 50,
 			},
 		},
 	},
