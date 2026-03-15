@@ -27,11 +27,13 @@ export NVM_LAZY_LOAD=true
 export PERL5LIB="$HOME/perl5/lib/perl5${PERL5LIB+:$PERL5LIB}"
 eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/perl5)"
 
-# pyenv, direnv, Java
+# pyenv, direnv
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv &>/dev/null && eval "$(pyenv init --path)"
 command -v pyenv &>/dev/null && eval "$(pyenv init -)"
 command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
+
+# Java
 [ -d "/usr/lib/jvm/default" ] && export JAVA_HOME="/usr/lib/jvm/default"
 
 # ghcup-env
