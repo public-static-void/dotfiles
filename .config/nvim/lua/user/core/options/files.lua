@@ -55,8 +55,8 @@ opt.directory = swapdir
 opt.backup = false
 opt.writebackup = false
 
--- Set default language for spell checking (removed broken spellfile line).
-opt.spelllang = { "en_us", "de_de" }
+-- Set default language for spell checking.
+opt.spelllang = { "en" }
 
 -- Disable spell checking by default.
 opt.spell = false
