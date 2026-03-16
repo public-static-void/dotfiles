@@ -5,6 +5,9 @@ if not minuet then
 	return
 end
 
+local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
+local api_key_env = is_windows and "APPDATA" or "TERM"
+
 minuet.setup({
 	provider = "openai_fim_compatible",
 	n_completions = 1,
@@ -13,9 +16,7 @@ minuet.setup({
 	debounce = 1000,
 	provider_options = {
 		openai_fim_compatible = {
-			-- For Windows users, TERM may not be present in environment variables.
-			-- Consider using APPDATA instead.
-			api_key = "TERM",
+			api_key = api_key_env,
 			name = "Ollama",
 			end_point = "http://localhost:11434/v1/completions",
 			model = "qwen2.5-coder:1.5b-instruct",
