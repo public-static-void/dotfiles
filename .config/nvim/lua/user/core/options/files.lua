@@ -55,11 +55,8 @@ opt.directory = swapdir
 opt.backup = false
 opt.writebackup = false
 
--- Set default language for spell checking.
-opt.spelllang = { "en" }
-
--- Use custom spell additions file path.
-opt.spellfile = join_path(spell_dir, "de.utf-8.add")
+-- Set default language for spell checking (removed broken spellfile line).
+opt.spelllang = { "en_us", "de_de" }
 
 -- Disable spell checking by default.
 opt.spell = false
