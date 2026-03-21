@@ -34,7 +34,11 @@ dashboard.section.buttons.val = {
 }
 
 local function footer()
-	return "☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆ "
+	local v = vim.version()
+	local nvim_version = string.format("v%d.%d.%d", v.major, v.minor, v.patch)
+	return {
+		"☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆ ★ " .. nvim_version .. " ★ ☆ ★ ☆ ★ ☆ ★ ☆ ★ ☆",
+	}
 end
 
 dashboard.section.footer.val = footer()
