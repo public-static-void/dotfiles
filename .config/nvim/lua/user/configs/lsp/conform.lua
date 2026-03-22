@@ -53,6 +53,7 @@ conform.setup({
 		svelte = {},
 		terraform = { "terraform_fmt" },
 		tex = { "tex-fmt", "latexindent" },
+		text = {},
 		toml = { "taplo" },
 		twig = { "djlint" },
 		typescript = { "prettierd", "prettier", stop_after_first = true },
