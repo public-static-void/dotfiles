@@ -7,9 +7,11 @@ local utils = require("user.utils")
 local blink = utils.safe_require("user.configs.completion.blink") or {}
 local codeium = utils.safe_require("user.configs.completion.codeium") or {}
 local minuet = utils.safe_require("user.configs.completion.minuet") or {}
+local ollama = utils.safe_require("user.configs.completion.ollama") or {}
 
 return {
 	blink = blink,
 	codeium = codeium,
 	minuet = minuet,
+	ollama = ollama,
 }
