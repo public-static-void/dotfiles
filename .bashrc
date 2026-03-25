@@ -27,7 +27,7 @@ parse_git_branch() {
   local head
   head=$(awk 'NR==1 {print $2; exit}' .git/HEAD 2>/dev/null) || return
   if [[ $head == refs/heads/* ]]; then
-    echo " ($(basename "$head"))"
+    echo " (${head#refs/heads/})"
   elif [[ -n $head ]]; then
     echo " ($head)"
   fi
