@@ -43,4 +43,25 @@ function M.build_classpath(jar_dir)
 	return table.concat(jars, ":")
 end
 
+--- Build OS-agnostic Java classpath string.
+--- @param jar_dir string Directory containing .jar files.
+--- @return string classpath Platform-correct (":" or ";").
+function M.build_classpath_os(jar_dir)
+	local jars = {}
+	local iter = uv.fs_scandir(jar_dir)
+	if iter then
+		while true do
+			local name = uv.fs_scandir_next(iter)
+			if not name then
+				break
+			end
+			if name:match("%.jar$") then
+				table.insert(jars, fs.join(jar_dir, name))
+			end
+		end
+	end
+	local sep = package.config:sub(1, 1) == "\\" and ";" or ":"
+	return table.concat(jars, sep)
+end
+
 return M
