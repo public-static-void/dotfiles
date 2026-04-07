@@ -50,6 +50,8 @@ return {
 	},
 	{
 		"nvim-treesitter/nvim-treesitter",
+		main = "nvim-treesitter",
+		commit = "90cd658",
 		build = ":TSUpdate",
 		event = { "BufReadPost", "BufNewFile" },
 		--- Core Treesitter plugin for highlighting and parsing.

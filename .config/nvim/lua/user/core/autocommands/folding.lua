@@ -17,14 +17,17 @@ vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufEnter" }, {
 })
 
 --- Auto-detect foldmethod: use Treesitter if parser exists, fallback to syntax
-vim.api.nvim_create_autocmd("FileType", {
+vim.api.nvim_create_autocmd({ "FileType", "BufEnter" }, {
 	callback = function()
-		if require("nvim-treesitter.parsers").has_parser() then
-			vim.opt.foldmethod = "expr"
-			vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+		if vim.bo.buftype ~= "" or vim.bo.filetype == "" then
+			return
+		end
+		local lang = vim.treesitter.language.get_lang(vim.bo.filetype)
+		if lang then
+			vim.opt_local.foldmethod = "expr"
+			vim.opt_local.foldexpr = "v:lua.vim.treesitter.foldexpr()"
 		else
-			vim.opt.foldmethod = "syntax"
-			vim.opt.foldexpr = ""
+			vim.opt_local.foldmethod = "syntax"
 		end
 	end,
 })
