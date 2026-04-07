@@ -100,34 +100,6 @@ end
 
 local version_path = mason_base .. "/" .. version
 
--- === DEBUG: Add this block ===
-local fs = require("user.utils.fs")
-local lib_dir = version_path .. "/lib"
-if not fs.exists(lib_dir) then
-	vim.notify("ltex-ls-plus lib missing: " .. lib_dir, vim.log.levels.ERROR)
-	return
-end
-local jar_count = 0
-local uv = vim.loop
-local iter = uv.fs_scandir(lib_dir)
-if iter then
-	while true do
-		local name = uv.fs_scandir_next(iter)
-		if not name then
-			break
-		end
-		if name:match("%.jar$") then
-			jar_count = jar_count + 1
-		end
-	end
-end
-if jar_count == 0 then
-	vim.notify("No JARs in " .. lib_dir .. " (found " .. jar_count .. ")", vim.log.levels.ERROR)
-	return
-end
-vim.notify("Found " .. jar_count .. " JARs in " .. lib_dir, vim.log.levels.INFO)
--- === END DEBUG ===
-
 --- Builds Java classpath string from all jars in the lib directory.
 --- @param jar_dir string Directory containing jar files.
 --- @return string Classpath string separated by ':'.
