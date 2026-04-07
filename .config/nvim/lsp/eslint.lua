@@ -11,8 +11,6 @@ local filetypes = {
 	"javascriptreact",
 	"typescript",
 	"typescriptreact",
-	"javascript.jsx",
-	"typescript.tsx",
 	"vue",
 	"svelte",
 	"astro",

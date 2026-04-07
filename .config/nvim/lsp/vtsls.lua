@@ -8,10 +8,8 @@ end
 local filetypes = {
 	"javascript",
 	"javascriptreact",
-	"javascript.jsx",
 	"typescript",
 	"typescriptreact",
-	"typescript.tsx",
 }
 
 --- Markers to detect project root for TS/JS

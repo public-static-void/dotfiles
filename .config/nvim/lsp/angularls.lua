@@ -10,7 +10,6 @@ local filetypes = {
 	"typescript",
 	"html",
 	"typescriptreact",
-	"typescript.tsx",
 	"htmlangular",
 }
 
