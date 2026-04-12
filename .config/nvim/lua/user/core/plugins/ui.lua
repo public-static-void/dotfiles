@@ -87,7 +87,6 @@ return {
 	},
 	{
 		"jiaoshijie/undotree",
-		dependencies = "nvim-lua/plenary.nvim",
 		--- Provides a tree-like history of undos for branching timelines.
 	},
 }

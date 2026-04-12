@@ -23,7 +23,7 @@ return {
 	{
 		"milanglacier/minuet-ai.nvim",
 		--- Provides local AI completion.
-		dependencies = { "Saghen/blink.cmp", "nvim-lua/plenary.nvim" },
+		dependencies = { "Saghen/blink.cmp" },
 		event = "VeryLazy",
 	},
 }
