@@ -7,7 +7,6 @@ local modules = {
 	picker = utils.safe_require("user.configs.ui.picker"),
 	filetree = utils.safe_require("user.configs.ui.filetree"),
 	runner = utils.safe_require("user.configs.project.coderunner"),
-	undotree = utils.safe_require("undotree"),
 }
 
 for _, mod in pairs(modules) do
@@ -16,8 +15,7 @@ for _, mod in pairs(modules) do
 	end
 end
 
-local flash, picker, filetree, runner, undotree =
-	modules.flash, modules.picker, modules.filetree, modules.runner, modules.undotree
+local flash, picker, filetree, runner = modules.flash, modules.picker, modules.filetree, modules.runner
 
 vim.keymap.set({ "n", "x", "o" }, "S", function()
 	flash.jump()
@@ -46,8 +44,6 @@ vim.keymap.set("n", "<leader>c", ":DapContinue<CR>", { noremap = true, silent = 
 vim.keymap.set("n", "<leader>o", ":DapStepOver<CR>", { noremap = true, silent = true, desc = "DAP: Step over" })
 vim.keymap.set("n", "<leader>i", ":DapStepInto<CR>", { noremap = true, silent = true, desc = "DAP: Step into" })
 
-vim.keymap.set("n", "<leader>u", function()
-	undotree.toggle()
-end, { noremap = true, silent = true, desc = "Toggle UndoTree" })
+vim.keymap.set("n", "<leader>u", ":Undotree<CR>", { noremap = true, silent = true, desc = "Toggle UndoTree" })
 
 vim.keymap.set("n", "<leader>e", runner.run_file, { noremap = true, silent = false, desc = "Run current File" })

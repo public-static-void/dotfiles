@@ -4,6 +4,13 @@
 
 local group = vim.api.nvim_create_augroup("GeneralSettings", { clear = true })
 
+--- Activate builtin undotree plugin
+vim.api.nvim_create_autocmd("VimEnter", {
+	callback = function()
+		vim.cmd.packadd("nvim.undotree")
+	end,
+})
+
 --- Set recommended formatoptions on window enter
 vim.api.nvim_create_autocmd("BufWinEnter", {
 	group = group,

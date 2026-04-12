@@ -19,7 +19,6 @@ local scrollbar = utils.safe_require("user.configs.ui.scrollbar") or {}
 local sunglasses = utils.safe_require("user.configs.ui.sunglasses") or {}
 local toggleterm = utils.safe_require("user.configs.ui.toggleterm") or {}
 local trouble = utils.safe_require("user.configs.ui.trouble") or {}
-local undotree = utils.safe_require("user.configs.ui.undotree") or {}
 local whichkey = utils.safe_require("user.configs.ui.whichkey") or {}
 
 return {
@@ -38,6 +37,5 @@ return {
 	sunglasses = sunglasses,
 	toggleterm = toggleterm,
 	trouble = trouble,
-	undotree = undotree,
 	whichkey = whichkey,
 }

@@ -53,7 +53,6 @@
   "sunglasses.nvim": { "branch": "main", "commit": "1e4c4ea4d6b46124090df1d35426a705cb3b99cf" },
   "toggleterm.nvim": { "branch": "main", "commit": "50ea089fc548917cc3cc16b46a8211833b9e3c7c" },
   "trouble.nvim": { "branch": "main", "commit": "bd67efe408d4816e25e8491cc5ad4088e708a69a" },
-  "undotree": { "branch": "main", "commit": "0e6d41d55ad147407e4ba00a292973de8db0b836" },
   "vim-blade": { "branch": "master", "commit": "9534101808cc320eef003129a40cab04b026a20c" },
   "vim-code-dark": { "branch": "master", "commit": "4624dc223bf574aa9a731c2383c579847303c380" },
   "vim-janah": { "branch": "master", "commit": "3b8ae976987b6ade2abeac25f0208e8bc90d7138" },

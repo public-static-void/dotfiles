@@ -85,8 +85,4 @@ return {
 		event = { "BufReadPost", "BufNewFile" },
 		--- Rainbow highlight for nested brackets and delimiters.
 	},
-	{
-		"jiaoshijie/undotree",
-		--- Provides a tree-like history of undos for branching timelines.
-	},
 }
