@@ -11,6 +11,13 @@ vim.api.nvim_create_autocmd("VimEnter", {
 	end,
 })
 
+--- Activate builtin difftool plugin
+vim.api.nvim_create_autocmd("VimEnter", {
+	callback = function()
+		vim.cmd.packadd("nvim.difftool")
+	end,
+})
+
 --- Set recommended formatoptions on window enter
 vim.api.nvim_create_autocmd("BufWinEnter", {
 	group = group,
