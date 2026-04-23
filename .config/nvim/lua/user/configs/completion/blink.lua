@@ -5,7 +5,7 @@ if not blink then
 	return
 end
 
-local ollama = require("user.configs.completion.ollama")
+local llm_server = require("user.configs.completion.llm_server")
 
 --- Returns whether the cursor is at the beginning of the line or the immediate
 --- left-hand character is whitespace.
@@ -77,7 +77,7 @@ blink.setup({
 	signature = { enabled = true },
 	sources = {
 		default = vim.tbl_filter(function(source)
-			return source ~= "minuet" or ollama.reachable()
+			return source ~= "minuet" or llm_server.reachable()
 		end, { "lsp", "path", "snippets", "buffer", "codeium", "minuet" }),
 		providers = {
 			codeium = {
@@ -85,7 +85,7 @@ blink.setup({
 				module = "codeium.blink",
 				async = true,
 			},
-			minuet = ollama.reachable() and {
+			minuet = llm_server.reachable() and {
 				name = "minuet",
 				module = "minuet.blink",
 				async = true,
