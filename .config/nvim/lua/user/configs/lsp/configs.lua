@@ -127,8 +127,8 @@ vim.list_extend(ensure_installed, debuggers)
 
 mason_tool_installer.setup({
 	ensure_installed = ensure_installed,
-	auto_update = true,
-	run_on_start = true,
+	auto_update = false,
+	run_on_start = false,
 })
 
 vim.lsp.enable(servers)
