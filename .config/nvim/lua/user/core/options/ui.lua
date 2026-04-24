@@ -67,3 +67,6 @@ opt.listchars = "tab:>·,trail:·"
 -- Specify fold settings: use Treesitter by default.
 opt.foldlevelstart = 20
 opt.foldenable = true
+
+-- Enable new UI
+require("vim._core.ui2").enable({})
