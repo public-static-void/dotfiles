@@ -1,35 +1,136 @@
 local utils = require("user.utils")
 
-local configs = utils.safe_require("nvim-treesitter.configs")
-if not configs then
+local treesitter = utils.safe_require("nvim-treesitter")
+if not treesitter then
 	return
 end
 
-configs.setup({
-	prefer_git = true,
-	ensure_installed = "all",
-	sync_install = true,
-	auto_install = true,
-	ignore_install = {},
-	autopairs = {
-		enable = false,
-	},
-	highlight = {
-		enable = true,
-		disable = { "" }, -- list of languages that will be disabled
-		additional_vim_regex_highlighting = false,
-	},
-	indent = { enable = false, disable = { "yaml" } },
+treesitter.setup({
+	install_dir = vim.fn.stdpath("data") .. "/site",
 })
 
--- Safe enable after parser ready (fixes range nil)
+local ensureInstalled = {
+	"angular",
+	"bash",
+	"bibtex",
+	"blade",
+	"c",
+	"c_sharp",
+	"clojure",
+	"cmake",
+	"commonlisp",
+	"cpp",
+	"css",
+	"csv",
+	"cuda",
+	"dart",
+	"diff",
+	"dockerfile",
+	"editorconfig",
+	"elixir",
+	"elm",
+	"erlang",
+	"fennel",
+	"fish",
+	"fortran",
+	"fsharp",
+	"git_config",
+	"git_rebase",
+	"gitattributes",
+	"gitcommit",
+	"gitignore",
+	"gnuplot",
+	"go",
+	"gpg",
+	"graphql",
+	"groovy",
+	"haskell",
+	"helm",
+	"html",
+	"htmldjango",
+	"http",
+	"ini",
+	"java",
+	"javadoc",
+	"javascript",
+	"jinja",
+	"jinja_inline",
+	"jq",
+	"jsdoc",
+	"json",
+	"jsx",
+	"julia",
+	"kotlin",
+	"latex",
+	"llvm",
+	"lua",
+	"luadoc",
+	"make",
+	"markdown",
+	"markdown_inline",
+	"matlab",
+	"mermaid",
+	"nginx",
+	"objc",
+	"ocaml",
+	"pascal",
+	"perl",
+	"php",
+	"phpdoc",
+	"powershell",
+	"prisma",
+	"prolog",
+	"python",
+	"r",
+	"racket",
+	"regex",
+	"requirements",
+	"ruby",
+	"rust",
+	"scheme",
+	"scss",
+	"sql",
+	"ssh_config",
+	"svelte",
+	"swift",
+	"terraform",
+	"toml",
+	"tsx",
+	"twig",
+	"typescript",
+	"vhdl",
+	"vim",
+	"vimdoc",
+	"vue",
+	"xml",
+	"xresources",
+	"yaml",
+	"zig",
+	"zsh",
+}
+
+treesitter.install(ensureInstalled)
+
+-- Enable treesitter highlighting per buffer
 vim.api.nvim_create_autocmd("FileType", {
-	callback = function()
-		if vim.bo.buftype ~= "" then
+	pattern = "*",
+	callback = function(args)
+		local buf = args.buf
+		if vim.bo[buf].buftype ~= "" then
 			return
 		end
-		vim.schedule(function()
-			vim.cmd("silent! TSBufEnable highlight")
-		end)
+		pcall(vim.treesitter.start, buf)
+	end,
+})
+
+-- Enable treesitter‑based indentation per buffer
+vim.api.nvim_create_autocmd("FileType", {
+	pattern = "*",
+	callback = function(args)
+		local buf = args.buf
+		if vim.bo[buf].buftype ~= "" then
+			return
+		end
+		vim.bo[buf].indentexpr = "v:lua.vim.treesitter.indentexpr()"
 	end,
 })
