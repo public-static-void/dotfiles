@@ -1,88 +1,78 @@
 --- User interface plugins
 --- Startup screen, tabline, statusline, file tree, terminal, etc.
---- @type Plugin[]
+--- @type table
 return {
 	{
-		"goolord/alpha-nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
+		--- Dependency for multiple UI plugins.
+		src = "https://github.com/nvim-tree/nvim-web-devicons",
+	},
+	{
+		--- Dependency for neo-tree.nvim.
+		src = "https://github.com/nvim-lua/plenary.nvim",
+	},
+	{
+		--- Dependency for neo-tree.nvim.
+		src = "https://github.com/MunifTanjim/nui.nvim",
+	},
+	{
 		--- Customizable startup screen/dashboard.
+		src = "https://github.com/goolord/alpha-nvim",
 	},
 	{
-		"akinsho/bufferline.nvim",
-		version = "*",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
 		--- Modern tabline with buffer indicators and icons.
+		src = "https://github.com/akinsho/bufferline.nvim",
+		version = vim.version.range("*"),
 	},
 	{
-		"nvim-lualine/lualine.nvim",
-		event = "UIEnter",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
 		--- Statusline framework with icons and LSP indicators.
+		src = "https://github.com/nvim-lualine/lualine.nvim",
 	},
 	{
-		"dstein64/nvim-scrollview",
 		--- Scrollbar showing diff markers and diagnostics.
+		src = "https://github.com/dstein64/nvim-scrollview",
 	},
 	{
-		"nvim-neo-tree/neo-tree.nvim",
-		branch = "v3.x",
-		dependencies = {
-			"nvim-lua/plenary.nvim",
-			"MunifTanjim/nui.nvim",
-			"nvim-tree/nvim-web-devicons",
-		},
 		--- File explorer sidebar with git and diagnostics support.
+		src = "https://github.com/nvim-neo-tree/neo-tree.nvim",
+		version = "v3.x",
 	},
 	{
-		"akinsho/toggleterm.nvim",
-		version = "*",
-		config = true,
 		--- Integrated floating terminal with multiple layout modes.
+		src = "https://github.com/akinsho/toggleterm.nvim",
+		version = vim.version.range("*"),
 	},
 	{
-		"nvim-mini/mini.indentscope",
-		version = "*",
 		--- Visual indication of current scope indentation block.
+		src = "https://github.com/nvim-mini/mini.indentscope",
+		version = vim.version.range("*"),
 	},
 	{
-		"miversen33/sunglasses.nvim",
-		event = "UIEnter",
 		--- Dims inactive windows to emphasize active buffer.
+		src = "https://github.com/miversen33/sunglasses.nvim",
 	},
 	{
-		"folke/which-key.nvim",
-		event = "VeryLazy",
 		--- Displays keybinding hints on partial leader input.
+		src = "https://github.com/folke/which-key.nvim",
 	},
 	{
-		"folke/trouble.nvim",
-		branch = "main",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		cmd = { "Trouble", "TroubleToggle", "TroubleClose", "TroubleRefresh" },
 		--- Centralized list of diagnostics, references, and quickfixes.
+		src = "https://github.com/folke/trouble.nvim",
+		version = "main",
 	},
 	{
-		"lewis6991/gitsigns.nvim",
-		event = { "BufReadPost", "BufNewFile" },
 		--- Git hunk signs, blame, and inline actions.
+		src = "https://github.com/lewis6991/gitsigns.nvim",
 	},
 	{
-		"ibhagwan/fzf-lua",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
 		--- Fuzzy finder built on fzf with Lua integration.
+		src = "https://github.com/ibhagwan/fzf-lua",
 	},
 	{
-		"stevearc/aerial.nvim",
-		dependencies = {
-			"nvim-treesitter/nvim-treesitter",
-			"nvim-tree/nvim-web-devicons",
-		},
 		--- Symbol outline sidebar synced with LSP/TS.
+		src = "https://github.com/stevearc/aerial.nvim",
 	},
 	{
-		"HiPhish/rainbow-delimiters.nvim",
-		dependencies = { "nvim-treesitter/nvim-treesitter" },
-		event = { "BufReadPost", "BufNewFile" },
 		--- Rainbow highlight for nested brackets and delimiters.
+		src = "https://github.com/HiPhish/rainbow-delimiters.nvim",
 	},
 }

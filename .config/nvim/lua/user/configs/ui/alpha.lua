@@ -28,7 +28,7 @@ dashboard.section.buttons.val = {
 	dashboard.button("r", "󱀸  Recently used files", "<cmd>lua require('user.configs.ui.picker').oldfiles()<CR>"),
 	dashboard.button("t", "󰮗  Find text", "<cmd>lua require('user.configs.ui.picker').live_grep()<CR>"),
 	dashboard.button("c", "  Configuration", ":e " .. config_path .. " <CR>"),
-	dashboard.button("u", "󰚰  Update Plugins", "<cmd>Lazy sync<CR>"),
+	dashboard.button("u", "󰚰  Update Plugins", "<cmd>VimPackUpdate<CR>"),
 	dashboard.button("m", "󱌣  Mason", "<cmd>Mason<CR>"),
 	dashboard.button("q", "󰩈  Quit Neovim", ":qa<CR>"),
 }

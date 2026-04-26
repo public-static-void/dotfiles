@@ -3,14 +3,23 @@
 --- @type Plugin[]
 return {
 	{
-		"mfussenegger/nvim-dap",
 		--- Core DAP client. Deferred initialization to avoid startup slowdowns.
-		event = "VeryLazy",
-		dependencies = {
-			"rcarriga/nvim-dap-ui", -- Rich UI for breakpoints/frames
-			"nvim-neotest/nvim-nio", -- Async primitives for debugging
-			"jay-babu/mason-nvim-dap.nvim", -- Automatic adapter installation
-			"theHamsta/nvim-dap-virtual-text", -- Inline values during debugging
-		},
+		src = "https://github.com/mfussenegger/nvim-dap",
+	},
+	{
+		--- Rich UI for breakpoints/frames.
+		src = "https://github.com/rcarriga/nvim-dap-ui",
+	},
+	{
+		--- Async primitives for debugging.
+		src = "https://github.com/nvim-neotest/nvim-nio",
+	},
+	{
+		--- Automatic adapter installation.
+		src = "https://github.com/jay-babu/mason-nvim-dap.nvim",
+	},
+	{
+		--- Inline values during debugging.
+		src = "https://github.com/theHamsta/nvim-dap-virtual-text",
 	},
 }

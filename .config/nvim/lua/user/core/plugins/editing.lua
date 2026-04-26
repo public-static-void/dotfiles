@@ -1,66 +1,61 @@
 --- Editing enhancements and textobject utilities
 --- Includes docs generation, autopairs, surround, and navigation.
---- @type Plugin[]
+--- @type table
 return {
 	{
-		"danymat/neogen",
-		--- Code documentation generation based on treesitter context.
-		event = "VeryLazy",
+		--- Dependency for hardtime.nvim.
+		src = "https://github.com/MunifTanjim/nui.nvim",
 	},
 	{
-		"brenoprata10/nvim-highlight-colors",
-		--- Displays CSS colors inline as background blocks for readability.
-		event = "VeryLazy",
-	},
-	{
-		"famiu/bufdelete.nvim",
-		--- Allows deleting buffers without closing windows.
-		event = "VeryLazy",
-	},
-	{
-		"nvim-mini/mini.ai",
-		version = "*",
-		--- Enhance `a`/`i` textobjects with semantic awareness.
-	},
-	{
-		"nvim-mini/mini.cursorword",
-		version = "*",
-		--- Highlights word under cursor across buffer, useful for context scanning.
-	},
-	{
-		"nvim-mini/mini.pairs",
-		version = "*",
-		--- Autopair brackets and quotes seamlessly.
-	},
-	{
-		"nvim-mini/mini.surround",
-		version = "*",
-		--- Add, replace, or delete surrounding pairs (quotes, tags, etc.).
-	},
-	{
-		"m4xshen/hardtime.nvim",
-		lazy = false,
-		dependencies = { "MunifTanjim/nui.nvim" },
 		--- Discourages inefficient habits while also suggesting improvements.
+		src = "https://github.com/m4xshen/hardtime.nvim",
 	},
 	{
-		"folke/flash.nvim",
-		event = "VeryLazy",
+		--- Code documentation generation based on Treesitter context.
+		src = "https://github.com/danymat/neogen",
+	},
+	{
+		--- Displays CSS colors inline as background blocks for readability.
+		src = "https://github.com/brenoprata10/nvim-highlight-colors",
+	},
+	{
+		--- Allows deleting buffers without closing windows.
+		src = "https://github.com/famiu/bufdelete.nvim",
+	},
+	{
+		--- Enhance `a`/`i` textobjects with semantic awareness.
+		src = "https://github.com/nvim-mini/mini.ai",
+		version = vim.version.range("*"),
+	},
+	{
+		--- Highlights word under cursor across buffer, useful for context scanning.
+		src = "https://github.com/nvim-mini/mini.cursorword",
+		version = vim.version.range("*"),
+	},
+	{
+		--- Autopair brackets and quotes seamlessly.
+		src = "https://github.com/nvim-mini/mini.pairs",
+		version = vim.version.range("*"),
+	},
+	{
+		--- Add, replace, or delete surrounding pairs (quotes, tags, etc.).
+		src = "https://github.com/nvim-mini/mini.surround",
+		version = vim.version.range("*"),
+	},
+	{
 		--- Fast motions using syntax-aware jumping.
+		src = "https://github.com/folke/flash.nvim",
 	},
 	{
-		"nvim-treesitter/nvim-treesitter",
-		build = ":TSUpdate",
-		event = { "BufReadPost", "BufNewFile" },
 		--- Core Treesitter plugin for highlighting and parsing.
+		src = "https://github.com/nvim-treesitter/nvim-treesitter",
 	},
 	{
-		"JoosepAlviste/nvim-ts-context-commentstring",
 		--- Context-aware `commentstring` adjustment for mixed syntaxes.
+		src = "https://github.com/JoosepAlviste/nvim-ts-context-commentstring",
 	},
 	{
-		"windwp/nvim-ts-autotag",
-		event = { "BufReadPost", "BufNewFile" },
 		--- Auto-close and rename HTML/JSX tags.
+		src = "https://github.com/windwp/nvim-ts-autotag",
 	},
 }

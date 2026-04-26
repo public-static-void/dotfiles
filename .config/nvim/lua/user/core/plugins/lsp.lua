@@ -1,37 +1,33 @@
 --- Language Server Protocol (LSP) tooling setup
 --- Uses Mason for installation and integrates format/lint hooks.
---- @type Plugin[]
+--- @type table
 return {
 	{
-		"williamboman/mason.nvim",
-		cmd = { "Mason", "MasonInstall", "MasonUpdate" },
-		build = ":MasonUpdate",
 		--- Package manager for LSP/DAP/formatter tools.
+		src = "https://github.com/williamboman/mason.nvim",
 	},
 	{
-		"WhoIsSethDaniel/mason-tool-installer.nvim",
-		dependencies = {
-			"williamboman/mason.nvim",
-			"williamboman/mason-lspconfig.nvim",
-		},
+		--- Mason LSP configuration bridge.
+		src = "https://github.com/williamboman/mason-lspconfig.nvim",
 	},
 	{
-		"mfussenegger/nvim-jdtls",
+		--- Auto-installs Mason tools.
+		src = "https://github.com/WhoIsSethDaniel/mason-tool-installer.nvim",
+	},
+	{
 		--- Java LSP client, used with Eclipse JDTls backend.
+		src = "https://github.com/mfussenegger/nvim-jdtls",
 	},
 	{
-		"folke/lazydev.nvim",
-		ft = "lua",
 		--- Adds completion + API docs for Neovim Lua.
+		src = "https://github.com/folke/lazydev.nvim",
 	},
 	{
-		"stevearc/conform.nvim",
-		event = { "BufReadPre", "BufNewFile" },
 		--- Lightweight formatter integration.
+		src = "https://github.com/stevearc/conform.nvim",
 	},
 	{
-		"mfussenegger/nvim-lint",
-		event = { "BufReadPre", "BufNewFile" },
 		--- Lightweight asynchronous linter integration.
+		src = "https://github.com/mfussenegger/nvim-lint",
 	},
 }

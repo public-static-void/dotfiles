@@ -1,29 +1,26 @@
 --- Autocompletion engines and AI assistance
---- @type Plugin[]
+--- @type table
 return {
 	{
-		"saghen/blink.cmp",
-		--- Core completion engine, lightweight successor to nvim-cmp.
-		dependencies = {
-			"rafamadriz/friendly-snippets",
-			"Exafunction/windsurf.nvim",
-			"milanglacier/minuet-ai.nvim",
-		},
-		version = "1.*",
-		build = "cargo build --release",
-		opts_extend = { "sources.default" },
+		--- Snippet collection for completion engines.
+		src = "https://github.com/rafamadriz/friendly-snippets",
 	},
 	{
-		"Exafunction/windsurf.nvim",
+		--- Dependency for windsurf.nvim.
+		src = "https://github.com/nvim-lua/plenary.nvim",
+	},
+	{
 		--- Provides Codeium AI completions via Windsurf client.
 		--- Disabled cmp source to avoid duplicating with blink.cmp.
-		dependencies = { "nvim-lua/plenary.nvim" },
-		event = "VeryLazy",
+		src = "https://github.com/Exafunction/windsurf.nvim",
 	},
 	{
-		"milanglacier/minuet-ai.nvim",
+		--- Core completion engine, lightweight successor to nvim-cmp.
+		src = "https://github.com/saghen/blink.cmp",
+		version = vim.version.range("1.*"),
+	},
+	{
 		--- Provides local AI completion.
-		dependencies = { "Saghen/blink.cmp" },
-		event = "VeryLazy",
+		src = "https://github.com/milanglacier/minuet-ai.nvim",
 	},
 }
