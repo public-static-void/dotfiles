@@ -46,4 +46,6 @@ vim.keymap.set("n", "<leader>i", ":DapStepInto<CR>", { noremap = true, silent = 
 
 vim.keymap.set("n", "<leader>u", ":Undotree<CR>", { noremap = true, silent = true, desc = "Toggle UndoTree" })
 
+vim.keymap.set("n", "<C-m>", ":AerialToggle<CR>", { noremap = true, silent = true, desc = "Toggle Aerial" })
+
 vim.keymap.set("n", "<leader>e", runner.run_file, { noremap = true, silent = false, desc = "Run current File" })
