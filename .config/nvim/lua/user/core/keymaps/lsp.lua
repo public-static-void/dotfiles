@@ -1,5 +1,5 @@
 --- LSP related keymaps and utilities
---- @module user.keymaps.lsp
+--- @module "user.keymaps.lsp"
 
 local utils = require("user.utils")
 local modules = {
