@@ -47,11 +47,11 @@ vim.keymap.set("n", "<leader>f", function()
 end, { noremap = true, silent = true, desc = "Format buffer: conform.nvim, LSP, or native fallback" })
 
 vim.keymap.set("n", "<leader>n", function()
-	vim.diagnostic.jump({ count = 1, float = true })
+	vim.diagnostic.jump({ count = 1, on_jump = vim.diagnostic.open_float })
 end, { noremap = true, silent = true, desc = "LSP: Next diagnostic" })
 
 vim.keymap.set("n", "<leader>b", function()
-	vim.diagnostic.jump({ count = -1, float = true })
+	vim.diagnostic.jump({ count = -1, on_jump = vim.diagnostic.open_float })
 end, { noremap = true, silent = true, desc = "LSP: Previous diagnostic" })
 
 vim.keymap.set("n", "<leader>v", function()
