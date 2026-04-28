@@ -101,7 +101,6 @@ end
 local version_path = mason_base .. "/" .. version
 
 --- Builds Java classpath string from all jars in the lib directory.
---- @param jar_dir string Directory containing jar files.
 --- @return string Classpath string separated by ':'.
 local jars_classpath = java.build_classpath_os(version_path .. "/lib")
 
@@ -120,9 +119,8 @@ end
 
 --- Uses Neovim's native 'spelllang' option to set LTeX language dynamically.
 --- Converts common spelllang codes to LTeX style language tags.
---- @param bufnr number Buffer number.
 --- @return string[] List of language codes for LTeX.
-local function detect_languages_from_spelllang(bufnr)
+local function detect_languages_from_spelllang()
 	local langs = vim.opt.spelllang:get()
 	if not langs or #langs == 0 then
 		return { "en" }
@@ -143,9 +141,8 @@ end
 
 --- Updates LTeX client language settings from spelllang.
 --- @param client table LSP client object.
---- @param bufnr number Buffer number.
-local function update_ltex_language(client, bufnr)
-	local langs = detect_languages_from_spelllang(bufnr)
+local function update_ltex_language(client)
+	local langs = detect_languages_from_spelllang()
 	client.config.settings = client.config.settings or {}
 	client.config.settings.ltex = client.config.settings.ltex or {}
 	-- LTeX expects a single string for language; use the first detected language only
@@ -160,16 +157,16 @@ end
 --- @param bufnr number Buffer number.
 local function on_attach(client, bufnr)
 	if client.name == "ltex-ls-plus" then
-		update_ltex_language(client, bufnr)
+		update_ltex_language(client)
 		local group_id = vim.api.nvim_create_augroup("LtexPlusSpelllangUpdate", { clear = true })
 		vim.api.nvim_create_autocmd("OptionSet", {
 			group = group_id,
 			pattern = "spelllang",
 			callback = function()
-				local clients = vim.lsp.get_active_clients({ bufnr = bufnr })
+				local clients = vim.lsp.get_clients({ bufnr = bufnr })
 				for _, c in ipairs(clients) do
 					if c.name == "ltex-ls-plus" then
-						update_ltex_language(c, bufnr)
+						update_ltex_language(c)
 					end
 				end
 			end,
