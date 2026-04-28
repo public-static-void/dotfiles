@@ -37,11 +37,11 @@ local mason_path = vim.fn.stdpath("data") .. "/mason/packages"
 local bundles = {}
 
 -- Get java-debug jars
-local java_debug_jars = vim.split(vim.fn.glob(mason_path .. "/java-debug-adapter/extension/server/*.jar", 1), "\n")
+local java_debug_jars = vim.split(vim.fn.glob(mason_path .. "/java-debug-adapter/extension/server/*.jar", true), "\n")
 vim.list_extend(bundles, java_debug_jars)
 
 -- Get java-test jars
-local java_test_jars = vim.split(vim.fn.glob(mason_path .. "/java-test/extension/server/*.jar", 1), "\n")
+local java_test_jars = vim.split(vim.fn.glob(mason_path .. "/java-test/extension/server/*.jar", true), "\n")
 
 local exclude = {
 	"com.microsoft.java.test.runner-jar-with-dependencies.jar",
@@ -72,17 +72,7 @@ local function on_attach(client, bufnr)
 		jdtls_dap.setup_dap_main_class_configs()
 	end
 	-- refresh codelens after attaching
-	vim.lsp.codelens.refresh()
-	-- auto refresh codelens on each save of a Java file
-	vim.api.nvim_create_autocmd("BufWritePost", {
-		buffer = bufnr,
-		callback = function()
-			local ok, _ = pcall(vim.lsp.codelens.refresh)
-			if not ok then
-				print("[jdtls] codelens refresh failed")
-			end
-		end,
-	})
+	vim.lsp.codelens.enable(true, { bufnr = bufnr })
 end
 
 local extendedClientCapabilities = jdtls.extendedClientCapabilities
