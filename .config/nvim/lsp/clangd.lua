@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local client_offset_encodings = setmetatable({}, { __mode = "k" })
+
 local filetypes = {
 	"c",
 	"cpp",
@@ -65,7 +67,8 @@ local function symbol_info(bufnr, client)
 	if not client or not client:supports_method(method) then
 		return vim.notify("Clangd: symbolInfo not supported", vim.log.levels.ERROR)
 	end
-	local params = vim.lsp.util.make_position_params(bufnr, client.offset_encoding)
+	local encoding = client_offset_encodings[client]
+	local params = vim.lsp.util.make_position_params(bufnr, encoding)
 	client:request(method, params, function(err, res)
 		if err or not res or #res == 0 then
 			return
@@ -109,12 +112,12 @@ local capabilities = vim.tbl_deep_extend("force", handlers.capabilities or {}, {
 	offsetEncoding = { "utf-8", "utf-16" }, -- let client/server negotiate
 })
 
---- Ensure client adopts server's advertised offset encoding
+--- Store the server's offset encoding in a separate table, not on client.
 ---@param client lsp.Client
 ---@param init_result table
 local on_init = function(client, init_result)
 	if init_result and init_result.offsetEncoding then
-		client.offset_encoding = init_result.offsetEncoding
+		client_offset_encodings[client] = init_result.offsetEncoding
 	end
 end
 
