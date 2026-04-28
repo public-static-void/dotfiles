@@ -16,6 +16,7 @@ local mini_pairs = utils.safe_require("user.configs.editing.mini_pairs") or {}
 local mini_surround = utils.safe_require("user.configs.editing.mini_surround") or {}
 local neogen = utils.safe_require("user.configs.editing.neogen") or {}
 local treesitter = utils.safe_require("user.configs.editing.treesitter") or {}
+local dial = utils.safe_require("user.configs.editing.dial") or {}
 
 return {
 	autotags = autotags,
@@ -30,4 +31,5 @@ return {
 	mini_surround = mini_surround,
 	neogen = neogen,
 	treesitter = treesitter,
+	dial = dial,
 }

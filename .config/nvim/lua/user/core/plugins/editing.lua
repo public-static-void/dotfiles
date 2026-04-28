@@ -58,4 +58,8 @@ return {
 		--- Auto-close and rename HTML/JSX tags.
 		src = "https://github.com/windwp/nvim-ts-autotag",
 	},
+	{
+		--- Extended increment/decrement.
+		src = "https://github.com/monaqa/dial.nvim",
+	},
 }

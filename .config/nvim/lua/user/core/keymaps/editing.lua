@@ -1,5 +1,5 @@
 --- Editing related keymaps: registers, indentation, yank/paste
---- @module user.keymaps.editing
+--- @module "user.keymaps.editing"
 
 vim.keymap.set("v", "p", '"_dP', { noremap = true, silent = true, desc = "Paste without overwriting register" })
 vim.keymap.set("x", "p", "pgvy", { noremap = true, silent = true, desc = "Paste and reselect in visual mode" })
