@@ -35,6 +35,7 @@ local function migrate_to_svelte_5()
 		client:exec_cmd({
 			command = "migrate_to_svelte_5",
 			arguments = { vim.uri_from_bufnr(0) },
+			title = "Migrate to Svelte 5",
 		})
 	end
 end
