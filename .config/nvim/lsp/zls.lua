@@ -5,6 +5,8 @@ if not handlers then
 	return
 end
 
+local cmd_default = { "zls" }
+
 local filetypes = { "zig" }
 
 --- Markers to identify project root directory
