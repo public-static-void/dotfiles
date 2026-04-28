@@ -85,7 +85,7 @@ local function symbol_info(bufnr, client)
 end
 
 --- Enhance default on_attach with extra clangd user commands.
----@param client lsp.Client
+---@param client vim.lsp.Client
 ---@param bufnr number
 local on_attach = function(client, bufnr)
 	if handlers.on_attach then
@@ -113,7 +113,7 @@ local capabilities = vim.tbl_deep_extend("force", handlers.capabilities or {}, {
 })
 
 --- Store the server's offset encoding in a separate table, not on client.
----@param client lsp.Client
+---@param client vim.lsp.Client
 ---@param init_result table
 local on_init = function(client, init_result)
 	if init_result and init_result.offsetEncoding then
