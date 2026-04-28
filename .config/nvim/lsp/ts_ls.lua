@@ -83,7 +83,12 @@ local function on_attach(client, bufnr)
 		local source_actions = vim.tbl_filter(function(action)
 			return vim.startswith(action, "source.")
 		end, client.server_capabilities.codeActionProvider.codeActionKinds or {})
-		vim.lsp.buf.code_action({ context = { only = source_actions } })
+		vim.lsp.buf.code_action({
+			context = {
+				diagnostics = vim.lsp.diagnostic.get_line_diagnostics(),
+				only = source_actions,
+			},
+		})
 	end, { desc = "Run TypeScript source actions" })
 end
 
