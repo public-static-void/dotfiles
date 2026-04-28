@@ -79,7 +79,7 @@ end
 
 --- Determines the project root directory based on filename.
 --- Honors Go environment paths for caching and standard library.
----@param fname string File path
+---@param bufnr number Buffer number
 ---@param on_dir function Callback to set root directory
 local function root_dir(bufnr, on_dir)
 	local fname = vim.api.nvim_buf_get_name(bufnr)
