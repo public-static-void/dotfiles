@@ -32,7 +32,6 @@ local home = os.getenv("HOME") or os.getenv("USERPROFILE") or vim.fn.expand("~")
 local project_name = vim.fn.fnamemodify(root_dir, ":p:h:t")
 local workspace_dir = home .. "/workspace/" .. project_name
 local mason_path = vim.fn.stdpath("data") .. "/mason/packages"
-vim.fn.mkdir(workspace_dir, "p")
 
 --- Search for debug and test bundles installed by mason
 local bundles = {}
@@ -65,6 +64,9 @@ local config_dir = mason_path
 
 --- Custom on_attach to setup nvim-jdtls dap integration for Java debugging
 local function on_attach(client, bufnr)
+	-- Create workspace directory only when server attaches
+	vim.fn.mkdir(workspace_dir, "p")
+
 	if client.name == "jdtls" then
 		jdtls.setup_dap({ hotcodereplace = "auto" })
 		jdtls_dap.setup_dap_main_class_configs()
