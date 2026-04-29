@@ -20,10 +20,11 @@ comment.setup({
 				location = require("ts_context_commentstring.utils").get_visual_start_location()
 			end
 
-			return require("ts_context_commentstring.internal").calculate_commentstring({
+			local commentstring = require("ts_context_commentstring.internal").calculate_commentstring({
 				key = type,
 				location = location,
 			})
+			return commentstring ~= nil and commentstring or nil
 		end
 	end,
 })
