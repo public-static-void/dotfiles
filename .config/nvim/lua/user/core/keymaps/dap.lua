@@ -1,5 +1,5 @@
 --- Debugging related keymaps and utilities
---- @module user.keymaps.dap
+--- @module "user.keymaps.dap"
 
 vim.keymap.set(
 	"n",

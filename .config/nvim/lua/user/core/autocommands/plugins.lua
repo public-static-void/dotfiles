@@ -5,7 +5,6 @@ local augroup = vim.api.nvim_create_augroup("VimPack", { clear = true })
 
 --- Update tree-sitter parsers.
 --- Runs TSUpdate only when nvim-treesitter is updated.
---- @param ev table The event data provided by PackChanged.
 vim.api.nvim_create_autocmd("PackChanged", {
 	group = augroup,
 	callback = function(ev)
@@ -21,7 +20,6 @@ vim.api.nvim_create_autocmd("PackChanged", {
 
 --- Update mason and its toolchain.
 --- Runs MasonUpdate when the plugin is updated.
---- @param ev table The event data provided by PackChanged.
 vim.api.nvim_create_autocmd("PackChanged", {
 	group = augroup,
 	callback = function(ev)
@@ -37,7 +35,6 @@ vim.api.nvim_create_autocmd("PackChanged", {
 
 --- Rebuild blink.cmp native code.
 --- Triggers cargo build when the plugin is updated.
---- @param ev table The event data provided by PackChanged.
 vim.api.nvim_create_autocmd("PackChanged", {
 	group = augroup,
 	callback = function(ev)
@@ -53,7 +50,6 @@ vim.api.nvim_create_autocmd("PackChanged", {
 
 --- Rebuild markdown-preview.nvim dependencies.
 --- Runs yarn install when the plugin is updated.
---- @param ev table The event data provided by PackChanged.
 vim.api.nvim_create_autocmd("PackChanged", {
 	group = augroup,
 	callback = function(ev)

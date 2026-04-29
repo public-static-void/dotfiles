@@ -1,5 +1,5 @@
 --- Buffer navigation and manipulation keymaps
---- @module user.keymaps.buffers
+--- @module "user.keymaps.buffers"
 
 vim.keymap.set("n", "<M-Tab>", ":bn<CR>", { noremap = true, silent = true, desc = "Next buffer" })
 vim.keymap.set("n", "<M-S-Tab>", ":bp<CR>", { noremap = true, silent = true, desc = "Previous buffer" })

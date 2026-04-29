@@ -1,5 +1,5 @@
 --- Tabs related keymaps
---- @module user.keymaps.tabs
+--- @module "user.keymaps.tabs"
 
 vim.keymap.set("n", "<leader><Tab>", "gt", { noremap = true, silent = true, desc = "Next tab" })
 vim.keymap.set("n", "<leader><S-Tab>", "gT", { noremap = true, silent = true, desc = "Previous tab" })

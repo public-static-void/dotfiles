@@ -1,5 +1,5 @@
 --- Terminal mode keymaps
---- @module user.keymaps.terminal
+--- @module "user.keymaps.terminal"
 
 local opts = { noremap = true, silent = true }
 vim.keymap.set("n", "<C-t>", ":ToggleTerm<CR>", { noremap = true, silent = true, desc = "Toggle terminal" })

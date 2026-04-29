@@ -2,7 +2,6 @@
 --- Ensures persistent undo, swap, spell directories exist.
 --- Configures spell settings, wildignore patterns, and backup behavior.
 
-local fs = require("user.utils.fs")
 local uv = vim.loop
 local opt = vim.opt
 

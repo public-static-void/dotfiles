@@ -1,5 +1,5 @@
 --- Window splitting, resizing and navigation keymaps
---- @module user.keymaps.window
+--- @module "user.keymaps.window"
 
 vim.keymap.set("n", "<M-v>", ":vsplit<CR>", { noremap = true, silent = true, desc = "Vertical split" })
 vim.keymap.set("n", "<M-b>", ":split<CR>", { noremap = true, silent = true, desc = "Horizontal split" })

@@ -19,20 +19,7 @@ return {
 		src = "https://github.com/Mofiqul/vscode.nvim",
 	},
 	{
-		--- Minimal dark colorscheme inspired by "angr".
-		src = "https://github.com/zacanger/angr.vim",
-	},
-	{
-		--- Subtle, low-contrast theme optimized for long coding sessions.
-		src = "https://github.com/mhinz/vim-janah",
-	},
-	{
 		--- Vibrant retro-style theme with restrained color palette.
 		src = "https://github.com/srcery-colors/srcery-vim",
-	},
-	{
-		--- Integrates pywal-generated colors into Neovim.
-		--- Useful for matching dynamic system color schemes.
-		src = "https://github.com/AlphaTechnolog/pywal.nvim",
 	},
 }

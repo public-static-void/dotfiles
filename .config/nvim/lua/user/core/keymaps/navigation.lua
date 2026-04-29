@@ -1,5 +1,5 @@
 --- Navigation and movement related keymaps
---- @module user.keymaps.navigation
+--- @module "user.keymaps.navigation"
 
 vim.keymap.set({ "n", "v", "o" }, "<S-h>", "0", { noremap = true, silent = true, desc = "Go to line start" })
 vim.keymap.set({ "n", "v", "o" }, "<S-l>", "$", { noremap = true, silent = true, desc = "Go to line end" })
