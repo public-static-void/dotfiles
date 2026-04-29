@@ -1,7 +1,7 @@
 --- Language-specific dap configurations.
 --- Each language’s launch configurations with detailed setup including asynchronous prog builders.
 --- Implements multi-language support and dynamic runtime executable resolution for Python virtual environments.
---- @module user.dap.configs
+--- @module "user.dap.configs"
 local utils = require("user.utils")
 
 local dap = utils.safe_require("dap")

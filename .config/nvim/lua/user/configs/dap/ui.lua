@@ -1,7 +1,7 @@
 --- UI setup for nvim-dap and associated plugins.
 --- Handles dapui and virtual text plugin setup,
 --- breakpoint sign highlight and automatic UI toggling.
---- @module user.dap.ui
+--- @module "user.dap.ui"
 local utils = require("user.utils")
 
 local dap = utils.safe_require("dap")

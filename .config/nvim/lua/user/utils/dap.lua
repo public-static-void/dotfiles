@@ -1,6 +1,6 @@
 --- Helper functions for DAP configurations like building executables,
 --- resolving Mason adapter paths, and async helpers.
---- @module user.utils.dap
+--- @module "user.utils.dap"
 local M = {}
 
 local sep = package.config:sub(1, 1)

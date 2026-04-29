@@ -1,7 +1,7 @@
 --- DAP adapter setup for various languages.
 --- Defines official DAP adapters using Mason paths or custom commands.
 --- Includes extended in-file documentation for complex adapters (e.g., PHP).
---- @module user.dap.adapters
+--- @module "user.dap.adapters"
 local utils = require("user.utils")
 
 local dap = utils.safe_require("dap")
