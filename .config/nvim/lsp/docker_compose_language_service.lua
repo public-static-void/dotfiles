@@ -19,7 +19,7 @@ local root_markers = {
 
 --- Root detection walks upwards to locate a valid marker.
 ---@param bufnr number Buffer handle
----@param on_dir fun(path:string) Callback with resolved root
+---@param on_dir fun(path:string?) Callback with resolved root (may be nil)
 local function root_dir(bufnr, on_dir)
 	local filepath = vim.api.nvim_buf_get_name(bufnr)
 	if not filepath or filepath == "" then

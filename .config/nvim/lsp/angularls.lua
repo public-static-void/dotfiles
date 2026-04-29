@@ -22,9 +22,8 @@ local root_markers = {
 	".git",
 }
 
---- Determine the project root directory by searching for root markers.
 ---@param bufnr number Buffer number
----@param on_dir fun(path: string) Callback invoked with resolved root directory
+---@param on_dir fun(path: string?) Callback invoked with resolved root directory (may be nil)
 local function root_dir(bufnr, on_dir)
 	local filepath = vim.api.nvim_buf_get_name(bufnr)
 	if not filepath or filepath == "" then
@@ -61,6 +60,9 @@ end
 
 local cmd = (function()
 	local cwd = vim.loop.cwd()
+	if not cwd or cwd == "" then
+		return {}
+	end
 	local ts_probe, ng_probe = build_probe_dirs(cwd)
 	return {
 		"ngserver",

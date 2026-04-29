@@ -21,7 +21,7 @@ local root_markers = {
 
 --- Find root directory for Kotlin projects based on root markers.
 ---@param bufnr number Buffer number
----@param on_dir fun(path: string) Callback to set root directory
+---@param on_dir fun(path: string?) Callback to set root directory (may be nil)
 local function root_dir(bufnr, on_dir)
 	local filepath = vim.api.nvim_buf_get_name(bufnr)
 	if not filepath or filepath == "" then

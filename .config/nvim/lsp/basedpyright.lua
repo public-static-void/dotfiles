@@ -37,13 +37,13 @@ local function set_python_path(path)
 		name = "basedpyright",
 	})
 	for _, client in ipairs(clients) do
-		if client.settings then
+		if client.settings and type(client.settings.python) == "table" then
 			client.settings.python = vim.tbl_deep_extend("force", client.settings.python, { pythonPath = path })
 		else
 			client.config.settings =
 				vim.tbl_deep_extend("force", client.config.settings, { python = { pythonPath = path } })
 		end
-		client:notify("workspace/didChangeConfiguration", { settings = nil })
+		client.notify("workspace/didChangeConfiguration", { settings = nil })
 	end
 end
 

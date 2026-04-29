@@ -15,7 +15,7 @@ local root_markers = { "ansible.cfg", ".ansible-lint", ".git" }
 
 --- Resolve project root by finding one of the root markers.
 ---@param bufnr number Buffer number
----@param on_dir fun(path: string) Callback with resolved root path
+---@param on_dir fun(path: string?) Callback with resolved root path (may be nil)
 local function root_dir(bufnr, on_dir)
 	local filepath = vim.api.nvim_buf_get_name(bufnr)
 	if not filepath or filepath == "" then

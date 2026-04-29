@@ -13,7 +13,7 @@ local root_markers = { "Dockerfile", ".git" }
 
 --- Resolve project root dynamically by scanning for markers.
 ---@param bufnr integer Buffer handle
----@param on_dir fun(path:string) Callback invoked with resolved root
+---@param on_dir fun(path:string?) Callback invoked with resolved root (may be nil)
 local function root_dir(bufnr, on_dir)
 	local filepath = vim.api.nvim_buf_get_name(bufnr)
 	if not filepath or filepath == "" then
