@@ -1,10 +1,7 @@
 local colorschemes = {
 	"vscode",
-	"codedark",
-	"angr",
 	"base16-da-one-gray",
 	"base16-ia-dark",
-	"pywal",
 }
 
 local fallback = "default" -- fallback to Neovim's default colorscheme

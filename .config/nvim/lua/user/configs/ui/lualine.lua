@@ -22,7 +22,7 @@ local diagnostics = {
 local diff = {
 	"diff",
 	colored = false,
-	symbols = { added = " ", modified = " ", removed = " " }, -- changes diff symbols
+	symbols = { added = " ", modified = " ", removed = " " },
 	cond = hide_in_width,
 }
 
@@ -35,8 +35,7 @@ local mode = {
 
 local filetype = {
 	"filetype",
-	icons_enabled = false,
-	icon = nil,
+	icons_enabled = true,
 }
 
 local branch = {
@@ -51,14 +50,13 @@ local location = {
 }
 
 local spaces = function()
-	return "spaces: " .. vim.api.nvim_buf_get_option(0, "shiftwidth")
+	return "spaces: " .. vim.api.nvim_get_option_value("shiftwidth", { scope = "local", buf = 0 })
 end
 
 lualine.setup({
 	options = {
 		icons_enabled = true,
 		theme = "auto",
-		-- theme = "pywal-nvim",
 		component_separators = { left = "", right = "" },
 		section_separators = { left = "", right = "" },
 		disabled_filetypes = { "alpha", "dashboard", "NvimTree", "Outline" },
@@ -68,8 +66,7 @@ lualine.setup({
 		lualine_a = { branch, diagnostics },
 		lualine_b = { mode },
 		lualine_c = {},
-		-- lualine_x = { "encoding", "fileformat", "filetype" },
-		lualine_x = { diff, spaces, "encoding", filetype },
+		lualine_x = { diff, spaces, "encoding", "fileformat", filetype },
 		lualine_y = { location },
 		lualine_z = { "progress" },
 	},

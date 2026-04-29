@@ -5,6 +5,9 @@ if not indentscope then
 	return
 end
 
+local math = math
+local pcall = pcall
+
 -- List of filetypes to disable mini.indentscope in
 local disabled_filetypes = {
 	"NvimTree",

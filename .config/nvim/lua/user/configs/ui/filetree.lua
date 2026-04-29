@@ -10,6 +10,8 @@ if not neo_tree_cmd then
 	return
 end
 
+local ipairs = ipairs
+
 neo_tree.setup({
 	close_if_last_window = false,
 	popup_border_style = "",
