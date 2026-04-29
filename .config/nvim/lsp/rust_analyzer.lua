@@ -74,12 +74,6 @@ local experimental_capabilities = {
 	},
 }
 
-local before_init = function(init_params, config)
-	if config.settings and config.settings["rust-analyzer"] then
-		init_params.initializationOptions = config.settings["rust-analyzer"]
-	end
-end
-
 local capabilities = vim.tbl_deep_extend("force", handlers.capabilities or {}, experimental_capabilities)
 
 local cmd = { "rust-analyzer" }
