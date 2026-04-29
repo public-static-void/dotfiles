@@ -2,7 +2,7 @@
 --- Provides functions for safely joining paths, checking existence,
 --- and working with parent directories.
 --- @class FS
-local uv = vim.loop
+local uv = vim.uv
 local M = {}
 
 --- Check if a path exists in the filesystem.
@@ -62,7 +62,7 @@ function M.mkdir_if_not_exists(dir)
 	if not M.exists(dir) then
 		local ok, err = uv.fs_mkdir(dir, 448) -- 0700 in decimal
 		if not ok then
-			vim.notify("Could not create directory: " .. dir .. "\nError: " .. (err or "unknown"), vim.log.levels.WARN)
+			vim.notify("Could not create directory: " .. dir .. "\\nError: " .. (err or "unknown"), vim.log.levels.WARN)
 			return false
 		end
 	end

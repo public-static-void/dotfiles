@@ -2,7 +2,7 @@
 --- Provides helpers to locate JAR bundles and construct classpaths,
 --- useful for language server setup (e.g., Eclipse JDT LS).
 --- @class JavaUtils
-local uv = vim.loop
+local uv = vim.uv
 local fs = require("user.utils.fs")
 local M = {}
 
@@ -60,7 +60,7 @@ function M.build_classpath_os(jar_dir)
 			end
 		end
 	end
-	local sep = package.config:sub(1, 1) == "\\" and ";" or ":"
+	local sep = package.config:sub(1, 1) == "\\\\" and ";" or ":"
 	return table.concat(jars, sep)
 end
 

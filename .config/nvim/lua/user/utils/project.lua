@@ -2,7 +2,7 @@
 --- Walks upward from a starting path to find a directory containing
 --- root marker files (e.g., .git, package.json).
 --- @class Project
-local uv = vim.loop
+local uv = vim.uv
 local fs = require("user.utils.fs")
 local M = {}
 
@@ -19,7 +19,7 @@ local function contains_marker(path, markers)
 	return false
 end
 
---- Check if the given directory is a filesystem root ("/" or "C:\").
+--- Check if the given directory is a filesystem root ("/" or "C:\\").
 --- @param dir string Directory path.
 --- @return boolean
 local function at_fs_root(dir)

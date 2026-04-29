@@ -7,7 +7,7 @@
 --- - Internal code remains modular and organized into separate files.
 --- - Avoids breaking downstream code that depends on the original `utils` table.
 ---
---- @module user.utils
+--- @module "user.utils"
 local fs = require("user.utils.fs") or {}
 local modules = require("user.utils.modules") or {}
 local project = require("user.utils.project") or {}
