@@ -8,10 +8,6 @@
       "rev": "6c6a89d5b068b5251c8bdf0dd57bb921bcfeeb09",
       "src": "https://github.com/goolord/alpha-nvim"
     },
-    "angr.vim": {
-      "rev": "fb5dc3f5b9a3dfd5db0ce1b6250d6e9a9a3e701c",
-      "src": "https://github.com/zacanger/angr.vim"
-    },
     "blink.cmp": {
       "rev": "78336bc89ee5365633bcf754d93df01678b5c08f",
       "src": "https://github.com/saghen/blink.cmp",
@@ -196,10 +192,6 @@
     "plenary.nvim": {
       "rev": "74b06c6c75e4eeb3108ec01852001636d85a932b",
       "src": "https://github.com/nvim-lua/plenary.nvim"
-    },
-    "pywal.nvim": {
-      "rev": "d11b673c0e3d6eb8cbee7ea8cf4a8911f6ee24b9",
-      "src": "https://github.com/AlphaTechnolog/pywal.nvim"
     },
     "rainbow-delimiters.nvim": {
       "rev": "08783ec022e7ddefe0f12a16f1ac4968f55478b0",

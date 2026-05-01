@@ -13,6 +13,7 @@ local modules = require("user.utils.modules") or {}
 local project = require("user.utils.project") or {}
 local java = require("user.utils.lang.java") or {}
 local dap_helpers = require("user.utils.dap") or {}
+local pack_helpers = require("user.utils.pack") or {}
 
 local M = {}
 
@@ -38,6 +39,11 @@ end
 
 -- Add dap helpers functions to top-level utils table
 for k, v in pairs(dap_helpers) do
+	M[k] = v
+end
+
+-- Add pack helpers functions to top-level utils table
+for k, v in pairs(pack_helpers) do
 	M[k] = v
 end
 

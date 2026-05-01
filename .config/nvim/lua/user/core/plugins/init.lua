@@ -9,8 +9,6 @@ if not commands then
 	return
 end
 
-local plugins = {}
-
 --- List of plugin specification modules
 --- @type string[]
 local modules = {
@@ -24,6 +22,8 @@ local modules = {
 	"user.core.plugins.project",
 }
 
+local plugins = {}
+
 for _, module in ipairs(modules) do
 	local spec = utils.safe_require(module)
 	if spec then
@@ -31,5 +31,12 @@ for _, module in ipairs(modules) do
 	end
 end
 
---- Initialize vim.pack plugin manager with all specs
+-- Initialize vim.pack plugin manager with all specs
 vim.pack.add(plugins)
+
+local names = {}
+for _, spec in ipairs(plugins) do
+	table.insert(names, spec[1])
+end
+
+commands.set_plugin_names(names)
