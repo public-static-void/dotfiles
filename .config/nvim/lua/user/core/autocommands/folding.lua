@@ -1,6 +1,6 @@
 --- Folding Autocommands
--- Handles fold refreshing, per-buffer fold method setup,
--- and automatic foldcolumn toggling.
+--- Handles fold refreshing, per-buffer fold method setup,
+--- and automatic foldcolumn toggling.
 
 --- Refresh folds when entering files (skip terminals or special buffers)
 vim.api.nvim_create_autocmd({ "BufReadPost", "BufNewFile", "BufEnter" }, {
