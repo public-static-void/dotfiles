@@ -51,7 +51,7 @@
       "src": "https://github.com/rafamadriz/friendly-snippets"
     },
     "fzf-lua": {
-      "rev": "2e29d5f233defe3c5587df0e4dd29af2bd95a5a7",
+      "rev": "b437bafc981a180d609bb4092c56ce8999f7a2c4",
       "src": "https://github.com/ibhagwan/fzf-lua"
     },
     "gitsigns.nvim": {
@@ -234,10 +234,6 @@
     "vim-code-dark": {
       "rev": "4624dc223bf574aa9a731c2383c579847303c380",
       "src": "https://github.com/tomasiser/vim-code-dark"
-    },
-    "vim-janah": {
-      "rev": "3b8ae976987b6ade2abeac25f0208e8bc90d7138",
-      "src": "https://github.com/mhinz/vim-janah"
     },
     "vscode.nvim": {
       "rev": "aa1102a7e15195c9cca22730b09224a7f7745ba8",

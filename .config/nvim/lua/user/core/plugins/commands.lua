@@ -33,7 +33,11 @@ end
 vim.api.nvim_create_user_command("VimPackDelete", vim_pack_delete, {
 	nargs = "+",
 	complete = function()
-		return vim.fn.keys(vim.pack.list())
+		local list_fn = vim.pack.list
+		if type(list_fn) ~= "function" then
+			return {}
+		end
+		return vim.fn.keys(list_fn())
 	end,
 	desc = "Delete plugins",
 })
