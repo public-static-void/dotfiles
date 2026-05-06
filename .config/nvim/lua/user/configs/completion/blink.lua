@@ -1,11 +1,15 @@
 local utils = require("user.utils")
+
 local blink = utils.safe_require("blink.cmp")
 if not blink then
 	vim.notify("blink.cmp not found! Check your plugin setup.", vim.log.levels.ERROR)
 	return
 end
 
-local llm_server = require("user.configs.completion.llm_server")
+local llm_server = utils.safe_require("user.configs.completion.llm_server")
+if not llm_server then
+	return
+end
 
 --- Returns whether the cursor is at the beginning of the line or the immediate
 --- left-hand character is whitespace.
