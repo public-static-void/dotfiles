@@ -6,8 +6,7 @@ if not minuet then
 	return
 end
 
-local model = "Qwen2.5-Coder-1.5B-Instruct-Q8_0"
-
+local model = llm_server.model
 local is_windows = vim.loop.os_uname().sysname == "Windows_NT"
 local api_key_env = is_windows and "APPDATA" or "TERM"
 
