@@ -30,7 +30,7 @@ eval "$(perl -I$HOME/perl5/lib/perl5 -Mlocal::lib=$HOME/perl5)"
 # pyenv, direnv
 export PYENV_ROOT="$HOME/.pyenv"
 command -v pyenv &>/dev/null && eval "$(pyenv init --path)"
-command -v pyenv &>/dev/null && eval "$(pyenv init -)"
+command -v pyenv &>/dev/null && eval "$(pyenv init - --no-rehash)"
 command -v direnv &>/dev/null && eval "$(direnv hook zsh)"
 
 # Java
