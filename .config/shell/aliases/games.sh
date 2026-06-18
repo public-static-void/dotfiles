@@ -197,3 +197,8 @@ gtasa() {
   local game_executable="$HOME/Games/Grand Theft Auto San Andreas/gta_sa.exe"
   launch_wine "$game_executable" "$prefix"
 }
+
+cdda() {
+  cd "$HOME/Games/cataclysmdda-0.J" || exit
+  "./cataclysm-tiles"
+}
