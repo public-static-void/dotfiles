@@ -79,7 +79,6 @@ local ensureInstalled = {
 	"phpdoc",
 	"powershell",
 	"prisma",
-	"prolog",
 	"python",
 	"r",
 	"racket",
