@@ -20,9 +20,6 @@ font pango:MesloLGSDZNerdFont Mono 13
 # Start compositor. Kill existing Picom before starting new instance.
 exec --no-startup-id "pkill -x picom; sleep 0.5; picom --backend xrender -b"
 
-# Start URxvt daemon.
-exec_always --no-startup-id urxvtd -q -f &
-
 # Use nitrogen to set wallpaper.
 #exec_always --no-startup-id nitrogen --restore
 
@@ -208,27 +205,27 @@ bindsym $mod+Shift+f exec --no-startup-id firefox
 bindsym $mod+Shift+t exec --no-startup-id Telegram
 
 # Open i3 config.
-bindsym $mod+Shift+a exec --no-startup-id urxvtc -e nvim ~/.config/i3/config
+bindsym $mod+Shift+a exec --no-startup-id urxvt -e nvim ~/.config/i3/config
 
 # Open i3blocks config.
-bindsym $mod+Shift+y exec --no-startup-id urxvtc -e nvim ~/.config/i3blocks/config
+bindsym $mod+Shift+y exec --no-startup-id urxvt -e nvim ~/.config/i3blocks/config
 
 # Open Xdefaults.
-bindsym $mod+Shift+x exec --no-startup-id urxvtc -e nvim ~/.Xdefaults
+bindsym $mod+Shift+x exec --no-startup-id urxvt -e nvim ~/.Xdefaults
 
 # Open bashrc.
-#bindsym $mod+Shift+s exec --no-startup-id urxvtc -e nvim ~/.bashrc
+#bindsym $mod+Shift+s exec --no-startup-id urxvt -e nvim ~/.bashrc
 
 # Open zshrc.
-bindsym $mod+Shift+s exec --no-startup-id urxvtc -e nvim ~/.zshrc
+bindsym $mod+Shift+s exec --no-startup-id urxvt -e nvim ~/.zshrc
 
 # Open vimrc.
-#bindsym $mod+Shift+d exec --no-startup-id urxvtc -e nvim ~/.vimrc
+#bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.vimrc
 # Open neovim config.
-bindsym $mod+Shift+d exec --no-startup-id urxvtc -e nvim ~/.config/nvim/init.lua
+bindsym $mod+Shift+d exec --no-startup-id urxvt -e nvim ~/.config/nvim/init.lua
 
 # Open picom config.
-bindsym $mod+Shift+less exec --no-startup-id urxvtc -e nvim ~/.config/picom/picom.conf
+bindsym $mod+Shift+less exec --no-startup-id urxvt -e nvim ~/.config/picom/picom.conf
 
 # Change transparency on the fly.
 bindsym $mod+KP_Add exec --no-startup-id picom-trans -c +5
@@ -240,7 +237,7 @@ bindsym $mod+KP_Divide exec --no-startup-id picom-trans -c -t
 bindsym $mod+Shift+w exec --no-startup-id spacefm
 
 # Start htop.
-bindsym Ctrl+Mod1+Delete exec --no-startup-id urxvtc -e htop
+bindsym Ctrl+Mod1+Delete exec --no-startup-id urxvt -e htop
 
 # Make screenshot.
 bindsym Print exec scrot '%Y-%m-%d-%s_screenshot_$wx$h.jpg' -e 'mv $f ~/Bilder/'
