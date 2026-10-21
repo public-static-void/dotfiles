@@ -21,7 +21,7 @@ font pango:MesloLGSDZNerdFont Mono 13
 exec --no-startup-id "pkill -x picom; sleep 0.5; picom --backend xrender -b"
 
 # Start URxvt daemon.
-exec_always --no-startup-id urxvtd -q -o -f &
+exec_always --no-startup-id urxvtd -q -f &
 
 # Use nitrogen to set wallpaper.
 #exec_always --no-startup-id nitrogen --restore
